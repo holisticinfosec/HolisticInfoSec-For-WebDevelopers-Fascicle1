@@ -3120,143 +3120,137 @@ That means that send() returned -1 for some reason. You can enable more output b
 
 ##### Improving the Strategy {#vps-countermeasures-lack-of-visibility-web-server-log-management-improving-the-strategy}
 
-With the above strategy, I had issues where messages were getting lost between rsyslog and papertrail, I spent over a week trying to find the cause. As the sender, you have no insight into what papertrail is doing. The support team could not provide much insight into their service when I had to trouble-shoot things. They were as helpful as they could be though.
+With the above strategy, I had issues where messages were getting lost between rsyslog and Papertrail and I spent over a week trying to find the cause. As the sender, you have no insight into what Papertrail is doing. The support team could not provide much insight into their service when I had to troubleshoot things. They were as helpful as they could be though.
 
-Reliability can be significantly improved by using RELP. Papertrail does not support RELP, so a next step could be to replace papertrail with a local network instance of an rsyslogd collector and Simple Event Correlator ([SEC](https://simple-evcorr.github.io/)). Notification for inactivity of events could be performed by cron and SEC. Then for all your graphical event correlation, you could use [LogAnalyzer](http://loganalyzer.adiscon.com/), also created by Rainer Gerhards (rsyslog author). This would be more work to set-up than an on-line service you do not have to set-up. In saying that. You would have greater control and security which for me is the big win here.
+Reliability can be significantly improved using RELP. Papertrail does not support RELP, so a next step could be to replace Papertrail with a local network instance of an rsyslogd collector and Simple Event Correlator ([SEC](https://simple-evcorr.github.io/)). Notification for inactivity of events could be performed by cron and SEC. Then, for all your graphical event correlation, you could use [LogAnalyzer](http://loganalyzer.adiscon.com/), also created by Rainer Gerhards (rsyslog author). This would be more work to set up than an online service you do not have to set up. In saying that, you would have greater control and security which for me is the big win here.
 [Normalisation](http://www.liblognorm.com/) also from Rainer could be useful.
 
-Another option instead of going through all the work of having to set-up and configure a local network instance of an rsyslogd collector, SEC and perhaps LogAnalyzer, would be to just deploy the SyslogAppliance which is a turn-key VM already configured with all the tools you would need to collect, aggregate, report and alert, as discussed in the Network chapter under Countermeasures, [Insufficient Logging](#network-countermeasures-lack-of-visibility-insufficient-logging).
+Another option, instead of going through all the work of having to setup and configure a local network instance of an rsyslogd collector, SEC and perhaps LogAnalyzer, would be to just deploy the SyslogAppliance which is a turnkey VM already configured with all the tools you would need to collect, aggregate, report and alert, as discussed in the Network chapter under Countermeasures, [Insufficient Logging](#network-countermeasures-lack-of-visibility-insufficient-logging).
 
 What I found, is that after several upgrades to rsyslog, the reliability issues seemed to improve, making me think that changes to rsyslog were possibly and probably responsible.
 
 #### Proactive Monitoring {#vps-countermeasures-lack-of-visibility-proactive-monitoring}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
-I recently performed an in-depth evaluation of a collection of tools, that one of their responsibilities was monitoring and performing actions on your processes and applications based on some other event(s). Some of these tools are very useful for security focussed tasks as well as generic dev-ops.
+I recently performed an indepth evaluation of a collection of tools, whose functionality was monitoring and performing actions on processes and applications. Some of these tools are very useful for security focused tasks as well as generic DevOps.
 
 **New Relic**
 
-New Relic is a Software as a Service (SaaS) provider that offers many products, primarily in the performance monitoring space, rather than security. Their offerings cost money, but may come into their own in larger deployments. I have used New Relic, it has been quick to start getting useful performance statistics on servers and helped my team isolate resource constraints.
+New Relic is a Software as a Service (SaaS) provider that offers many products, primarily in the performance monitoring space, rather than security. Their offerings aren't free, but may come into their own in larger deployments. I have used New Relic, it has been quick to provide useful performance statistics on servers, and helped my team isolate resource constraints.
 
 **Advanced Web Statistics ([AWStats](http://www.awstats.org/))**
 
-Unlike NewRelic which is SaaS, AWStats is FOSS. It kind of fits a similar market space as NewRelic though. You can find the documentation  
-here: [http://www.awstats.org/docs/index.html](http://www.awstats.org/docs/index.html).
+Unlike NewRelic which is SaaS, AWStats is FOSS. It fits a similar market space as NewRelic though. You can find the documentation here: [http://www.awstats.org/docs/index.html](http://www.awstats.org/docs/index.html).
 
 **Pingdom**
 
-Similar to New Relic but not as feature rich. As discussed below, [Monit](http://slides.com/tildeslash/monit#/7) is a better alternative.
+Pindom is similar to New Relic but not as feature rich. As discussed below, [Monit](http://slides.com/tildeslash/monit#/7) is a better alternative.
 
-&nbsp;
+All the following offerings that I evaluated target different scenarios. I have listed the pros and cons for each of them and where I think they fit as a potential solution to monitor your web applications (I am leaning toward NodeJS) and make sure they run in a healthy state. I have listed the [goals](#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals) I was looking to satisfy.
 
-All the following offerings that I have evaluated, target different scenarios. I have listed the pros and cons for each of them and where I think they fit into a potential solution to monitor your web applications (I am leaning toward NodeJS) and make sure they keep running in a healthy state. I have listed the [goals](#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals) I was looking to satisfy.
+I have to have good knowledge of the landscape before I commit to a decision and stand behind it. I like to know that I have made the best decision based on all the facts that are publicly available. Therefore, as always, it is my responsibility to make sure I have done my research in order to make an informed and sound decision. I believe my evaluation was unbiased as I had not used any of the offerings other than [forever](#vps-countermeasures-lack-of-visibility-proactive-monitoring-forever) before.
 
-For me I have to have a good knowledge of the landscape before I commit to a decision and stand behind it. I like to know I have made the best decision based on all the facts that are publicly available. Therefore, as always, it is my responsibility to make sure I have done my research in order to make an informed and ideally best decision possible. I am pretty sure my evaluation was un-biased, as I had not used any of the offerings other than [forever](#vps-countermeasures-lack-of-visibility-proactive-monitoring-forever) before.
+I looked at quite a few more than what I have detailed below, but these I felt were worth spending some time on.
 
-I looked at quite a few more than what I have detailed below, but the following candidates I felt were worth spending some time on.
-
-Keep in mind, that everyones requirements will be different, so rather than tell you which to use because I do not know your situation, I have listed the attributes (positive, negative and neutral) that I think are worth considering when making this choice. After the evaluation we make some decisions and start the [configuration](#vps-countermeasures-lack-of-visibility-proactive-monitoring-getting-started-with-monit) of the chosen offerings.
+Keep in mind, that everyone's requirements will be different, so rather than tell you which to use as I do not know your situation, I have listed the attributes (positive, negative and neutral) that I think are worth considering when making this choice. After the evaluation, we make some decisions and start the [configuration](#vps-countermeasures-lack-of-visibility-proactive-monitoring-getting-started-with-monit) of the chosen offerings.
 
 ##### Evaluation Criteria
 
-1. Who is the creator. I favour teams rather than individuals, because the strength, ability to be side-tracked, and affected by external influences is greater on individuals as compared to a team. If an individual moves on, where does that leave the product? With that in mind, there are some very passionate and motivated individuals running very successful projects.
+1. Who is the creator? I favour teams rather than individuals. Teams are less likely to be side-tracked and affected by external influences. If an individual abandons a project, where does that leave the product? With that in mind, there are some very passionate and motivated individuals running very successful projects.
 2. Does it do what we need it to do? [Goals](#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals) address this.
 3. Do I foresee any integration problems with other required components, and how difficult are the relationships likely to be?
-4. Cost in money. Is it free, as in free beer? I usually gravitate toward free software. It is usually an easier sell to clients and management. Are there catches once you get further down the road? Usually open source projects are marketed as is, so although it costs you nothing up front, what is it likely to cost in maintenance? Do you have the resources to support it?
-5. Cost in time. Is the set-up painful?
+4. Cost (financial). Is it free? I usually gravitate toward free software. It is typically an easier sell to clients and management. Are there catches once you get further down the road? Usually open source projects are marketed as is, so although it costs you nothing up front, what is it likely to cost in maintenance? Do you have the resources to support it?
+5. Cost (time). Is the setup painful?
 6. How well does it appear to be supported? What do the users say?
-7. Documentation. Is there any / much? What is its quality? Is the User Experience so good, that little documentation is required?
+7. Documentation. Is there any/much? What is its quality? Is the user experience so good that little documentation is required?
 8. Community. Does it have an active one? Are the users getting their questions answered satisfactorily? Why are the unhappy users unhappy (do they have a valid reason)?
 9. Release schedule. How often are releases being made? When was the last release? Is the product mature, does it need any work?
-10. Gut feeling, Intuition. How does it feel. If you have experience in making these sorts of choices, lean on it. Believe it or not, this may be the most important criteria for you.
+10. Gut feeling, intuition. How does it feel? If you have experience in making these sorts of choices, lean on it. Believe it or not, this may be the most important criteria for you.
 
-The following tools were my choice based on the above criterion.
+The following tools were my choices based on the above criterion.
 
 ##### Goals {#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals}
 
 1. Application should start automatically on system boot
-2. Application should be re-started if it dies or becomes unresponsive
-3. The person responsible for the application should know if a troganised version of your application is swapped in, or even if your file time-stamps have changed
+2. Application should restart if it dies or becomes unresponsive
+3. The person responsible for the application should know if a trojanised version of the application is swapped in, or even if your file timestamps have changed
 4. Ability to add the following later without having to swap the chosen offering:
     1. Reverse proxy (Nginx, node-http-proxy, Tinyproxy, Squid, Varnish, etc)
-    2. Clustering and providing load balancing for your single threaded application
-    3. Visibility of [application statistics](#vps-countermeasures-lack-of-visibility-statistics-graphing) as we discuss a little later.
+    2. Clustering and providing load balancing for a single threaded application
+    3. Visibility to [application statistics](#vps-countermeasures-lack-of-visibility-statistics-graphing) as we discuss a little later.
 5. Enough documentation to feel comfortable consuming the offering
-6. The offering should be production ready. This means: mature with a security conscious architecture and features, rather than some attempt of security retrofitted somewhere down the track. Do the developers think and live security, thus bake the concept in from the start?
+6. The offering should be production ready. This means that it is mature with a security conscious architecture and features, rather than some attempt at retrofitted security after the fact. Do the developers think and live security, and thus bake it in from the start?
 
 ##### Sysvinit, [Upstart](http://upstart.ubuntu.com/), [systemd](https://freedesktop.org/wiki/Software/systemd/) & [Runit](http://smarden.org/runit/) {#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit}
 
-You will have one of these running on your standard GNU/Linux box.
+You will have one of these running on a standard GNU/Linux system.
 
-These are system and service managers for Linux. Upstart and the later systemd were developed as replacements for the traditional init daemon (Sysvinit), which all depend on init. Init is an essential package that pulls in the default init system. In Debian, starting with Jessie, [systemd](https://wiki.debian.org/systemd) is your default system and service manager.
+These are system and service managers for Linux. Upstart, and the later systemd were developed as replacements for the traditional init daemon (Sysvinit), which all depend on init. Init is an essential package that pulls in the default init system. In Debian, starting with Jessie, [systemd](https://wiki.debian.org/systemd) is your default system and service manager.
 
-There is some helpful info on the [differences](https://doc.opensuse.org/documentation/html/openSUSE_122/opensuse-reference/cha.systemd.html) between Sysvinit and systemd, links in the attributions chapter.
+There is helpful info on the [differences](https://doc.opensuse.org/documentation/html/openSUSE_122/opensuse-reference/cha.systemd.html) between Sysvinit and systemd, and links in the attributions chapter.
 
 {#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit-systemd}
 **systemd**  
 
-As I have systemd installed out of the box on my test machine (Debian Stretch), I will be using this for my set-up.
+As I have systemd installed out of the box on my test system (Debian Stretch), I will be using this for my setup.
 
 **Documentation**
 
-There is a well written [comparison](http://www.tuicool.com/articles/qy2EJz3) with Upstart, systemd, Runit and even Supervisor.
+There is a well written [comparison](http://www.tuicool.com/articles/qy2EJz3) of Upstart, systemd, Runit, and Supervisor.
 
-Running the likes of the below commands will provide some good details on how these packages interact with each other:
+The below commands will provide good details on how these packages interact with each other:
 
 {linenos=off, lang=bash}
     aptitude show sysvinit
     aptitude show systemd
     # and any others you think of
 
-These system and service managers all run as `PID 1` and start the rest of your system. Your Linux system will more than likely be using one of these to start tasks and services during boot, stop them during shutdown and supervise them while the system is running. Ideally you are going to want to use something higher level to look after your NodeJS application(s). See the following candidates.
+These system and service managers all run as `PID 1` and start the rest of your system. Your Linux system will more than likely be using one of these to start tasks and services during boot, stop them during shutdown, and supervise them while the system is running. Ideally, you are going to want to use something higher level to look after your NodeJS application(s). See the following candidates.
 
 ##### [forever](https://github.com/foreverjs/forever) {#vps-countermeasures-lack-of-visibility-proactive-monitoring-forever}
 
-and its [web UI](https://github.com/FGRibreau/forever-webui) can run any kind of script continuously (whether it is written in NodeJS or not). This was not always the case though. It was originally targeted toward keeping NodeJS applications running.
+forever and its [web UI](https://github.com/FGRibreau/forever-webui) can run any kind of script continuously (whether it is written in NodeJS or not). This was not always the case though. It was originally targeted toward keeping NodeJS applications running.
 
-Requires NPM to [install globally](https://www.npmjs.com/package/forever). We already have a package manager on Debian and all other main-stream Linux distros. Even Windows has package managers. Installing NPM just adds more attack surface area. Unless it is essential, I would rather do without NPM on a production server where we are actively working to [reduce the installed package count](#vps-countermeasures-disable-remove-services-harden-what-is-left) and [disable](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) everything else we can. We could install forever on a development box and then copy to the production server, but it starts to turn the simplicity of a node module into something not as simple, which then makes native offerings such as [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and even [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
+forever requires NPM to [install globally](https://www.npmjs.com/package/forever). We already have a package manager on Debian, and all other mainstream Linux distros. Even Windows has package managers. Installing NPM just adds more attack surface area. Unless it is essential, I would rather do without NPM on a production server where we are actively working to [reduce the installed package count](#vps-countermeasures-disable-remove-services-harden-what-is-left) and [disable](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) everything else we can. We could install forever on a development box and then copy to the production server, but it starts to turn the simplicity of a node module into something not as simple. This then makes native offerings such as [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
 
-**[Does it Meet Our Goals](#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals)**
+**[Does it Meet Our Goals?](#vps-countermeasures-lack-of-visibility-proactive-monitoring-goals)**
 
-1. Not without an extra script. Crontab or similar
-2. The application will be re-started if it dies, but if its response times go up, forever is not going to help. It has no way of knowing.
-3. forever provides no file integrity or times-tamp checking, so there is nothing stopping your application files being swapped for trojanised counterfeits with forever
+1. Not without an extra script such as crontab or similar
+2. The application will restart if it dies, but if its response times go up, forever is not going to help as it has no way of knowing.
+3. forever provides no file integrity or timestamp checking, so there is nothing that prevents known good application files being swapped for trojanised counterfeits with forever
 4. Ability to add the following later without having to swap the chosen offering:
-    1. Reverse proxy: I do not see a problem
-    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing
-    3. Visibility of application statistics could be added later with the likes of [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) or something else, but if you used Monit, then there would not really be a need for forever, as Monit does the little that forever does and is capable of so much more, but is not pushy on what to do and how to do it. All the behaviour is defined with quite a nice syntax in a config file or as many as you like.
-5. There is enough documentation to feel comfortable consuming forever, as forever does not do a lot, which is not a bad trait to have
-6. The code it self is probably production ready, but I have heard quite a bit about stability issues. You are also expected to have NPM installed (more attack surface in the form of an application whos sole purpose is to install more packages, which goes directly against what we are trying to achieve by minimising the attack surface) when we already have native package managers on the server(s).
+    1. Reverse proxy: No problem
+    2. Integrate NodeJS's core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing
+    3. Visibility to application statistics could be added later with the likes of [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) or something else, but if you use Monit, then there would be no need for forever. Monit does the little that forever does and is capable of so much more, but is not pushy on what to do and how to do it. All the behaviour is defined with quite a nice syntax in a config file or as many as you like.
+5. There is enough documentation to feel comfortable consuming forever, as forever does not do a lot
+6. The code itself is probably production ready, but I have heard quite a bit about stability issues. You are also expected to have NPM installed (more attack surface) when we already have native package managers on the server(s).
 
 **Overall Thoughts**
 
-For me, I am looking for a tool set that is a little smarter, knows when the application is struggling and when someone has tampered with it. Forever does not satisfy the requirements. There is often a balancing act between not doing enough and doing too much. If the offering "can" do to much but does not actually do it (get in your way), then it is not so bad, as you do not have to use all the features. In saying that, it is extra attack surface area that can and will be exploited, it is just a matter of time.
+I am looking for a tool set that is a little smarter, knows when the application is struggling, and when someone has tampered with it. Forever does not satisfy these requirements. There is often a balancing act between not doing enough and doing too much. If the offering "can" do too much but do so in a manner that doesn't get in your way, then it's not so bad, you do not have to use all the features. In saying that, it is extra attack surface area that can and will be exploited, it's just a matter of time.
 
 ##### [PM2](http://pm2.keymetrics.io/)
 
-Younger than forever, but seems to have quite a few more features. I am not sure about production ready though. Let us elaborate.
+PM2 is younger than forever, but seems to have quite a few more features. I am not sure about production-ready though, let's elaborate.
 
-I prefer the dark cockpit approach from my monitoring tools. What I mean by that is, I do not want to be told that everything is OK all the time. I only want to be notified when things are not OK. PM2 provides a display of memory and cpu usage of each app with `pm2 monit`, I do not have the time to sit around watching statistics that do not need to be watched and most system administrators do not either, besides, when we do want to do this, we have perfectly good native tooling that system administrators are comfortable using. Amongst the list of [commands that PM2 provides](https://github.com/Unitech/pm2#commands-overview), most of this functionality can be performed by native tools, so I am not sure what benefit this adds.
+I prefer the dark cockpit approach with my monitoring tools. By this I mean, I do not want to be told that everything is OK all the time. I only want to be notified when things are not OK. PM2 provides a display of memory and CPU usage for each app with `pm2 monit`. I do not have the time to sit around watching statistics that don't need to be watched, and neither do most system administrators. Besides, when we do want to do this, we have perfectly good native tooling that system administrators are comfortable using. Amongst the list of [commands that PM2 provides](https://github.com/Unitech/pm2#commands-overview), most of this functionality can be performed by native tools, so I am not sure what benefit this adds.
 
-PM2 also seems to [provide logging](https://github.com/Unitech/pm2#log-facilities). My applications provide their [own logging](#web-applications-countermeasures-lack-of-visibility-insufficient-logging) and we have the [systems logging](#vps-countermeasures-lack-of-visibility-logging-and-alerting) which provides aggregates and singular logs, so again I struggle to see what PM2 is offering here that we do not already have.
+PM2 also seems to [provide logging](https://github.com/Unitech/pm2#log-facilities). My applications provide their [own logging](#web-applications-countermeasures-lack-of-visibility-insufficient-logging) and we have the system's [logging](#vps-countermeasures-lack-of-visibility-logging-and-alerting), which provides aggregate and singular logs, so again I struggle to see what PM2 is offering here that we do not already have.
 
-As mentioned on the [github](https://github.com/Unitech/pm2) README: â€œ_PM2 is a production process manager for Node.js applications with a built-in load balancer_â€œ. This â€œSoundsâ€ and at the initial glance looks shiny. Very quickly you should realise there are a few security issues you need to be aware of though.
+As mentioned on the [github](https://github.com/Unitech/pm2) README: "PM2 is a production process manager for Node.js applications with a built-in load balancer". Initially, this sounds and looks shiny. Very quickly though, you should realise there are a few security issues you need to be aware of.
 
-The word â€œproductionâ€ is used but it requires NPM to install globally. We already have a package manager on Debian and all other main-stream Linux distros. As previously mentioned, installing NPM adds unnecessary attack surface area. Unless it is essential and it should not be, we really do not want another application whos sole purpose is to install additional attack surface in the form of extra packages. NPM contains a huge number of packages, that we really do not want access to on a production server facing the internet. We could install PM2 on a development box and then copy to the production server, but it starts to turn the simplicity of a node module into something not as simple, which then, as does forever, makes offerings like [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and even [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
+The word 'production' is used but it requires NPM to install globally. We already have a package manager on Debian and all other main-stream Linux distros. As previously mentioned, installing NPM adds unnecessary attack surface area. Unless it is essential, and it should not be, we really do not want another application whose sole purpose is to install additional attack surface in the form of extra packages. NPM contains a huge number of packages, we really do not want these on a production server facing the Internet. We could install PM2 on a development box and then copy it to the production server, but it starts to turn the simplicity of a node module into something not as simple. As with forever, this makes offerings such as [Supervisor](#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor), [Monit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit) and [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger) look even more attractive.
 
 At the time of writing this, PM2 is about four years old with about 440 open issues on github, most quite old, with 29 open pull requests.
+Yes, it is very popular currently, but that does not tell me it is ready for production though, it tells me the marketing is working.
 
-Yes, it is very popular currently. That does not tell me it is ready for production though. It tells me the marketing is working.
-
-"[Is your production server ready for PM2](https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#is-my-production-server-ready-for-pm2)?" That phrase alone tells me the mind-set behind the project. I would much sooner see it worded the other way around. Is PM2 ready for my production server? Your production server(s) are what you have spent time hardening, I am not personally about to compromise that work by consuming a package that shows me no sign of up-front security considerations in the development of this tool. You are going to need a development server for this, unless you honestly want development tools installed on your production server (NPM, git, build-essential and NVM) on your production server? Not for me or my clients thanks.
-
-If you have considered the above concerns and can justify adding the additional attack surface area, check out the features if you have not already.
+"[Is your production server ready for PM2](https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#is-my-production-server-ready-for-pm2)?" That phrase alone tells me the mindset behind the project. I would much sooner see it worded the other way around. Is PM2 ready for my production server? Your production server(s) are what you have spent time hardening, I am not personally about to compromise that work by consuming a package that shows me no sign of upfront security considerations in the development of this tool. You are going to need a development server for this, unless you honestly want development tools installed on your production server (NPM, git, build-essential and NVM) on your production server. Not for me, or my clients, thanks.
 
 **Features that Stand Out**
 
-They are also listed on the github repository. Just beware of some of the caveats. Like for the [load balancing](https://github.com/Unitech/pm2#load-balancing--0s-reload-downtime): â€œ_we recommend the use of node#0.12.0+ or node#0.11.16+. We do not support node#0.10.*'s cluster module anymore_â€. 0.11.16 is unstable, but hang-on, I thought PM2 was a â€œproductionâ€ process manager? OK, so were happy to mix unstable in with something we label as production?
+They are listed on the github repository. Just beware of some of the caveats. For [load balancing](https://github.com/Unitech/pm2#load-balancing--0s-reload-downtime): "we recommend the use of node#0.12.0+ or node#0.11.16+. We do not support node#0.10.*'s cluster module anymore". 0.11.16 is unstable, but hang on, I thought PM2 was a "production" process manager?
 
-On top of NodeJS, PM2 will run the following scripts: bash, python, ruby, coffee, php, perl.
+On top of NodeJS, PM2 will run the following: bash, python, ruby, coffee, php, perl.
 
 After working through the offered features, I struggled to find value in features that were not already offered natively as part of the GNU/Linux Operation System.
 
@@ -3264,35 +3258,34 @@ PM2 has [Start-up Script Generation](https://github.com/Unitech/PM2/blob/master/
 
 **Documentation**
 
-The documentation has nice eye candy which I think helps to sell PM2.
+The documentation is nice eye candy, which I think helps to sell PM2.
 
-PM2 has what they call an Advanced [Readme](https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md) which at the time of reviewing, didn't appear to be very advanced and had a large collection of broken links.
+PM2 has what they call an Advanced [Readme](https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md) which at the time of reviewing, didn't appear to be very advanced, and had a large collection of broken links.
 
 **Does it Meet Our Goals**
 
-1. The feature exists, unsure of how reliable it is currently though. I personally prefer to [create my own](#vps-countermeasures-lack-of-visibility-proactive-monitoring-keep-nodejs-application-alive) and test that it is being used by the Operating Systems native init system, that is the same system that starts everything else at boot time. There is nothing more reliable than this.
-2. Application should be re-started if it dies should not be a problem. PM2 can also restart your application if it reaches a certain memory or cpu threshold. I have not seen anything around restarting based on response times or other application health issues though.
-3. PM2 provides no file integrity or times-tamp checking, so there is nothing stopping your application files being swapped for trojanised counterfeits with PM2
+1. The feature exists, unsure of how reliable it is currently though. I personally prefer to [create my own](#vps-countermeasures-lack-of-visibility-proactive-monitoring-keep-nodejs-application-alive) and test that it is being used by the operating system's native init system, that is, the same system that starts everything else at boot time. There is nothing more reliable than this.
+2. The application restarts if it dies so no problem there. PM2 can also restart your application if it reaches a certain memory or CPU threshold. I have not seen anything specific to restarting based on response times, or other application health issues though.
+3. PM2 provides no file integrity or timestamp checking, so there is nothing stopping your application files being swapped for trojanised counterfeits with PM2
 4. Ability to add the following later without having to swap the chosen offering:
-    1. Reverse proxy: I do not see a problem
+    1. Reverse proxy: No problem
     2. [Clustering](http://pm2.keymetrics.io/docs/usage/cluster-mode/) and [load-balancing](https://github.com/Unitech/pm2#load-balancing--zero-second-downtime-reload) is integrated.
-    3. PM2 can provide a small collection of viewable statistics, nothing that can not be easily seen by native tooling though, it also offers KeyMetrics integration, except you have to sign up and [pay $29 per host per month](https://keymetrics.io/pricing/) for it. Personally I would rather pay $0 for something with more features that is way more mature and also native to the Operating System. You will see this with [Monit](https://mmonit.com/monit/) soon.
-5. There is reasonable official documentation for the age of the project. The community supplied documentation has caught up. After working through all of the offerings and edge-cases, I feel as I usually do with NodeJS projects. The documentation does not cover all the edge-cases and the development itself misses edge cases.
-6. I have not seen much that would make me think PM2 is production ready. It may work well, but I do not see much thought in terms of security gone into this project. It has not wow'd me.
+    3. PM2 can provide a small collection of viewable statistics, nothing that can not be easily seen by native tooling though. It also offers KeyMetrics integration, except you have to sign up and [pay $29 per host per month](https://keymetrics.io/pricing/) for it. Personally, I would rather pay $0 for something with more features that is way more mature and also native to the operating system. You will see this with [Monit](https://mmonit.com/monit/) soon.
+5. There is reasonable official documentation for the age of the project. The community supplied documentation has caught up. After working through all of the offerings and edge cases, I feel as I usually do with NodeJS projects. The documentation does not cover all the edge cases and the development itself also covers few edge cases.
+6. I have not seen much that would make me think PM2 is production ready. It may work well, but I do not see much thought in terms of security going into this project. It did not wow me.
 
 **Overall Thoughts**
 
-For me, the architecture does not seem to be heading in the right direction to be used on a production internet facing web server, where less is better, unless the functionality provided is truly unique and adds more value than the extra attack surface area removes. I would like to see this change, but I do not think it will, the culture is established.
+The architecture does not seem to be heading in the right direction to be used on a production, Internet-facing web server, where less is better. Unless the functionality provided is truly unique and adds more value there's no reason to add extra attack surface area. I would like to see this change, but I do not think it will, the culture is established.
 
 A> The following are better suited to monitoring and managing your applications. Other than [Passenger](#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger), they should all be in your repositories, which means trivial installs and configurations.
 
 ##### [Supervisor](https://github.com/Supervisor/supervisor) {#vps-countermeasures-lack-of-visibility-proactive-monitoring-supervisor}
 
-Supervisor is a process manager with a lot of features and a higher level of abstraction than the likes of the above mentioned [Sysvinit, upstart, systemd, Runit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit), etc, so it still needs to be run by an init daemon in itself.
+Supervisor is a process manager with lots of features, and a higher level of abstraction than the likes of the above mentioned [Sysvinit, upstart, systemd, Runit](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit), etc. It still needs to be run by an init daemon however.
 
-From the [docs](http://supervisord.org/#supervisor-a-process-control-system): â€œ_It shares some of the same goals of programs like [launchd, daemontools, and runit](http://supervisord.org/glossary.html#term-daemontools). Unlike some of these programs, it is not meant to be run as a substitute for init as â€œprocess id 1â€. Instead it is meant to be used to control processes related to a project or a customer, and is meant to start like any other program at boot time._â€ Supervisor monitors the [state](http://supervisord.org/subprocess.html#process-states) of processes. Where as a tool like [Monit](https://mmonit.com/monit/#about) can perform so many more types of tests and take what ever actions you define.
-
-It is in the Debian [repositories](https://packages.debian.org/stretch/supervisor) and is a trivial install on Debian and derivatives.
+From the [docs](http://supervisord.org/#supervisor-a-process-control-system): "It shares some of the same goals of programs such as [launchd, daemontools, and runit](http://supervisord.org/glossary.html#term-daemontools). Unlike some of these programs, it is not meant to be run as a substitute for init as 'process id 1'. Instead it is meant to be used to control processes related to a project or a customer, and is meant to start like any other program at boot time." Supervisor monitors the [state](http://supervisord.org/subprocess.html#process-states) of processes  where as a tool like [Monit](https://mmonit.com/monit/#about) can perform so many more types of tests, and take what ever actions you define.
+Superevisor is in the Debian [repositories](https://packages.debian.org/stretch/supervisor) and is a trivial install on Debian and derivatives.
 
 **Documentation**
 
@@ -3300,63 +3293,63 @@ It is in the Debian [repositories](https://packages.debian.org/stretch/superviso
 
 **Does it Meet Our Goals**
 
-1. Application should start automatically on system boot: Yes, that is what Supervisor does well.
-2. Application will be re-started if it dies, or becomes un-responsive. It is often difficult to get accurate up/down status on processes on UNIX. Pid-files often lie. Supervisord starts processes as sub-processes, so it always knows the true up/down status of its children. Your application may become unresponsive or can not connect to its database or any other service/resource it needs to work as expected. To be able to monitor these events and respond accordingly your application can expose a health-check interface, like `GET /healthcheck`. If everything goes well it should return `HTTP 200`, if not then `HTTP 5**` In some cases the restart of the process will solve this issue. [`httpok`](https://superlance.readthedocs.io/en/latest/httpok.html) is a Supervisor event listener which makes `GET` requests to the configured URL. If the check fails or times out, `httpok` will restart the process. To enable `httpok` the [following lines](https://blog.risingstack.com/operating-node-in-production/#isitresponding) have to be placed in `supervisord.conf`:  
+1. Application should start automatically on system boot: Yes, this is what Supervisor does well.
+2. Application will be restarted if it dies, or becomes unresponsive. It is often difficult to get accurate up/down status on processes on UNIX. Pid-files often lie. Supervisord starts processes as subprocesses, so it always knows the true up/down status of its children. Your application may become unresponsive or can not connect to its database, or any other service/resource it needs to work as expected. To be able to monitor these events and respond accordingly your application can expose a health check interface, such as `GET /healthcheck`. If everything goes well it should return `HTTP 200`, if not then `HTTP 5**` In some cases the restart of the process will solve this issue. [`httpok`](https://superlance.readthedocs.io/en/latest/httpok.html) is a Supervisor event listener which makes `GET` requests to the configured URL. If the check fails or times out, `httpok` will restart the process. To enable `httpok` the [following lines](https://blog.risingstack.com/operating-node-in-production/#isitresponding) must be placed in `supervisord.conf`:  
   
   {linenos=off, lang=bash}
       [eventlistener:httpok]
       command=httpok -p my-api http://localhost:3000/healthcheck  
       events=TICK_5  
   
-3. The person responsible for the application should know if a troganised version of your application is swapped in, or even if your file time-stamps have changed. This is not one of Supervisor's responsibilities.
+3. The person responsible for the application should know if a troganised version of the application is swapped in, or if file timestamps have changed. This is not one of Supervisor's capabilities.
 4. Ability to add the following later without having to swap the chosen offering:
-    1. Reverse proxy: I do not see a problem
-    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. This would be completely separate to supervisor.
-    3. Visibility of application statistics could be added later with the likes of Monit or something else. For me, Supervisor does not do enough. Monit does. Plus if you need what Monit offers, then you have to have three packages to think about, or Something like Supervisor, which is not an init system, so it kind of sits in the middle of the ultimate stack. So my way of thinking is, use the init system you already have to do the low level lifting and then something small to take care of everything else on your server that the init system is not really designed for, and Monit does this job really well. Just keep in mind also. This is not based on any bias. I had not used Monit before this exercise. It has been a couple of years since a lot of this was written though and Monit has had a home in my security focussed hosting facility since then. I never look at it or touch it, Monit just lets me know when there are issues and is quiet the rest of the time.
+    1. Reverse proxy: No problem
+    2. Integrate NodeJS's core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. This would be completely separate to Supervisor.
+    3. Visibility to application statistics could be added later with the likes of Monit or something else. For me, Supervisor does not do enough. Monit does. If you need what Monit offers, then you have three packages to think about, or something like Supervisor, which is not an init system, so it kind of sits in the middle of the stack. My preference is to use the init system already available to do the low level lifting, and then something small to take care of everything else on your server that the init system is not really designed for. Monit does this job really well. Keep in mind, this is not based on bias. I had not used Monit before this exercise. It has been a couple of years since a lot of this was written though, and Monit has had a home in my security focused hosting facility since then. I never look at it or touch it, Monit just lets me know when there are issues, and is quiet the rest of the time.
 5. Supervisor is a mature product. It has been around since 2004 and is still actively developed. The official and community provided [docs](https://serversforhackers.com/monitoring-processes-with-supervisord) are good.
-6. Yes it is production ready. It has proven itself.
+6. Yes it is production ready, it has proven itself.
 
 **Overall Thoughts**
 
-The documentation is quite good, easy to read and understand. I felt that the config was quite intuitive also. I already had systemd installed out of the box and did not see much point in installing Supervisor as systemd appeared to do everything Supervisor could do, plus systemd is an init system, sitting at the bottom of the stack. In most scenarios you are going to have a Sysvinit or replacement of (that runs with a `PID` of `1`), so in many cases Supervisor although it is quite nice is kind of redundant.
+The documentation is quite good, it's easy to read and understand. I felt that the config was quite intuitive as well. I already had systemd installed and did not see much point in installing Supervisor as systemd appeared to do everything Supervisor could do, plus systemd is an init system, sitting at the bottom of the stack. In most scenarios you are going to have a Sysvinit or replacement (that runs with a `PID` of `1`). In many cases, Supervisor while quite nice, is kind of redundant.
 
-Supervisor is better suited to running multiple scripts with the same runtime, for example a bunch of different client applications running on Node. This can be done with systemd and the others, but Supervisor is a better fit for this sort of thing, PM2 also looks to do a good job of running multiple scripts with the same runtime.
+Supervisor is better suited to running multiple scripts with the same runtime, for example, a bunch of different client applications running on Node. This can be done with systemd and others, but Supervisor is a better fit for this sort of thing. PM2 also looks to do a good job of running multiple scripts with the same runtime.
 
 ##### [Monit](https://mmonit.com/monit/) {#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit}
 
-Is a utility for monitoring and managing daemons or similar programs. It is mature, actively maintained, free, open source and licensed with GNU [AGPL](http://www.gnu.org/licenses/agpl.html).
+Monit is a utility for monitoring and managing daemons or similar programs. It is mature, actively maintained, free, open source, and licensed with GNU [AGPL](http://www.gnu.org/licenses/agpl.html).
 
-It is in the debian [repositories](https://packages.debian.org/stretch/monit) (trivial install on Debian and derivatives). The home page told me the binary was just under 500kB. The install however produced a different number:
+It is in the Debian [repositories](https://packages.debian.org/stretch/monit) (trivial install on Debian and derivatives). The home page told me the binary was just under 500kB. The install however produced a different number:
 
 {linenos=off, lang=bash}
     After this operation, 765 kB of additional disk space will be used.
 
 Monit provides an impressive feature set for such a small package.
 
-Monit provides far more visibility into the state of your application and control than any of the offerings mentioned above. It is also generic. It will manage and/or monitor anything you throw at it. It has the right level of abstraction. Often when you start working with a product you find its limitations, and they stop you moving forward, you end up settling for imperfection or you swap the offering for something else providing you have not already invested to much effort into it. For me Monit hit the sweet spot and never seems to stop you in your tracks. There always seems to be an easy to relatively easy way to get any "monitoring -> take action" sort of task done. What I also really like is that moving away from Monit would be relatively painless also, other than what you would miss. The time investment / learning curve is very small, and some of it will be transferable in many cases. It is just config from the control file.
+Monit provides far more visibility into the state of your application and control than any of the offerings mentioned above. It is also generic. It will manage and/or monitor anything you throw at it. It has the right level of abstraction. Often, when you start working with a product you find its limitations, and they stop you moving forward. You end up settling for imperfection or you swap the offering for something else providing you have not already invested too much effort into it. For me, Monit hit the sweet spot, and never seems to stop you in your tracks. There always seems to be an easy way to get any "monitoring -> take action" sort of task done. I also really like that moving away from Monit would be relatively painless, other than miss its capabilities. The time investment and learning curve are very small, and some of it will be transferable in many cases, you need only config from the control file.
 
 {#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit-features-that-stand-out}
 **[Features that Stand Out](https://mmonit.com/monit/#about)**
 
 * Ability to [monitor](http://slides.com/tildeslash/monit#/1) files, [directories](http://slides.com/tildeslash/monit#/23), disks, processes, [programs](http://slides.com/tildeslash/monit#/26), the system, and other hosts.
 * Can perform [emergency logrotates](http://slides.com/tildeslash/monit#/21) if a log file suddenly grows too large too fast
-* [File Checksum Testing](http://mmonit.com/monit/documentation/monit.html#FILE-CHECKSUM-TESTING). [This](http://slides.com/tildeslash/monit#/22) is good so long as the compromised server has not also had the tool your using to perform your verification (md5sum or sha1sum) modified, whether using the systems utilities or monit provided utilities, which would be common. That is why in cases like this, tools such as [Stealth](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth) can be a good choice to protect your monitoring tools.
-* Testing of other attributes like ownership and access permissions. These are good, but again can be [easily modified](#vps-identify-risks-lack-of-visibility).
-* Monitoring [directories](http://slides.com/tildeslash/monit#/23) using time-stamp. Good idea, but do not rely solely on this. time-stamps are easily modified with `touch -r`, providing you do it between Monits cycles and you do not necessarily know when they are, unless you have permissions to look at Monits control file. This provides defence in depth though.
-* Monitoring [space of file-systems](http://slides.com/tildeslash/monit#/24)
-* Has a built-in lightweight HTTP(S) interface you can use to browse the Monit server and check the status of all monitored services. From the web-interface you can start, stop and restart processes and disable or enable monitoring of services. Monit provides [fine grained control](https://mmonit.com/monit/documentation/monit.html#MONIT-HTTPD) over who/what can access the web interface or whether it is even active or not. Again an excellent feature that you can choose to use, or not even have the extra attack surface.
-* There is also an aggregator ([m/monit](https://mmonit.com/)) that allows system administrators to monitor and manage many hosts at a time. Also works well on mobile devices and is available at a one off cost (reasonable price) to monitor all hosts.
-* Once you install Monit you have to actively enable the http daemon in the `monitrc` in order to run the Monit cli and/or access the Monit http web UI. At first I thought â€œis this broken?â€ I could not even run `monit status` (a Monit command). ps told me Monit was running. Then I realisedâ€¦ **it is secure by default**. You have to actually think about it in order to expose anything. It was this that confirmed Monit was one of the tools for me.
+* [File Checksum Testing](http://mmonit.com/monit/documentation/monit.html#FILE-CHECKSUM-TESTING). [This](http://slides.com/tildeslash/monit#/22) is good so long as the compromised server has not also had the tool you're using to perform your verification (md5sum or sha1sum) modified, whether using the system's utilities or Monit-provided utilities. In cases like this, tools such as [Stealth](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth) can be a good choice to protect your monitoring tools.
+* Testing of other attributes such as ownership and access permissions. These are good, but again can be [easily modified](#vps-identify-risks-lack-of-visibility).
+* Monitoring [directories](http://slides.com/tildeslash/monit#/23) using timestamps. Good idea, but do not rely solely on this. Timestamps are easily modified with `touch -r`, providing you do it between Monit's cycles. You may not necessarily know when they are, unless you have permissions to look at Monit's control file. This provides defence in depth though.
+* Monitoring [space of file systems](http://slides.com/tildeslash/monit#/24)
+* Has a built-in lightweight HTTP(S) interface you can use to browse the Monit server, and check the status of all monitored services. From the web interface you can start, stop, and restart processes and disable or enable monitoring of services. Monit provides [fine grained control](https://mmonit.com/monit/documentation/monit.html#MONIT-HTTPD) over who/what can access the web interface, or whether it is even active or not. Again an excellent feature that you can choose to use or not depending on your attack surface preferences.
+* There is also an aggregator ([m/monit](https://mmonit.com/)) that allows system administrators to monitor and manage many hosts at a time. It also works well on mobile devices and is available at a reasonable price to monitor all hosts.
+* Once you install Monit you have to actively enable the HTTP daemon in the `monitrc` in order to run the Monit cli and/or access the Monit HTTP web UI. At first I thought of this as broken. I could not even run `monit status` (a Monit command). PS told me Monit was running, then I realised **it is secure by default**. You have to actually try to expose anything. It was this that confirmed Monit was one of the tools for me.
 * The [Control File](http://mmonit.com/monit/documentation/monit.html#THE-MONIT-CONTROL-FILE)
-* Security by default. Just [like SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication-ssh-perms), to protect the security of your control file and passwords the control file must have read-write permissions no more than `0700 (`u=xrw,g=,o=`); Monit will complain and exit otherwise, again, security by default.
+* Security by default. Just [like SSH](#vps-countermeasures-disable-remove-services-harden-what-is-left-ssh-key-pair-authentication-ssh-perms), to protect the security of your control file and passwords, the control file must have read-write permissions no more than `0700 (`u=xrw,g=,o=`); Monit will complain and exit otherwise, again, security by default.
 
 **Documentation**
 
 The following was the documentation I used in the same order and I found that the most helpful.
 
 1. [Main web site](https://mmonit.com/monit/)
-2. Clean concise [Official Documentation](https://mmonit.com/monit/documentation/monit.html) all on one page with hyper-links
-3. Source and links to other [documentation](https://bitbucket.org/tildeslash/monit/src) including a QUICK START guide of about 6 lines
+2. Clean concise [Official Documentation](https://mmonit.com/monit/documentation/monit.html) all on one page with hyperlinks
+3. Source and links to other [documentation](https://bitbucket.org/tildeslash/monit/src), including a QUICK START guide of about six lines
 4. [Adding Monit to systemd](https://mmonit.com/wiki/Monit/Systemd)
 5. [Release notes](https://mmonit.com/monit/changes/)
 6. The monit control file itself has excellent documentation in the form of commented examples. Just uncomment and modify to suite your use case.
@@ -3364,26 +3357,26 @@ The following was the documentation I used in the same order and I found that th
 **Does it Meet Our Goals**
 
 1. Application can start automatically on system boot
-2. Monit has a plethora of different types of tests it can perform and then follow up with actions based on the outcomes. [Http](http://mmonit.com/monit/documentation/monit.html#HTTP) is but one of them.
-3. Monit covers this nicely, you still need to be integrity checking Monit though.
+2. Monit has a plethora of different types of tests it can perform and then follow up with actions based on the outcomes. [HTTP](http://mmonit.com/monit/documentation/monit.html#HTTP) is but one of them.
+3. Monit covers this nicely, you still need to integrity check Monit though.
 4. Ability to add the following later without having to swap the chosen offering:
-    1. Reverse proxy: Yes, I do not see any issues here
-    2. Integrate NodeJSâ€™s core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. Monit will still monitor, restart and do what ever else you tell it to do.
+    1. Reverse proxy: No issues here
+    2. Integrate NodeJS's core module [cluster](https://nodejs.org/api/cluster.html) into your NodeJS application for load balancing. Monit will still monitor, restart, and do what ever else you tell it to do.
     3. Monit provides application statistics to look at if that is what you want, but it also goes further and provides directives for you to declare behaviour based on conditions that Monit checks for and can execute.
 5. Plenty of official and community supplied documentation
-6. Yes it is production ready and has been for many years and is still very actively maintained. It is proven itself. Some extra education around some of the [points](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit-features-that-stand-out) I raised above with some of the security features would be good.
+6. Yes, it is production ready, has been for many years, and is still very actively maintained. It has proven itself. Some extra education specific to the [points](#vps-countermeasures-lack-of-visibility-proactive-monitoring-monit-features-that-stand-out) I raised above with some of the security features would be good.
 
 **Overall Thoughts**
 
-There was accepted answer on [Stack Overflow](http://stackoverflow.com/questions/7259232/how-to-deploy-node-js-in-cloud-for-high-availability-using-multi-core-reverse-p) that discussed a pretty good mix and approach to using the right tools for each job. Monit has a lot of capabilities, none of which you must use, so it does not get in your way, as many opinionated tools do and like to dictate how you do things and what you must use in order to do them. I have been using Monit now for several years and just forget that it is even there, until it barks because something is not quite right. Monit allows you to leverage what ever you already have in your stack, it plays very nicely with all other tools. Monit under sells and over delivers. You do not have to install package managers or increase your attack surface other than `[apt-get|aptitude] install monit`. It is easy to configure and has lots of good documentation.
+There was an well received answer on [Stack Overflow](http://stackoverflow.com/questions/7259232/how-to-deploy-node-js-in-cloud-for-high-availability-using-multi-core-reverse-p) that discussed a good mix and approach to using the right tools for each job. Monit has many capabilities, none of which you must use, so it does not get in your way. Many tools do, and like to dictate how you do things and what you must use in order to do them. I have been using Monit now for several years and just forget that it is even there, until it alerts because something is not quite right. Monit allows you to leverage what ever you already have in your stack, it plays very nicely with all other tools. Monit under sells and over delivers. You do not have to install package managers or increase your attack surface other than `[apt-get|aptitude] install monit`. It is easy to configure and has lots of good documentation.
 
 ##### Passenger {#vps-countermeasures-lack-of-visibility-proactive-monitoring-passenger}
 
-I have looked at Passenger before and it looked quite good then. It still does, with one main caveat. It is trying to do to much. One can easily get lost in the official documentation ([example](http://mmonit.com/wiki/Monit/Installation) of the Monit install (handfull of commands to cover all Linux distributions on one page) vs Passenger [install](https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#installation) (many pages to get through)).  â€œ_Passenger is a web server and application server, designed to be fast, robust and lightweight. It runs your web applications with the least amount of hassle by taking care of almost all administrative heavy lifting for you._â€ I would like to see the actual weight rather than just a relative term â€œlightweightâ€. To me it does not look light weight. The feeling I got when evaluating Passenger was similar to the feeling produced with my [Ossec evaluation](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec).
+I looked at Passenger before and it looked quite good when I did. It still does, with one main caveat: it is trying to do too much. One can easily get lost in the official documentation ([example](http://mmonit.com/wiki/Monit/Installation) of the Monit install (handful of commands to cover all Linux distributions on one page) versus Passenger [install](https://www.phusionpassenger.com/documentation/Users%20guide%20Standalone.html#installation) (many pages to get through)). "Passenger is a web server and application server, designed to be fast, robust and lightweight. It runs your web applications with the least amount of hassle by taking care of almost all administrative heavy lifting for you." I would like to see the actual application weight, rather than just a relative term 'lightweight'. To me it does not look lightweight. The feeling I got when evaluating Passenger was similar to the feeling produced with my [Ossec evaluation](#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec).
 
-The learning curve is quite a bit steeper than all the previous offerings. Passenger has strong opinions that once you buy into could make it hard to use the tools you may want to swap in and out. I am not seeing the [UNIX Philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) here.
+The learning curve is quite a bit steeper than all the previous offerings. Passenger makes it hard to use the tools you may want to swap in and out. I am not seeing the [UNIX Philosophy](http://en.wikipedia.org/wiki/Unix_philosophy) here.
 
-If you looked at the Phusion Passenger Philosophy when it was available, seems to have been removed now, you would see some note-worthy comments. â€œWe believe no good software has bad documentationâ€œ. If your software is 100% intuitive, the need for documentation should be minimal. Few software products are 100% intuitive, because we only have so much time to develop them. The [comment around](https://github.com/phusion/passenger/wiki/Phusion-Passenger:-Meteor-tutorial#what-passenger-doesnt-do) â€œthe Unix wayâ€ is interesting also. At this stage I am not sure this is the Unix way. I would like to spend some time with someone or some team that has Passenger in production in a diverse environment and see how things are working out.
+If you looked at the Phusion Passenger Philosophy when it was available (it's been removed) you would see some note-worthy comments. "We believe no good software has bad documentation". If your software is 100% intuitive, the need for documentation should be minimal. Few software products are 100% intuitive, because we only have so much time to develop them. The [comment around](https://github.com/phusion/passenger/wiki/Phusion-Passenger:-Meteor-tutorial#what-passenger-doesnt-do) "the Unix way" is interesting also. At this stage I am not sure this is the Unix way. I would like to spend some time with someone, or some team, that has Passenger in production in a diverse environment and see how things are working out.
 
 Passenger is not in the Debian repositories, so you would need to add the apt repository.
 
@@ -3393,21 +3386,21 @@ Passenger is seven years old at the time of writing this, but the NodeJS support
 
 Sadly there were not many that stood out for me.
 
-* The [Handle more traffic](https://www.phusionpassenger.com/handle_more_traffic) marketing material looked similar to [Monit resource testing](http://mmonit.com/monit/documentation/monit.html#RESOURCE-TESTING) but without the detail. If there is something Monit can not do well, it will say â€œHay, use this other tool and I will help you configure it to suite the way you want to work. If you do not like it, swap it out for something elseâ€ With Passenger it seems to integrate into everything rather than providing tools to communicate loosely. Essentially locking you into a way of doing something that hopefully you like. It also talks about â€œUses all available CPU coresâ€œ. If you are using Monit you can use the NodeJS cluster module to take care of that. Again leaving the best tool for the job to do what it does best.
+* The [Handle more traffic](https://www.phusionpassenger.com/handle_more_traffic) marketing material looked similar to [Monit resource testing](http://mmonit.com/monit/documentation/monit.html#RESOURCE-TESTING) but without the detail. If there is one thing Monit doesn't do well, it's letting you know when to use other tools and help you configure them to suit your needs. If you do not like it, swap it out for something else. Passenger seems to integrate into everything, rather than providing tools to communicate loosely, essentially locking you into a way of doing something that hopefully you like. It also talks about using all available CPU cores. If you are using Monit you can use the NodeJS cluster module to take care of that, again, leaving the best tool for the job it does best.
 * [Reduce maintenance](https://www.phusionpassenger.com/reduce_maintenance)
-  * â€œ**_Keep your app running, even when it crashes_**. _Phusion Passenger supervises your application processes, restarting them when necessary. That way, your application will keep running, ensuring that your website stays up. Because this is automatic and builtin, you do not have to setup separate supervision systems like Monit, saving you time and effort._â€ but this is what we want, we want a separate supervision (monitoring) system, or at least a very small monitoring daemon, and this is what Monit excels at, and it is so much easier to set-up than Passenger. This sort of marketing does not sit right with me.
-  * â€œ**_Host multiple apps at once_**. _Host multiple apps on a single server with minimal effort._â€ If we are talking NodeJS web apps, then they are their own server. They host themselves. In this case it looks like Passenger is trying to solve a problem that does not exist, at least in regards to NodeJS?
+  * "**_Keep your app running, even when it crashes_**. _Phusion Passenger supervises your application processes, restarting them when necessary. That way, your application will keep running, ensuring that your website stays up. Because this is automatic and builtin, you do not have to setup separate supervision systems like Monit, saving you time and effort." But this is what we want, we want a separate supervision (monitoring) system, or at least a very small monitoring daemon, and this is what Monit excels at, and it is so much easier to set-up than Passenger. This sort of marketing does not sit right with me.
+  * "**_Host multiple apps at once_**. _Host multiple apps on a single server with minimal effort." If we are talking NodeJS web apps, then they are their own server. They host themselves. In this case it looks like Passenger is trying to solve a problem that does not exist, at least in regards to NodeJS?
 * [Improve security](https://www.phusionpassenger.com/improve_security)
-  * â€œ**_Privilege separation_**. _If you host multiple apps on the same system, then you can easily run each app as a different Unix user, thereby separating privileges._â€œ. The Monit [documentation](https://mmonit.com/monit/documentation/monit.html#PROGRAM-STATUS-TESTING) says this: â€œIf Monit is run as the super user, you can optionally run the program as a different user and/or group.â€ and goes on to provide examples how it is done. So again I do not see anything new here. Other than the â€œSlow client protectionsâ€ which has side affects, that is it for security considerations with Passenger. Monit has security woven through every aspect of itself.
+  * "**_Privilege separation_**. _If you host multiple apps on the same system, then you can easily run each app as a different Unix user, thereby separating privileges._â€œ. The Monit [documentation](https://mmonit.com/monit/documentation/monit.html#PROGRAM-STATUS-TESTING) says this: "If Monit is run as the super user, you can optionally run the program as a different user and/or group", and goes on to provide examples as to how it is done. Again, I do not see anything new here other than the "slow client protections" which has side effects, that is it for security considerations with Passenger. Monit has security woven through every aspect of itself.
 * What I saw happening here, was a lot of stuff that as a security focussed proactive monitoring tool, was not required. Your mileage may vary.
 
 **[Offerings](https://www.phusionpassenger.com/download)**
 
-Phusion Passenger is a commercial product that has enterprise, custom and open source (which is free and has many features).
+Phusion Passenger is a commercial product that has enterprise, custom, and open source support which is free and includes many features.
 
 **Documentation**
 
-The following was the documentation I used in the same order and I found that the most helpful.
+Following is the documentation I used, in the same order I found to be most helpful.
 
 1. NodeJS [tutorial](https://github.com/phusion/passenger/wiki/Phusion-Passenger%3A-Node.js-tutorial), this got me started with how it could work with NodeJS
 2. [Main web site](https://www.phusionpassenger.com/)
@@ -3421,43 +3414,41 @@ The following was the documentation I used in the same order and I found that th
 10. [Source](https://github.com/phusion/passenger)
 
 
-**Does it Meet Our Goals**
+**Does it Meet Our Goals?**
 
-1. Application should start automatically on system boot. There is no doubt that Passenger goes way beyond this aim.
-2. Application should be re-started if it dies or becomes un-responsive. There is no doubt that Passenger goes way beyond this aim.
-3. I have not seen Passenger provide any file integrity or time-stamp checking features
+1. Application should start automatically on system boot. There is no doubt that Passenger goes way beyond this goal.
+2. Application should restart if it dies or becomes unresponsive. There is no doubt that Passenger goes way beyond this goal too.
+3. I have not seen Passenger provide any file integrity or timestamp checking features
 4. Ability to add the following later without having to swap the chosen offering:
-    1. Reverse proxy: Passenger provides Integrations into Nginx, Apache and stand-alone (provide your own proxy)
+    1. Reverse proxy: Passenger provides integration with Nginx, Apache and stand-alone (provide your own proxy)
     2. Passenger scales up NodeJS processes and automatically load balances between them
     3. Passenger is advertised as offering easily viewable [statistics](https://www.phusionpassenger.com/identify_and_fix_problems). I have not seen many of them though
-5. There is loads of official documentation. Not as much community contributed though.
-6. From what I have seen so far, I would say Passenger may be production ready. I would like to see more around how security was baked into the architecture though before I committed to using it in production. I am just not seeing it.
+5. There is loads of official documentation but not as much community contribution though.
+6. From what I have seen so far, I would say Passenger may be production-ready. I would like to see more specific to how security was baked into the architecture though before I commit to using it in production. I am just not seeing it.
 
 **Overall Thoughts**
 
-I spent quite a while reading the documentation. I just think it is doing to much. I prefer to have stronger single focused tools that do one job, do it well and play nicely with all the other kids in the sand pit. You pick the tool up and it is just intuitive how to use it, and you end up reading docs to confirm how you think it should work. For me, this was not my experience with passenger.
-
-&nbsp;
+I spent quite awhile reading the documentation. I just think it is doing too much. I prefer to have stronger single focused tools that do one job, do it well, and play nicely with all the other kids in the sand pit. You pick the tool, it's simply intuitive how to use it, and you end up just reading docs to confirm how you think it should work. For me, this was not my experience with Passenger.
 
 A> If you are looking for something even more comprehensive, check out [Zabbix](http://en.wikipedia.org/wiki/Zabbix).  
-A> If you like to pay for your tools, check out Nagios if you have not already.
+A> If you like to pay for your tools, check out Nagios, if you have not already.
 
-At this point it was fairly clear as to which components I would like to use to keep my NodeJS application(s) monitored, alive and healthy along with any other scripts and processes.
+At this point it was fairly clear as to which components I would like to use to keep my NodeJS application(s) monitored, alive, and healthy, along with any other scripts and processes.
 
 Systemd and Monit.
 
-Going with the default for the init system should give you a quick start and provide plenty of power. Plus it is well supported, reliable, feature rich and you can manage anything/everything you want without installing extra packages.
+Going with the default for the init system should give you a quick start and provide plenty of power. Plus, it is well supported, reliable, feature rich, and you can manage anything/everything you want without installing extra packages.
 
-For the next level up, I would choose Monit. I have now used it in production and it has taken care of everything above the init system with a very simple configuration. I feel it has a good level of abstraction, plenty of features, never gets in the way, and integrates nicely into your production OS(s) with next to no friction.
+For the next level, I would choose Monit. I have now used it in production, and it has taken care of everything above the init system with a very simple configuration. I feel it has a good level of abstraction, plenty of features, never gets in the way, and integrates nicely with production OS(s) with little to no friction.
 
 ##### Getting Started with Monit {#vps-countermeasures-lack-of-visibility-proactive-monitoring-getting-started-with-monit}
 
-So we have installed Monit with an `apt-get install monit` and we are ready to start configuring it.
+We have installed Monit with an `apt-get install monit` and we are ready to start configuring it.
 
 {linenos=off, lang=bash}
     ps aux | grep -i monit
 
-Will reveal that Monit is running:
+This reveals that Monit is running:
 
 {linenos=off, lang=bash}
     /usr/bin/monit -c /etc/monit/monitrc
@@ -3466,7 +3457,7 @@ The first thing we need to do is make some changes to the control file (`/etc/mo
 
 "_Note that if HTTP support is disabled, the Monit CLI interface will have reduced functionality, as most CLI commands (such as "monit status") need to communicate with the Monit background process via the HTTP interface. We strongly recommend having HTTP support enabled. If security is a concern, bind the HTTP interface to local host only or use Unix Socket so Monit is not accessible from the outside._"
 
-In order to turn on the httpd, all you need in your control file for that is:
+In order to turn on the HTTP daemon, all you need in your control file is:
 
 {linenos=off, lang=bash}
     # only accept connection from localhost
@@ -3474,24 +3465,24 @@ In order to turn on the httpd, all you need in your control file for that is:
     # allow localhost to connect to the server and
     allow localhost
 
-If you want to receive alerts via email, then you will need to [configure that](https://mmonit.com/monit/documentation/monit.html#Setting-a-mail-server-for-alert-delivery). Then on reload you should get start and stop events (when you quit).
+If you want to receive alerts via email, then you will need to [configure it](https://mmonit.com/monit/documentation/monit.html#Setting-a-mail-server-for-alert-delivery). On reload you should get start and stop events (when you quit).
 
 {linenos=off, lang=bash}
     sudo monit reload
 
-Now if you issue a `curl localhost:2812` you should get the web UIs response of a html page. Now you can start to play with the Monit CLI. Monit can also be seen listening in the `netstat` output [above](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) where we disabled and removed services.
+Now, if you issue a `curl localhost:2812` you should see the web UI's response with an HTML page. Now you can start to play with the Monit CLI. Monit can also be seen listening in the `netstat` output [above](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) where we disabled and removed services.
 
-Now to stop the Monit background process use:
+To stop the Monit background process use:
 
 {linenos=off, lang=bash}
     monit quit
 
-You can find all the arguments you can throw at Monit in the documentaion under [Arguments](https://mmonit.com/monit/documentation/monit.html#Arguments), or just issue:
+You can find all the arguments you can use with Monit in the documentaion under [Arguments](https://mmonit.com/monit/documentation/monit.html#Arguments), or just issue:
 
 {linenos=off, lang=bash}
     monit -h # will list all options.
 
-To check the control file for syntax errors:
+To check the control file for syntax errors:t
 
 {linenos=off, lang=bash}
     sudo monit -t
@@ -3499,21 +3490,21 @@ To check the control file for syntax errors:
 Also keep an eye on your log file which is specified in the control file:  
 `set logfile /var/log/monit.log`
 
-Right. So what happens when Monit dies..?...
+So, what happens when Monit dies?
 
 ##### Keep Monit Alive
 
-Now you are going to want to make sure your monitoring tool that can be configured to take all sorts of actions never just stops running, leaving you flying blind. No noise from your servers means all good right? Not necessarily. Your monitoring tool just has to keep running, no ifs or buts about it. So let us make sure of that now.
+You're going to want to make sure your monitoring tool that is configured to take all sorts of actions on your behalf never stops running, leaving you blind. No noise from your servers means all good right? Not necessarily. Your monitoring tool has to keep running, no ifs, ands, or buts about it. Let's make sure of that now.
 
-When Monit is `apt-get install`â€˜ed on Debian, it gets installed and configured to run as a daemon. This is defined in Monits init script.  
-Monits init script is copied to `/etc/init.d/` and the run levels set-up for it upon installation. This means when ever a run level is entered the init script will be run taking either the single argument of `stop` (example: `/etc/rc0.d/K01monit`), or `start` (example: `/etc/rc2.d/S17monit`). Remember we [discussed run levels](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) previously?
+When Monit is 'apt-get install'ed on Debian, it is installed and configured to run as a daemon. This is defined in Monit's init script.  
+Monit's init script is copied to `/etc/init.d/` and the run levels set up for it upon installation. This means when ever a run level is entered, the init script will be run taking either the single argument of `stop` (example: `/etc/rc0.d/K01monit`), or `start` (example: `/etc/rc2.d/S17monit`). Remember we [discussed run levels](#vps-countermeasures-disable-remove-services-harden-what-is-left-disable-exim) previously?
 
 **systemd to the rescue**
 
-Monit is very stable, but if for some reason it dies, then it will not be [automatically restarted](https://mmonit.com/monit/documentation/monit.html#INIT-SUPPORT) again. In saying that I have never had Monit die on any of my servers being monitored.  
-This is where systemd comes in. systemd is installed out of the box on Debian Jessie on-wards. Ubuntu uses Upstart on 14.10 which is similar, Ubuntu 15.04 uses systemd. Both SysV init and systemd can act as drop-in replacements for each other or even work along side of each other, which is the case in Debian Jessie. If you add a unit file which describes the properties of the process that you want to run, then issue some magic commands, the systemd unit file will take precedence over the init script (`/etc/init.d/monit`).
+Monit is very stable, but if for some reason it dies, then it will not be [automatically restarted](https://mmonit.com/monit/documentation/monit.html#INIT-SUPPORT) again. In saying that, I have never had Monit die on any of my servers being monitored.  
+This is where systemd comes in. systemd is installed automatically on Debian Jessie and later. Ubuntu uses Upstart on 14.10 which is similar, Ubuntu 15.04 uses systemd. Both SysV init and systemd can act as drop-in replacements for each other or even work along side of each other, which is the case in Debian Jessie. If you add a unit file which describes the properties of the process that you want to run, then issue some magic commands, the systemd unit file will take precedence over the init script (`/etc/init.d/monit`).
 
-Before we get started, let us get some terminology established. The two concepts in systemd we need to know about are unit and target.
+Before we get started, let's get some terminology established. The two concepts in systemd we need to know about are unit and target.
 
 1. A unit is a configuration file that describes the properties of the process that you would like to run. There are many examples of these that I can show you, and I will point you in the direction soon. They should have a `[Unit]` directive at a minimum. The syntax of the unit files and the target files were derived from Microsoft Windows `.ini` files. Now I think the idea is that if you want to have a `[Service]` directive within your unit file, then you would append `.service` to the end of your unit file name.
 2. A target is a grouping mechanism that allows systemd to start up groups of processes at the same time. This happens at every boot as processes are started at different run levels.
@@ -3523,12 +3514,11 @@ Now in Debian there are two places that systemd looks for unit files... In order
 1. `/lib/systemd/system/` (prefix with `/usr` dir for archlinux) unit files provided by installed packages. Have a look in here for many existing examples of unit files.
 2. `/etc/systemd/system/` unit files created by the system administrator.
 
-As mentioned [above](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit-systemd), systemd should be the first process started on your Linux server. systemd reads the different targets and runs the scripts within the specific targets `target.wants` directory (which just contains a collection of symbolic links to the unit files). For example the target file we will be working with is the `multi-user.target` file (actually we do not touch it, systemctl does that for us (as per the magic commands mentioned above)). Just as systemd has two locations in which it looks for unit files. I think this is probably the same for the target files, although there was not any target files in the system administrator defined unit location, but there were some `target.wants` files there.
+As mentioned [above](#vps-countermeasures-lack-of-visibility-proactive-monitoring-sysvinit-upstart-systemd-runit-systemd), systemd should be the first process started on your Linux server. systemd reads the different targets and runs the scripts within the specific targets `target.wants` directory (which just contains a collection of symbolic links to the unit files). For example, the target file we will work with is the `multi-user.target` file (we do not actually touch it, systemctl does that for us (as per the magic commands mentioned above)). As systemd has two locations in which it looks for unit files, it is probably the same for the target files. There was not any target files in the system administrator-defined unit location, but there were some `target.wants` files there.
 
 **systemd Monit Unit file**
 
-I found a template that Monit had already provided for a unit file in  
-`/usr/share/doc/monit/examples/monit.service`. There is also one for Upstart. Copy that to where the system administrator unit files should go, as mentioned above, and make the change so that systemd restarts Monit if it dies for what ever reason. Check the `Restart=` options on the [systemd.service man page](http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=systemd.service). The following is what my initial unit file looked like:
+I found a template that Monit had already provided for a unit file in `/usr/share/doc/monit/examples/monit.service`. There is also one for Upstart. Copy that to where the system administrator unit files should go, as mentioned above, and make the change so that systemd restarts Monit if it dies for what ever reason. Check the `Restart=` options on the [systemd.service man page](http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=systemd.service). The following is what my initial unit file looked like:
 
 {title="/etc/systemd/system/monit.service", linenos=off, lang=bash}
     [Unit]
@@ -3545,12 +3535,12 @@ I found a template that Monit had already provided for a unit file in
     [Install]
     WantedBy=multi-user.target
 
-Now, some explanation. Most of this is pretty obvious. The `After=` directive just tells systemd to make sure the `network.target` file has been acted on first and of course `network.target` has `After=network-pre.target` which does not have a lot in it. I am not going to go into this now, as I do not really care too much about it. It works. It means the network interfaces have to be up first. If you want to know how, why, check the [systemd NetworkTarget documentation](https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/). `Type=simple`. Again check the systemd.service man page.
-Now to have systemd control Monit, Monit must not run as a background process (the default). To do this, we can either add the `set init` statement to Monitâ€™s control file or add the `-I` option when running systemd, which is exactly what we have done above. The `WantedBy=` is the target that this specific unit is part of.
+Now, some explanation. Most of this is pretty obvious. The `After=` directive tells systemd to make sure the `network.target` file has been acted on first. `network.target` has `After=network-pre.target` which does not have a lot in it. I am not going to go into this now, it simply works, the network interfaces have to be up first. If you want to know how or why, check the [systemd NetworkTarget documentation](https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/). `Type=simple`. Again check the systemd.service man page.
+To have systemd control Monit, Monit must not run as a background process (the default). To do this, we can either add the `set init` statement to Monit's control file or add the `-I` option when running systemd, which is exactly what we have done above. The `WantedBy=` is the target that this specific unit is part of.
 
-Now we need to tell systemd to create the symlinks in the `/etc/systemd/system/multi-user.target.wants` directory and other things. See the [systemctl man page](http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=systemctl) for more details about what enable actually does if you want them. You will also need to start the unit.
+We need to tell systemd to create the symlinks in the `/etc/systemd/system/multi-user.target.wants` directory. See the [systemctl man page](http://www.dsm.fordham.edu/cgi-bin/man-cgi.pl?topic=systemctl) for more details about what enable actually does if you want them. You will also need to start the unit.
 
-Now what I like to do here is:
+What I like to do here is:
 
 {linenos=off, lang=bash}
     systemctl status /etc/systemd/system/monit.service
@@ -3582,7 +3572,7 @@ Now start the service:
 {linenos=off, lang=bash}
     sudo systemctl start monit.service # there's a stop and restart also.
 
-Now you can check the `status` of your Monit service again. This shows terse runtime information about the units or PID you specify (monit.service in our case).
+You can check the `status` of your Monit service again. This shows terse runtime information about the units or PID you specify (monit.service in our case).
 
 {linenos=off, lang=bash}
     sudo systemctl status monit.service
@@ -3592,7 +3582,7 @@ By default this function will show you 10 lines of output. The number of lines c
 {linenos=off, lang=bash}
     sudo systemctl --lines=20 status monit.service
 
-Now try `kill`ing the Monit process. At the same time, you can watch the output of Monit in another terminal. [tmux](https://tmux.github.io/) or [screen](https://blog.binarymist.net/2011/11/27/centerim-irssi-alpine-on-screen/#screen) is helpful for this:
+Now, try `kill`ing the Monit process. At the same time, you can watch the output of Monit in another terminal. [tmux](https://tmux.github.io/) or [screen](https://blog.binarymist.net/2011/11/27/centerim-irssi-alpine-on-screen/#screen) is helpful for this:
 
 {linenos=off, lang=bash}
     sudo tail -f /var/log/monit.log
@@ -3602,9 +3592,9 @@ Now try `kill`ing the Monit process. At the same time, you can watch the output 
     # SIGTERM is a safe kill and is the default, so you don't actually need to specify it.
     # Be patient, this may take a minute or two for the Monit process to terminate.
 
-Or you can emulate a nastier termination with `SIGKILL` or even `SEGV` (which may kill monit faster).
+Or you can emulate a nastier termination with `SIGKILL` or even `SEGV` (which may kill Monit faster).
 
-Now when you run another `status` command you should see the PID has changed. This is because systemd has restarted Monit.
+When you run another `status` command you should see the PID has changed. This is because systemd has restarted Monit.
 
 When you need to make modifications to the unit file, you will need to run the following command after save:
 
@@ -3621,7 +3611,7 @@ When you need to make modifications to the running services configuration file
 
 ##### Keep NodeJS Application Alive {#vps-countermeasures-lack-of-visibility-proactive-monitoring-keep-nodejs-application-alive}
 
-Right, we know systemd is always going to be running. So let's use it to take care of the coarse grained service control. That is keeping your NodeJS service alive.
+Now we know systemd is always going to be running. So let's use it to take care of the primary service control: keeping your NodeJS service alive.
 
 **Using systemd**
 
@@ -3676,13 +3666,13 @@ Add the system user and group so systemd can actually run your service as the us
     sudo adduser --system --no-create-home --group my-nodejs-app
     groups my-nodejs-app # to verify which groups the new user is in.
 
-Now as we did above, go through the same procedure `enable`ing, `start`ing and verifying your new service.
+As we did above, go through the same procedure `enable`ing, `start`ing, and verifying your new service.
 
-Make sure you have your directory permissions set-up correctly and you should have a running NodeJS application that when it dies will be restarted automatically by systemd.
+Make sure you have your directory permissions set up correctly, you should have a running NodeJS application that, if it dies, will be restarted automatically by systemd.
 
 Do not forget to backup all your new files and changes in case something happens to your server.
 
-We are done with systemd for now. The following are some useful resources that I have used:
+We are done with systemd for now. Following are some useful resources that I have used:
 
 * [`kill`ing processes](http://www.cyberciti.biz/faq/kill-process-in-linux-or-terminate-a-process-in-unix-or-linux-systems/)
 * [Unix signals](https://en.wikipedia.org/wiki/Unix_signal)
@@ -3690,12 +3680,12 @@ We are done with systemd for now. The following are some useful resources that I
 
 **Using Monit**
 
-Now just configure your Monit control file. You can spend a lot of time here tweaking a lot more than just your NodeJS application. There are loads of examples around, and the control file itself has lots of commented out examples also. You will find the following the most helpful:
+Now configure your Monit control file. You can spend a lot of time here tweaking much more than just your NodeJS application. There are loads of examples, and the control file itself has lots of commented examples as well. You will find the following the most helpful:
 
 * [Official Monit Documentation](https://mmonit.com/monit/documentation/monit.html)
 * [Monit Man page](http://linux.die.net/man/1/monit)
 
-There are a few things that had me stuck for a while. By default Monit only sends alerts on change (dark cockpit approach), not on every cycle if the condition stays the same, unless when you set-up your:
+There are a few things that had me stuck for awhile. By default, Monit only sends alerts on change (my dark cockpit approach), instead of on every cycle if the condition stays the same:
 
 {linenos=off, lang=bash}
     set alert your-email@your.domain
@@ -3705,7 +3695,7 @@ Append `receive all alerts`, so that it looks like this:
 {linenos=off, lang=bash}
     set alert your-email@your.domain receive all alerts
 
-There is quite a few things you just work out as you go. The main part I used to health-check my NodeJS app was:
+There are quite a few things you just work out as you go. The main part I used to health check my NodeJS app was:
 
 {title="Sub-section of /etc/monit/monitrc", linenos=off, lang=bash}
     check host your_server with address your_server
@@ -3725,57 +3715,57 @@ Carry on and add to, or uncomment, and modify the `monitrc` file, with the likes
 1. CPU and memory usage
 2. Load averages
 3. File system space on all the mount points
-4. Check SSH that it has not been restarted by anything other than Monit (potentially swapping the binary or its config). Of course if an attacker kills Monit or systemd immediately restarts it and we get Monit alert(s). We also get real-time logging hopefully to an [off-site syslog server](#vps-countermeasures-lack-of-visibility-web-server-log-management-initial-set-up). Ideally your off-site syslog server also has alerts set-up on particular log events. On top of that you should also have inactivity alerts set-up so that if your log files are not generating events that you expect, then you also receive alerts. Services like [Dead Mans Snitch](https://deadmanssnitch.com/) or packages like [Simple Event Correlator](https://simple-evcorr.github.io/) with Cron are good for this. On top of all that, if you have a file integrity checker that resides on another system that your host reveals no details of, and you have got it configured to check all the correct file check-sums, dates, permissions, etc, you are removing a lot of low hanging fruit for someone wanting to compromise your system.
+4. Check SSH such that it has not been restarted by anything other than Monit (potentially swapping the binary or its config). If an attacker kills Monit, or systemd immediately restarts it, we get Monit alert(s). We also get real-time logging, ideally to an [offsite syslog server](#vps-countermeasures-lack-of-visibility-web-server-log-management-initial-set-up). Your offsite syslog server also has alerts set up on particular log events. On top of that, you should also have inactivity alerts set-up so that if your log files are not generating events that you expect, then you also receive alerts. Services such as [Dead Man's Snitch](https://deadmanssnitch.com/), or packages such as [Simple Event Correlator](https://simple-evcorr.github.io/) with Cron are good for this. On top of all that, if you have a file integrity checker that resides on another system that your host reveals no details for, and you've got it configured to check all the correct file checksums, dates, permissions, etc., you are removing much of the of low hanging fruit for attackers seeking to compromise your system.
 5. Directory permissions, uid, gid and checksums. I believe the tools Monit uses to do these checks are part of Monit.
 
 #### Statistics Graphing {#vps-countermeasures-lack-of-visibility-statistics-graphing}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
-This is where [collectd](https://collectd.org/) and [graphite](https://graphiteapp.org/) come to the party. Both tools do one thing, do it well, and are independent of each other, but are often used together.
+This is where [collectd](https://collectd.org/) and [graphite](https://graphiteapp.org/) really shine. Both tools do one thing, do it well, and are independent of each other, but are often used together.
 
-Also check the related [Statistics Graphing](#web-applications-countermeasures-lack-of-visibility-insufficient-Monitoring-statistics-graphing) section in the countermeasures section of the Web Applications chapter, where we introduce statsd as the collector for application metrics.
+Check the related [Statistics Graphing](#web-applications-countermeasures-lack-of-visibility-insufficient-Monitoring-statistics-graphing) section in the countermeasures section of the Web Applications chapter, where we introduce statsd as the collector for application metrics.
 
-Collectd can be used to feed statistics to many consumers, including AWS CloudWatch via a [plugin](https://aws.amazon.com/blogs/aws/new-cloudwatch-plugin-for-collectd/), but using it with graphite (and ultimately [Grafana](https://grafana.com/), which can take inputs from a collection of [data sources](https://grafana.com/plugins?type=datasource), including graphite, Elasticsearch, [AWS CloudWatch](http://docs.grafana.org/features/datasources/cloudwatch/), and others) would provide a much [better solution](http://blog.takipi.com/graphite-vs-grafana-build-the-best-monitoring-architecture-for-your-application/). 
+Collectd can be used to feed statistics to many consumers, including AWS CloudWatch via a [plugin](https://aws.amazon.com/blogs/aws/new-cloudwatch-plugin-for-collectd/), Using it with graphite (and ultimately [Grafana](https://grafana.com/), which can take inputs from a collection of [data sources](https://grafana.com/plugins?type=datasource), including graphite, Elasticsearch, [AWS CloudWatch](http://docs.grafana.org/features/datasources/cloudwatch/), and others) provides a much [better solution](http://blog.takipi.com/graphite-vs-grafana-build-the-best-monitoring-architecture-for-your-application/). 
 
 ##### [Collectd](https://collectd.org/)
 
 "_Collectd is a daemon which collects system and application performance metrics_" at a configurable frequency. Almost everything in collectd is done with plugins. Most of the over 100 plugins are used to read statistics from the target system, but plugins are also used to define where to send those statistics, and in the case of distributed systems, read those statistics sent from collectd agents. Collectd is an agent based system metrics collection tool. An agent is deployed on every host that needs to be monitored.
 
-If you want to send statistics over the network, then the network plugin must be loaded. collectd is capable of [cryptographically signing or encrypting](https://collectd.org/wiki/index.php/Networking_introduction#Cryptographic_setup) the network traffic it transmits. Collectd is not a complete monitoring solution by it self.
+If you want to send statistics over the network, then the network plugin must be loaded. collectd is capable of [cryptographically signing or encrypting](https://collectd.org/wiki/index.php/Networking_introduction#Cryptographic_setup) the network traffic it transmits. Collectd is not a complete monitoring solution by itself.
 
-The collectd daemon has no external dependencies and should run on any POSIX supporting system, such as Linux, Solaris, Max OS X, AIX, the BSDs, and probably many others.
+The collectd daemon has no external dependencies and should run on any POSIX-supported system, such as Linux, Solaris, Max OS X, AIX, the BSDs, and probably many others.
 
 ##### [Graphite](http://graphiteapp.org/)
 
-Graphite is a statistics storage and visualisation component which consists of:
+Graphite is a statistics storage and visualisation component, which consists of:
 
-* Carbon - A daemon that listens for time-series data and stores it. Any data sent to Graphite is actually sent to Carbon. The protocols for data transfer that Carbon accepts and understands are:
+* Carbon - a daemon that listens for time-series data and stores it. Any data sent to Graphite is actually sent to Carbon. The protocols for data transfer that Carbon accepts and understands are:
   1. Plain text, which includes fields:
       1. The metric name
       2. Value of the statistic
-      3. Timestamp that the statistic was captured
-  2. Pickle, because Graphite is written in Python, and Pickle serializers and de-serializers Python object structures. Pickle is good when you want to batch up large amounts of data and have the Carbon pickle receiver accept it
+      3. Timestamp of when the statistic was captured
+  2. Pickle, because Graphite is written in Python, and Pickle serializes and de-serializes Python object structures. Pickle is good when you want to batch up large amounts of data and have the Carbon Pickle receiver accept it
   3. AMQP, which Carbon can use to listen to a message bus
-* Whisper - A simple database library for storing time-series data
-* Graphite-web - A (Django) webapp that renders graphs on demand
+* Whisper - a simple database library for storing time series data
+* Graphite-web - a (Django) webapp that renders graphs on demand
 
 Graphite has excellent [official](https://graphite.readthedocs.io/en/latest/) and [community](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-graphite-on-an-ubuntu-14-04-server) provided documentation.
 
 There are a large number of [tools](http://graphite.readthedocs.org/en/latest/tools.html) that can be integrated with graphite.
 
-Graphite can take [some work](https://kevinmccarthy.org/2013/07/18/10-things-i-learned-deploying-graphite/) to deploy, This can be made easier several ways. You could deploy it with your favourite configuration management tool, such as with an [ansible-graphite](https://github.com/dmichel1/ansible-graphite) playbook, or perhaps with one of the many collectd-graphite-docker type containers.
+Graphite can take [some work](https://kevinmccarthy.org/2013/07/18/10-things-i-learned-deploying-graphite/) to deploy, but this can be made easier several ways. You can deploy it with your favourite configuration management tool, such as with an [ansible-graphite](https://github.com/dmichel1/ansible-graphite) playbook, or perhaps with one of the many collectd-graphite-docker type containers.
 
-You can even do better than graphite by adding the likes of [Grafana]()
+You can do even better than graphite by adding the likes of [Grafana](https://grafana.com)
 
 ##### Assembling the Components
 
-Collectd can be used to send statistics locally or remotely. It can be setup as an agent and server, along with Graphite on a [single machine](https://www.digitalocean.com/community/tutorials/how-to-configure-collectd-to-gather-system-metrics-for-graphite-on-ubuntu-14-04).
+Collectd can be used to send statistics locally or remotely. It can be set up as an agent and server, along with Graphite on a [single machine](https://www.digitalocean.com/community/tutorials/how-to-configure-collectd-to-gather-system-metrics-for-graphite-on-ubuntu-14-04).
 
-Another common deployment scenario which is more interesting is to have a collection of hosts (clients/agents) that all require statistics gathering from them, and a server that listens for the data coming from all of the clients/agents. Let us see [how this looks](https://pradyumnajoshi.blogspot.co.nz/2015/11/setting-up-collectd-based-monitoring.html):
+Another common and more intersting deployment scenario is to have a collection of hosts (clients/agents) that all require statistics gathering, and a server that listens for the data coming from all of the clients/agents. Let's see [how this looks](https://pradyumnajoshi.blogspot.co.nz/2015/11/setting-up-collectd-based-monitoring.html):
 
 1. graphing server (1)
     1. [install, configure](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-graphite-on-an-ubuntu-14-04-server), and run [graphite](https://graphite.readthedocs.io/en/latest/install.html)
-    2. Install collectd: If you are using a recent Ubuntu or Debian release, then more than likely you will be able to just install the distributions [`collectd`](https://packages.debian.org/stretch/collectd) (which depends on [`collectd-core`](https://packages.debian.org/stretch/collectd-core) which includes many plugins) and [`collectd-utils`](https://packages.debian.org/stretch/collectd-utils)
+    2. Install collectd: If you are using a recent Ubuntu or Debian release, more than likely you will be able to just install the distribution's [`collectd`](https://packages.debian.org/stretch/collectd) (which depends on [`collectd-core`](https://packages.debian.org/stretch/collectd-core) which includes many plugins) and [`collectd-utils`](https://packages.debian.org/stretch/collectd-utils)
     3. Configure collectd to use the following plugins, which will also require their own configuration:
       * Network (read, write)
       * [Write_Graphite](https://collectd.org/wiki/index.php/Plugin:Write_Graphite) (write)
@@ -3791,121 +3781,121 @@ Another common deployment scenario which is more interesting is to have a collec
       * Any other read plugins from [the list](https://collectd.org/wiki/index.php/Table_of_Plugins) that you would like to collect statistics for
 
 {#vps-countermeasures-lack-of-visibility-statistics-graphing-assembling-the-components-after}
-In this case, each collectd agent is sending its statistics from its Network plugin to the graphing servers network interface (achieving the same result as the below netcat command), which is picked up by the collectd Network plugin and flows through to the collectd `write_graphite` plugin, which sends the [statistics](https://collectd.org/wiki/index.php/Plugin:Write_Graphite#Example_data) using the plain text transfer protocol (metric-name actual-value timestamp-in-epoch) to graphites listening service called carbon (usually to [port 2003](https://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-cache-py)). Carbon only accepts a single value per interval, which is [10 seconds by default](https://graphite.readthedocs.io/en/latest/config-carbon.html#storage-schemas-conf). Carbon writes the data to the whisper library which is responsible for storing to its data files. graphite-web reads the data points from the wisper files, and provides user interface and API for rendering dashboards and graphs. 
+In this case, each collectd agent is sending its statistics from its network plugin to the graphing server's network interface (achieving the same result as the below netcat command), which is picked up by the collectd network plugin and flows through to the collectd `write_graphite` plugin. This then sends the [statistics](https://collectd.org/wiki/index.php/Plugin:Write_Graphite#Example_data) using the plain text transfer protocol (metric-name actual-value timestamp-in-epoch) to Graphite's listening service called Carbon (usually to [port 2003](https://graphite.readthedocs.io/en/latest/carbon-daemons.html#carbon-cache-py)). Carbon only accepts a single value per interval, which is [10 seconds by default](https://graphite.readthedocs.io/en/latest/config-carbon.html#storage-schemas-conf). Carbon writes the data to the Whisper library, which is responsible for storing to its data files. graphite-web reads the data points from the Whisper files, and provides user interface and API for rendering dashboards and graphs. 
 
 {linenos=off, lang=bash}
     echo "<metric-name> <actual-value> `date +%s`" | nc -q0 graphing-server 2003
 
 ![](images/collectd-graphite.png)
 
-I also looked into [Raygun](https://raygun.com/) which provides visibility into many aspects of your applications. Raygun is an all-in-one offering, but does not focus on server statistics.
+I also looked into [Raygun](https://raygun.com/), which provides visibility into many aspects of your applications. Raygun is an all-in-one offering, but does not focus on server statistics.
 
 #### Host Intrusion Detection Systems (HIDS) {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids}
 ![](images/ThreatTags/PreventionAVERAGE.png)
 
-I recently performed an in-depth evaluation of a couple of great HIDS available. The choice of which candidates to take into the second round came from an initial evaluation of a larger collection of HIDS. First I will briefly discuss the full collection I looked at, as these also have some compelling features and reasons as to why you may want to use them in your own VPSs. I will then discuss the two that I was the most impressed with, and dive into some more details around the winner, why, and how I had it configured and running in my lab.
+I recently performed an indepth evaluation of a couple of great HIDS available. My final candidates for the second round came from an initial evaluation of a larger collection of HIDS. First, I will briefly discuss the full collection I looked at, as these also have some compelling features and reasons as to why you may want to use them in your own VPSs. I will then discuss the two that I was the most impressed with, and dive into some more details around the winner, as well as why and how I had it configured and running in my lab.
 
-The best time to install a HIDS is on a fresh installed system before you open the host up to the internet or even your LAN, especially if it is corporate. Of course if you do not have that luxury, there are a bunch of tools that can help you determine if you are already owned. Be sure to run one or more over your target system(s) before your HIDS bench-marks it, otherwise you could be bench-marking an already compromised system.
+The best time to install a HIDS is on a freshly installed system, before you open the host up to the internet or even your LAN, especially if it is a corporate system. If you do not have that luxury, there are a bunch of tools that can help you determine if you are already owned. Be sure to run one or more over your target system(s) before your HIDS benchmarks it, otherwise you could be benchmarking an already compromised system.
 
 ##### [Tripwire](https://packages.debian.org/stretch/tripwire)
 
-Is a HIDS that stores a good known state of vital system files of your choosing and can be set-up to notify an administrator upon change in the files. Tripwire stores cryptographic hashes (deltas) in a database and compares them with the files it has been configured to monitor changes on. DigitalOcean had a [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-tripwire-to-detect-server-intrusions-on-an-ubuntu-vps) on setting Tripwire up. Most of what you will find around Tripwire now are the commercial offerings.
+Tripwire stores a known good state of vital system files of your choosing, and can be set up to notify an administrator upon change in the files. Tripwire stores cryptographic hashes (deltas) in a database and compares them with the files it has been configured to monitor changes for. DigitalOcean has a [tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-tripwire-to-detect-server-intrusions-on-an-ubuntu-vps) on setting Tripwire up. Most of what you will find specific to Tripwire are commercial offerings.
 
 ##### [RkHunter](https://packages.debian.org/stretch/rkhunter)
 
-Is a similar [offering](http://rkhunter.sourceforge.net/) to Tripwire for POSIX compliant systems. RkHunter scans for rootkits, backdoors, checks on the network interfaces and local exploits by testing for:
+RkHunter is a similar [offering](http://rkhunter.sourceforge.net/) to Tripwire for POSIX compliant systems. RkHunter scans for rootkits, backdoors, checks on network interfaces and local exploits by testing for:
 
 * MD5 hash changes
-* Files commonly created by root-kits
-* Wrong file permissions for binaries
+* Files commonly created by rootkits
+* Erroneous file permissions for binaries
 * Suspicious strings in kernel modules
 * Hidden files in system directories
-* Optionally scan within plain-text and binary files
+* Optionally, scan within plaintext and binary files
 
-Version 1.4.2 (24/02/2014) now checks the `ssh`, `sshd` and `telent`, although you should not have telnet installed. This could be useful for mitigating non-root users running a trojanised sshd on a 1025-65535 port. You can run ad-hoc scans, then set them up to be run with cron. Debian Jessie has this release in its repository. Any Debian distro before Jessie is on 1.4.0-1 or earlier.
+Version 1.4.2 (24/02/2014) now checks `ssh`, `sshd` and `telent`, although you should not have telnet installed in the first place. This could be useful for mitigating non-root users running a trojanised sshd on a 1025-65535 port. You can run adhoc scans, then set them up to be run with cron. Debian Jessie has this release in its repository. Any Debian distro before Jessie is on 1.4.0-1 or earlier.
 
 The latest version you can install for Linux Mint Rosa (17.3) within the repositories is 1.4.0-3 (01/05/2012). Linux Mint Sarah (18) within the repositories is 1.4.2-5
 
 ##### [Chkrootkit](https://packages.debian.org/stretch/chkrootkit)
 
-It is a good idea to run a couple of these types of scanners. Hopefully what one misses the other will not. Chkrootkit scans for many system programs, some of which are cron, crontab, date, echo, find, grep, su, ifconfig, init, login, ls, netstat, sshd, top and many more. All the usual targets for attackers to modify. You can specify if you do not want them all scanned. Chkrootkit runs tests such as:
+It is a good idea to run a couple of these types of scanners. Hopefully, what one misses the other will not. Chkrootkit scans for many system programs, some of which are cron, crontab, date, echo, find, grep, su, ifconfig, init, login, ls, netstat, sshd, top and many more, all the usual targets for attackers to modify. You can specify if you do not want them all scanned. Chkrootkit runs tests such as:
 
 * System binaries for rootkit modification
 * If the network interface is in promiscuous mode
 * lastlog deletions
 * wtmp and utmp deletions (logins, logouts)
 * Signs of LKM trojans
-* Quick and dirty strings replacement
+* Quick and dirty strings replacements
 
 {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-unhide}
 ##### [Unhide](http://www.unhide-forensics.info/)
 
-While not strictly a HIDS, Unhide is quite a useful forensics tool for working with your system if you suspect it may have been compromised.
+While not strictly a HIDS, Unhide is quite a useful forensics tool for determining if your system has been compromised.
 
-Unhide is a forensic tool to find hidden processes and TCP/UDP ports by rootkits / LKMs or by another hidden technique. Unhide runs on Unix/Linux and Windows Systems. It implements six main techniques.
+Unhide is a forensic tool to find hidden processes and TCP/UDP ports by rootkits / LKMs or by another hidden technique. Unhide runs on Unix/Linux and Windows systems. It implements six main techniques.
 
 1. Compare `/proc` vs `/bin/ps` output
-2. Compare info gathered from `/bin/ps` with info gathered by walking through the `procfs` (ONLY for unhide-linux version).
-3. Compare info gathered from `/bin/ps` with info gathered from `syscalls` (syscall scanning)
+2. Compare information gathered from `/bin/ps` with information gathered by walking through the `procfs` (ONLY for unhide-linux version).
+3. Compare information gathered from `/bin/ps` with information gathered from `syscalls` (syscall scanning)
 4. Full PIDs space occupation (PIDs brute-forcing) (ONLY for unhide-linux version).
 5. Compare `/bin/ps` output vs `/proc`, `procfs` walking and `syscall` (ONLY for unhide-linux version). Reverse search, verify that all threads seen by `ps` are also seen in the `kernel`.
 6. Quick compare `/proc`, `procfs` walking and `syscall` vs `/bin/ps` output (ONLY for unhide-linux version). This technique is about 20 times faster than tests 1+2+3 but may give more false positives.
 
 Unhide includes two utilities: unhide and unhide-tcp.
 
-unhide-tcp identifies TCP/UDP ports that are listening but are not listed in /bin/netstat through brute forcing of all TCP/UDP ports available.
+unhide-tcp identifies TCP/UDP ports that are listening but are not listed in /bin/netstat by bruteforcing all TCP/UDP ports available.
 
-Can also be used by rkhunter in its daily scans. Unhide was number one in the top 10 toolswatch.org security tools pole
+Unhide can also be used by RkHunter in its daily scans. Unhide was #1 in the Top 10 toolswatch.org Security Tools Poll.
 
 ##### Ossec
 
-Is a HIDS that also has some preventative features. This is a pretty comprehensive offering with a lot of great features.
+OSSEC is a HIDS that also has some preventative features. This is a pretty comprehensive offering with a lot of great features.
 
 ##### [Stealth](https://fbb-git.github.io/stealth/)
 
-The idea of Stealth is to do a similar job as the above file integrity checkers, but to leave almost no sediments on the tested computer (called the client). A potential attacker therefore does not necessarily know that Stealth is in fact checking the integrity of its clients files. Stealth is installed on a different machine (called the controller) and scans over SSH.
+Stealth does a similar job as the above file integrity checkers, but leaves almost no sediment on the tested computer (client). A potential attacker therefore does not necessarily know that Stealth is, in fact, checking the integrity of its client's files. Stealth is installed on a different machine (controller), and scans over SSH.
 
-The faster you can respond to an attacker modifying system files, the more likely you are to circumvent their attempts. Ossec provides real-time cheacking. Stealth provides agent-less (runs from another machine) checking, using the checksum programme of your choice that it copies to the controller on first run, ideally before it is exposed in your DMZ.
+The faster you can respond to an attacker modifying system files, the more likely you are to prevent their attempts. Ossec provides real-time checking. Stealth provides agent-less (runs from another machine) checking, using the checksum programme of your choice that it copies to the controller on first run, ideally before it is exposed in your DMZ.
 
-##### Deeper with Ossec {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec}
+##### Deeper with OSSEC {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-ossec}
 
 You can find the source on [github](https://github.com/ossec/ossec-hids)
 
-**Who is Behind Ossec?**
+**Who is Behind OSSEC?**
 
-Many developers, contributors, managers, reviewers, translators. Infact the [OSSEC team](https://ossec.github.io/about.html#ossec-team) looks almost as large as the [Stealth user base](https://qa.debian.org/popcon.php?package=stealth), well, that is a slight exaggeration.
+Many developers, contributors, managers, reviewers, and translators produce OSSEC. In fact, the [OSSEC team](https://ossec.github.io/about.html#ossec-team) looks almost as large as the [Stealth user base](https://qa.debian.org/popcon.php?package=stealth), a slight exaggeration :-).
 
 **Documentation**
 
-There is Lots of documentation. It is not always the easiest to navigate because you have to understand so much up front. There is lots of buzz on the inter-webs and there are several books.
+There is a great deal of documentation. It is not always the easiest to navigate because you have to understand so much of it up front. There is lots of buzz about OSSEC on the Internet and there are several books.
 
 * The main documentation is on [github](https://ossec.github.io/docs/)
 * Similar docs on [readthedocs.io](https://ossec-docs.readthedocs.io/en/latest/)
 * Mailing list on [google groups](https://groups.google.com/forum/#!forum/ossec-list)
-* Several good looking books
-  1. Book one ([Instant OSSEC Host-based Intrusion Detection System](https://www.amazon.com/Instant-Host-based-Intrusion-Detection-System/dp/1782167641/))
-  2. Book two ([OSSEC Host-Based Intrusion Detection Guide](https://www.amazon.com/OSSEC-Host-Based-Intrusion-Detection-Guide/dp/159749240X))
-  3. Book three ([OSSEC How-To â€“ The Quick And Dirty Way](https://blog.savoirfairelinux.com/en/tutorials/free-ebook-ossec-how-to-the-quick-and-dirty-way/))
+* Several good books
+  1. [Instant OSSEC Host-based Intrusion Detection System](https://www.amazon.com/Instant-Host-based-Intrusion-Detection-System/dp/1782167641/)
+  2. [OSSEC Host-Based Intrusion Detection Guide](https://www.amazon.com/OSSEC-Host-Based-Intrusion-Detection-Guide/dp/159749240X)
+  3. [OSSEC How-To - The Quick And Dirty Way](https://blog.savoirfairelinux.com/en/tutorials/free-ebook-ossec-how-to-the-quick-and-dirty-way/)
 * [Commercial Support](https://ossec.github.io/blog/posts/2014-05-12-OSSEC-Commercial-Support-Contracts.markdown.html)
 * [FAQ](https://ossec-docs.readthedocs.io/en/latest/faq/index.html)
 * [Package meta-data](http://ossec.alienvault.com/repos/apt/debian/dists/jessie/main/binary-amd64/Packages)
 
 **Community / Communication**
 
-IRC channel #ossec on irc.freenode.org Although it is not very active.
+There is an IRC channel, #ossec on irc.freenode.org, although it is not very active.
 
 **Components**
 
-* [Manager](https://ossec-docs.readthedocs.io/en/latest/manual/ossec-architecture.html#manager-or-server) (sometimes called server): does most of the work monitoring the Agents. It stores the file integrity checking databases, the logs, events and system auditing entries, rules, decoders, major configuration options.
+* [Manager](https://ossec-docs.readthedocs.io/en/latest/manual/ossec-architecture.html#manager-or-server) (sometimes called server): does most of the work monitoring the agents. It stores the file integrity checking databases, the logs, events and system auditing entries, rules, decoders, and major configuration options.
 * [Agents](https://ossec-docs.readthedocs.io/en/latest/manual/agent/index.html): small collections of programs installed on the machines we are interested in monitoring. Agents collect information and forward it to the manager for analysis and correlation.
 
-There are quite a few other ancillary components also.
+There are also quite a few other ancillary components.
 
 **[Architecture](https://ossec-docs.readthedocs.io/en/latest/manual/ossec-architecture.html)**
 
 You can also go the [agent-less](https://ossec-docs.readthedocs.io/en/latest/manual/agent/agentless-monitoring.html) route which may allow the Manager to perform file integrity checks using [agent-less scripts](http://ossec-docs.readthedocs.org/en/latest/manual/agent/agentless-scripts.html). As with Stealth, you have still got the issue of needing to be root in order to read some of the files.
 
-Agents can be installed on VMware ESX but from what I have read it is quite a bit of work.
+Agents can be installed on VMware ESX, but from what I have read, it is quite a bit of work.
 
 **[Features](https://ossec.github.io/docs/manual/non-technical-overview.html?page_id=165) in a nut-shell**
 
@@ -3913,48 +3903,48 @@ Agents can be installed on VMware ESX but from what I have read it is quite a bi
 * Rootkit detection
 * Real-time log file monitoring and analysis (you may already have something else doing this)
 * Intrusion Prevention System (IPS) features as well: blocking attacks in real-time
-* Alerts can go to a databases MySQL or PostgreSQL or other types of [outputs](https://ossec-docs.readthedocs.io/en/latest/manual/output/index.html)
-* There is a PHP web UI that runs on Apache if you would rather look at pretty outputs vs log files.
+* Alerts can go to a database such as MySQL or PostgreSQL, or other types of [outputs](https://ossec-docs.readthedocs.io/en/latest/manual/output/index.html)
+* There is a PHP web UI that runs on Apache if you would rather look at pretty outputs versus log files.
 
 **What I like**
 
-To me, the ability to scan in real-time off-sets the fact that the agents in most cases have binaries installed. This hinders the attacker from [covering their tracks](#vps-identify-risks-lack-of-visibility).
+The ability to scan in real-time offsets the fact that the agents, in most cases, require installed binaries. This hinders the attacker from [covering their tracks](#vps-identify-risks-lack-of-visibility).
 
-Can be configured to scan systems in [real](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#realtime-options)â€“[time](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#real-time-monitoring) based on [inotify](https://en.wikipedia.org/wiki/Inotify) events.
+OSSEC can be configured to scan systems in [real](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#realtime-options) [time](https://ossec-docs.readthedocs.io/en/latest/manual/syscheck/index.html#real-time-monitoring) based on [inotify](https://en.wikipedia.org/wiki/Inotify) events.
 
-Backed by a large company Trend Micro.
+It's backed by a large company: Trend Micro.
 
-Options: Install options for starters. You have the options of:
+Options: Install options for starters. These include:
 
 * Agent-less installation as described above
 * Local installation: Used to secure and protect a single host
 * Agent installation: Used to secure and protect hosts while reporting back to a central OSSEC server
 * Server installation: Used to aggregate information
 
-Can install a web UI on the manager, so you need Apache, PHP, MySQL.
+You can install a web UI on the manager, so you need Apache, PHP, MySQL.
 
 If you are going to be checking many machines, OSSEC will scale.
 
 **What I like less**
 
-* Unlike Stealth, The fact that something usually has to be installed on the agents
-* The packages are not in the standard repositories. The downloads, PGP keys and directions are here: [https://ossec.github.io/downloads.html](https://ossec.github.io/downloads.html).
-* I think Ossec may be doing to much and if you do not like the way it does one thing, you may be stuck with it. Personally I really like the idea of a tool doing one thing, doing it well and providing plenty of configuration options to change the way it does its one thing. This provides huge flexibility and minimises your dependency on a suite of tools and/or libraries
-* Information overload. There seems to be a lot to get your head around to get it set-up. There are a lot of install options documented (books, inter-webs, official docs). It takes a bit to workout exactly the best procedure for your environment, in saying that it does have scalability on its side.
+* Unlike Stealth, the fact is that something usually has to be installed on the agents
+* The packages are not in the standard repositories. The downloads, PGP keys, and directions are here: [https://ossec.github.io/downloads.html](https://ossec.github.io/downloads.html).
+* I think OSSEC may be doing too much, and if you do not like the way it does one thing, you may be stuck with it. Personally, I really like the idea of a tool doing one thing, doing it well, and providing plenty of configuration options to change the way it does its one thing. This provides huge flexibility, and minimises your dependency on a suite of tools and/or libraries.
+* Information overload. There seems to be a lot to get your head wrapped around in order to get it set up. There are a lot of install options documented (books, Internet, official docs). It takes a bit to work out exactly the best procedure for your environment, in saying that, it does have scalability on its side.
 
 ##### Deeper with Stealth {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth}
 
-And why it rose to the top.
+Stealth rose to the top, here's why.
 
 You can find the source on [github](https://github.com/fbb-git/stealth)
 
 **Who is Behind Stealth?**
 
-Author: Frank B. Brokken. An admirable job for one person. Frank is not a fly-by-nighter though. Stealth was first presented to Congress in 2003. It is still actively maintained and used by a few. It is one of GNU/Linuxâ€™s dirty little secrets I think. It is a great idea implemented, makes a tricky job simple and does it in an elegant way.
+Author: Frank B. Brokken. This is an admirable job for one person. Frank is not a fly-by-nighter though. Stealth was first presented to Congress in 2003. It is still actively maintained. It is one of GNU/Linux's dirty little secrets I think. It is a great idea implemented, makes a tricky job simple, and does it in an elegant way.
 
 **[Documentation](https://fbb-git.github.io/stealth/)**
 
-All hosted on github.
+All documentation is hosted on Github.
 
 * [4.01.05 (2016-05-14)](https://packages.debian.org/stretch/stealth)
   * [man page](https://fbb-git.github.io/stealth/stealthman.html)
@@ -3967,15 +3957,15 @@ Once you install Stealth, all the documentation can be found by `sudo updatedb &
 
 **Binaries**
 
-Debian Stretch: has [4.01.05-1](https://packages.debian.org/stretch/stealth)
+Debian Stretch: [4.01.05-1](https://packages.debian.org/stretch/stealth)
 
-Linux Mint 18 (Sarah) has [4.01.04-1](https://community.linuxmint.com/software/view/stealth)
+Linux Mint 18 (Sarah) [4.01.04-1](https://community.linuxmint.com/software/view/stealth)
 
-Last time I installed Stealth I had to either go out of band to get a recent version or go with a much older version. These repositories now have very recent releases though.
+Last time I installed Stealth, I had to either go out-of-band to get a recent version, or go with a much older version. These repositories now have very recent releases though.
 
 **Community / Communication**
 
-There is no community really. I see it as one of the dirty little secretes that I am surprised many diligent sys-admins have not jumped on. The author is happy to answer emails. The author is more focussed on maintaining a solid product than marketing.
+There is no community really. I am surprised that many diligent sysadmins have not jumped on the Stealth bandwagon. The author is happy to answer emails and is more focussed on maintaining a solid product than marketing.
 
 **Components**
 
@@ -3990,20 +3980,20 @@ There is no community really. I see it as one of the dirty little secretes that 
     4. Physically secure location
     5. Sensitive information of the clients are stored on the Monitor
     6. Password-less access to the clients for anyone who gains Monitor root access, unless either:
-        * You are happy to enter a pass-phrase when ever your Monitor is booted so that Stealth can use SSH to access the client(s). The Monitor could stay running for years, so this may not pose a problem. I suggest using some low powered computer like a Raspberry Pie as your monitoring device, hooked up to a UPS. Also keep in mind that if you wan to monitor files on Client(s) with root permissions, you will have to SSH in as root (which is why it is recommended that the Monitor not accept any incoming connections, and be in a physically safe location). An alternative to having the Monitor log in as root is to have something like Monit take care of integrity checking the Client files with root permissions and have Stealth monitor the non root files and Monit.
+        * You are happy to enter a passphrase when ever your Monitor is booted so that Stealth can use SSH to access the client(s). The Monitor could stay running for years, so this may not pose a problem. I suggest using some low powered computer such as a Raspberry Pie as your monitoring device, hooked up to a UPS. Also keep in mind that if you want to monitor files on Client(s) with root permissions, you will have to SSH in as root (which is why it is recommended that the Monitor not accept any incoming connections, and be in a physically safe location). An alternative to having the Monitor log in as root is to have something like Monit take care of integrity checking the Client files with root permissions, and have Stealth monitor the non-root files and Monit.
         * [ssh-cron](https://fbb-git.github.io/ssh-cron/) is used  
 	  
-2. **Client** The computer(s) being monitored. I do not see any reason why a Stealth solution could not be set-up to look after many clients.
+2. **Client** The computer(s) being monitored. I do not see any reason why a Stealth solution could not be set up to look after many clients.
 
 **Architecture**
 
-The Monitor stores one to many policy files. Each of which is specific to a single client and contains `USE` directives and commands. Its recommended policy to take copies of the client utilities such as the hashing programme `sha1sum`, `find` and others that are used extensively during the integrity scans and copy them to the Monitor to take bench-mark hashes. Subsequent runs will do the same to compare with the initial hashes stored before the client utilities are trusted.
+The Monitor stores one-to-many policy files, each of which is specific to a single client and contains `USE` directives and commands. It's recommended policy to take copies of the client utilities such as the hashing programme `sha1sum`, `find` and others that are used extensively during the integrity scans, and copy them to the Monitor to take benchmark hashes. Subsequent runs will do the same to compare with the initial hashes stored before the client utilities are trusted.
 
 **Features in a nut-shell**
 
-File integrity tests leaving virtually no sediments on the tested client.
+File integrity tests leaving virtually no sediment on the tested client.
 
-Stealth subscribes to the â€œdark cockpitâ€ approach. I.E. no mail is sent when no changes are detected. If you have a MTA, Stealth can be configured to send emails on changes it finds.
+Stealth adheres to the dark cockpit approach, i.e. no mail is sent when no changes are detected. If you have an MTA, Stealth can be configured to send emails on changes it finds.
 
 {#vps-countermeasures-lack-of-visibility-host-intrusion-detection-systems-hids-deeper-with-stealth-what-i-like}
 **What I like**
